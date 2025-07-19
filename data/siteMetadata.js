@@ -1,28 +1,28 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
-  language: 'en-us',
+  title: 'Cristina Chapoñán – IA, Data & Analytics',
+  author: 'Cristina Chapoñán',
+  headerTitle: 'Cristina Chapoñán',
+  description:
+    'Portafolio y blog de Cristina Chapoñán: proyectos de IA, pipelines de datos, modelos predictivos y visualizaciones interactivas.',
+  language: 'es-ES',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
-  siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
-  mastodon: 'https://mastodon.social/@mastodonuser',
-  email: 'address@yoursite.com',
-  github: 'https://github.com',
-  x: 'https://twitter.com/x',
-  // twitter: 'https://twitter.com/Twitter',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
-  threads: 'https://www.threads.net',
-  instagram: 'https://www.instagram.com',
-  medium: 'https://medium.com',
-  bluesky: 'https://bsky.app/',
-  locale: 'en-US',
+  siteUrl: 'https://cristinachaponan.com', // Placeholder, update when domain is final
+  siteRepo: 'https://github.com/CristinaChaponanC/cristinachaponan-ia-data-analytics', // Placeholder, update after renaming repo
+  siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`, // Update with new logo path
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`, // Update with new social banner
+  mastodon: '',
+  email: 'contact@cristinachaponan.com', // Placeholder, update with Cristina's email
+  github: 'https://github.com/CristinaChaponanC',
+  x: 'https://twitter.com/Cristina_CCC',
+  facebook: '',
+  youtube: '',
+  linkedin: 'https://www.linkedin.com/in/cristina-chapo%C3%B1an/',
+  threads: '',
+  instagram: '',
+  medium: '',
+  bluesky: '',
+  locale: 'es-ES',
   // set to true if you want a navbar fixed to the top
   stickyNav: false,
   analytics: {
@@ -81,7 +81,7 @@ const siteMetadata = {
       // example: https://giscus.app/themes/custom_example.css
       themeURL: '',
       // This corresponds to the `data-lang="en"` in giscus's configurations
-      lang: 'en',
+      lang: 'es',
     },
   },
   search: {
