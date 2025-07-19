@@ -12,7 +12,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
-  `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
+  `https://x.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}` // Changed to x.com
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',
@@ -74,14 +74,14 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       <dl className="text-sm leading-5 font-medium whitespace-nowrap">
                         <dt className="sr-only">Name</dt>
                         <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
+                        <dt className="sr-only">X</dt> {/* Changed from Twitter to X */}
                         <dd>
-                          {author.twitter && (
+                          {author.x && ( // Changed from author.twitter to author.x
                             <Link
-                              href={author.twitter}
+                              href={author.x}
                               className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                             >
-                              {author.twitter
+                              {author.x // Changed from author.twitter to author.x
                                 .replace('https://twitter.com/', '@')
                                 .replace('https://x.com/', '@')}
                             </Link>
@@ -97,7 +97,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <div className="prose dark:prose-invert max-w-none pt-10 pb-8">{children}</div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(path)} rel="nofollow">
-                  Discuss on Twitter
+                  Discuss on X {/* Changed from Twitter to X */}
                 </Link>
                 {` • `}
                 <Link href={editUrl(filePath)}>View on GitHub</Link>
