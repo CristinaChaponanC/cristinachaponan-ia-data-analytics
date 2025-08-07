@@ -3,6 +3,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Logo from '@/data/logo.svg' // Import the SVG logo
 import Image from '@/components/Image' // Import Image component
 
 const MAX_DISPLAY = 5
@@ -14,14 +15,11 @@ export default function Home({ posts }) {
       <div className="flex flex-col items-center justify-center space-y-4 pt-10 pb-16 md:pt-20 md:pb-24">
         {/* Logo */}
         <div className="flex items-center space-x-4">
-          <Image
-            src={'/static/images/logo.png'} // Placeholder for the new logo, make sure to replace this path with the actual new logo path (e.g., /static/images/cristina-logo.png)
-            alt="Cristina Chapoñán Logo"
-            width={100} // Adjust width as needed
-            height={100} // Adjust height as needed
-            className="rounded-full" // Example styling, adjust as per design
-          />
-          <h1 className="text-4xl leading-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl dark:text-gray-100">
+          <Logo width={200} height={200} /> {/* Use the imported Logo component */}
+          <h1
+            className="text-4xl leading-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl dark:text-gray-100"
+            style={{ fontFamily: 'Playfair Display, serif' }}
+          >
             Cristina Chapoñán
           </h1>
         </div>
@@ -40,7 +38,7 @@ export default function Home({ posts }) {
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h2 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
+          <h2 className="font-playfairDisplay text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14 dark:text-gray-100">
             Últimas Publicaciones
           </h2>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
