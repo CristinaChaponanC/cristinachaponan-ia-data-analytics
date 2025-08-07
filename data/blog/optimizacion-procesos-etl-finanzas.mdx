@@ -1,0 +1,38 @@
+---
+title: 'Optimizando Procesos ETL: Lecciones Aprendidas en el Sector Financiero'
+date: 2024-11-26 10:00:00
+tags: ['ETL', 'Data Engineering', 'SSIS', 'SQL Server', 'Data Quality', 'Finanzas']
+draft: false
+summary: 'Una guía con lecciones prácticas para optimizar procesos de Extracción, Transformación y Carga (ETL), basada en la experiencia mejorando la ingesta de datos para el análisis de riesgo crediticio en Crediscotia.'
+images: ['/imagenes/posts/etl-flujo-datos-optimizado.jpg']
+authors: ['01']
+---
+
+# Optimizando Procesos ETL: Lecciones Aprendidas en el Sector Financiero.
+
+Un buen análisis depende de buenos datos. Y los buenos datos dependen de buenos procesos ETL (Extracción, Transformación y Carga). Un ETL lento o propenso a errores puede contaminar todo el ecosistema analítico.
+Durante my tiempo en la Gerencia de Riesgos de Crediscotia, lideré proyectos para optimizar los ETL de todo el portafolio, reduciendo errores y tiempos de ejecución. Aquí comparto las lecciones más valiosas de esa experiencia.
+
+## Lección 1: La Extracción debe ser Inteligente, no Bruta (ELT vs. ETL)
+
+Se discute cuándo es mejor extraer solo los datos necesarios (o los que han cambiado) en lugar de tablas completas. Se introduce el concepto de ELT (Extract, Load, Transform) y cuándo es apropiado, especialmente en arquitecturas de data warehouse modernas.
+
+## Lección 2: La Transformación debe ser Eficiente y Documentada
+
+Se dan consejos para optimizar la fase de transformación.
+
+- Realizar transformaciones en la base de datos siempre que sea posible (es más rápido).
+- Evitar bucles fila por fila (row-by-row processing).
+- La importancia crítica de mantener un diccionario de datos actualizado y documentar la lógica de negocio, una tarea clave realizada en Crediscotia.
+
+## Lección 3: La Carga debe ser Atómica y Verificable
+
+Se explica el concepto de transacciones atómicas en la carga de datos para evitar estados inconsistentes. Se subraya la importancia de los logs y los mecanismos de alerta para detectar fallos en la carga.
+
+## El Rol de la Calidad de Datos (Data Quality)
+
+Se enfatiza que ningún ETL puede arreglar datos fundamentalmente malos. Se relata la importancia de los procesos de monitoreo de calidad y validación de fuentes primarias implementados para garantizar la integridad de la información.
+
+## Conclusión y CTA
+
+Un ETL optimizado es la columna vertebral de un departamento de datos fiable y eficiente. Llamada a la acción: "¿Cuál es el mayor dolor de cabeza que te ha dado un proceso ETL? ¡Comparte tu experiencia!"

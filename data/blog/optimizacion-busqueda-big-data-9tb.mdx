@@ -1,0 +1,86 @@
+---
+title: 'Cómo Procesar 9 TB de Datos en 4 Minutos: Un Caso Real de Optimización de Búsqueda'
+date: 2024-11-12 10:00:00
+lastmod: 2024-11-12 10:00:00
+draft: false
+author: 'Cristina Chapoñán Chamorro'
+tags: ['Big Data', 'Optimización', 'Python', 'Caso de Estudio', 'Data Engineering', 'Banca']
+slug: 'optimizacion-busqueda-big-data-9tb'
+images: ['/imagenes/posts/big-data-servidor-busqueda.jpg']
+summary: 'Análisis del desarrollo de un algoritmo de búsqueda masiva de metadatos en BBVA. Se explican los desafíos de trabajar con Big Data y las estrategias de optimización que permitieron procesar 9 TB en minutos.'
+seo_title: 'Cómo Procesar 9 TB de Datos en 4 Minutos: Un Caso Real de Optimización de Búsqueda'
+seo_description: 'La historia de cómo se desarrolló un algoritmo en BBVA para procesar 9 TB de datos en minutos. Un caso real de optimización y Data Engineering.'
+---
+
+# Cómo Procesar 9 TB de Datos en 4 Minutos: Un Caso Real de Optimización de Búsqueda.
+
+¿Qué haces cuando necesitas encontrar una aguja en un pajar de 9 terabytes? El servidor de riesgos de un banco es un universo de datos en constante crecimiento. Encontrar un archivo o un metadato específico podía ser una tarea de horas, o incluso imposible.
+Este post detalla el viaje técnico detrás de la creación de un algoritmo que resolvió este problema, optimizando drásticamente la gestión del espacio y el acceso a la información en el servidor de riesgos de BBVA.
+
+## El Problema: La Jungla de Datos del Servidor Compartido:
+
+Se describe el escenario: un servidor masivo con millones de archivos, sin un sistema de indexación eficiente. Se explican los problemas que esto causaba: pérdida de tiempo, duplicación de datos y dificultades para la gobernanza de datos.
+
+## El Enfoque Inicial y Por Qué Falló:
+
+Se narra el primer intento, quizás usando un enfoque de fuerza bruta (recorrer todos los directorios secuencialmente), y se explica por qué era demasiado lento e ineficiente para la escala del problema.
+
+## La Solución Optimizada: Paralelismo y Búsqueda Inteligente:
+
+Se explica la arquitectura de la solución final a un nivel conceptual.
+
+Uso de multiprocesamiento en Python para paralelizar la búsqueda en diferentes directorios.
+
+Enfoque en la búsqueda de metadatos en lugar del contenido de los archivos para acelerar el proceso.
+
+Creación de un índice simple que se actualizaba periódicamente.
+
+## El Código: Fragmentos Clave Explicados:
+
+Se comparten fragmentos de código (en Python, por ejemplo) que ilustran los conceptos clave, como el uso de la librería `multiprocessing` o `os.walk`. No se comparte el código completo, sino los principios.
+
+```python
+import os
+import multiprocessing
+
+def find_files(directory, search_term, results_queue):
+    """Searches for files containing a term in their metadata."""
+    found_files = []
+    for root, _, files in os.walk(directory):
+        for file in files:
+            # Example: Simple check in file name or path
+            if search_term.lower() in file.lower() or search_term.lower() in root.lower():
+                found_files.append(os.path.join(root, file))
+    results_queue.put(found_files)
+
+if __name__ == '__main__':
+    search_directories = ['/ruta/al/directorio1', '/ruta/al/directorio2', ...] # Replace with actual paths
+    search_term = 'nombre_reporte_riesgo'
+    results_queue = multiprocessing.Queue()
+    processes = []
+
+    for directory in search_directories:
+        process = multiprocessing.Process(target=find_files, args=(directory, search_term, results_queue))
+        processes.append(process)
+        process.start()
+
+    all_results = []
+    for _ in processes:
+        all_results.extend(results_queue.get())
+
+    for process in processes:
+        process.join()
+
+    print(f"Found {len(all_results)} files containing '{search_term}':")
+    for result in all_results:
+        print(result)
+
+```
+
+## El Impacto en la Gobernanza de Datos:
+
+Se explica cómo esta herramienta no solo ahorró tiempo, sino que también permitió identificar archivos obsoletos, duplicados y optimizar el uso de más de 9 TB de almacenamiento, un logro clave en la gestión de infraestructuras de Big Data.
+
+## Conclusión y CTA:
+
+La optimización no siempre se trata de algoritmos complejos, sino de entender el problema y aplicar los principios correctos. ¿Te has enfrentado a un problema de rendimiento con grandes volúmenes de datos? ¡Comparte tu desafío en los comentarios!

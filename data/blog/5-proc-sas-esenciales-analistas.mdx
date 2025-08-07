@@ -1,0 +1,95 @@
+---
+title: '5 Procedimientos (PROC) de SAS que Todo Analista de Datos Junior Debe Dominar'
+date: 2024-09-10 10:00:00
+lastmod: 2024-09-10 10:00:00
+draft: false
+authors: ['default']
+tags: ['SAS', 'Tutorial', 'PROC SAS', 'Data Analytics', 'Principiantes']
+external_link: null
+summary: 'Una lista práctica con los 5 procedimientos de SAS más importantes para principiantes. Desde la impresión de datos hasta la generación de estadísticas descriptivas y frecuencias, esta es tu guía de inicio rápido.'
+canonical: null
+images:
+  - /static/images/posts/sas-procs-caja-herramientas.jpg
+seo_title: null
+seo_description: 'Domina los 5 procedimientos de SAS esenciales para cualquier analista de datos: PRINT, CONTENTS, FREQ, MEANS y SORT. Guía para principiantes.'
+seo_keywords: 'procedimientos sas, proc freq, proc means, proc print, aprender sas, sas para principiantes, tutorial sas'
+---
+
+# 5 Procedimientos (PROC) de SAS que Todo Analista de Datos Junior Debe Dominar
+
+Aprender SAS puede parecer abrumador por la cantidad de procedimientos que existen. Pero la realidad es que con un puñado de ellos puedes resolver el 80% de las tareas diarias de un analista.
+En este post, se presenta la "caja de herramientas" esencial de PROCs que te convertirán en un usuario funcional y eficiente de SAS desde el primer día.
+
+## PROC PRINT: Tu Lupa para Ver los Datos
+
+El primer paso para entender tus datos es poder verlos. `PROC PRINT` es la herramienta básica para visualizar el contenido de un dataset. Puedes usar la cláusula `VAR` para seleccionar las variables que quieres mostrar y la cláusula `WHERE` para filtrar las observaciones que cumplan una condición específica.
+
+```
+sas
+PROC PRINT DATA=nombre_dataset;
+    VAR variable1 variable2;
+    WHERE condicion;
+RUN;
+```
+
+## PROC CONTENTS: El Mapa de tu Tesoro de Datos
+
+Antes de trabajar con un dataset, es crucial saber qué contiene. `PROC CONTENTS` te da un resumen completo de su estructura: nombres de variables, tipos (numérico o carácter), formatos, etiquetas y la cantidad de observaciones y variables. Es tu primer paso para la documentación y el entendimiento de datos nuevos.
+
+```
+sas
+PROC CONTENTS DATA=nombre_dataset;
+RUN;
+```
+
+## PROC FREQ: Contando y Descubriendo Patrones
+
+Cuando trabajas con variables categóricas (como género, estado civil, segmentos de clientes), `PROC FREQ` es tu mejor amigo. Genera tablas de frecuencia que muestran cuántas veces aparece cada valor único en una variable. Puedes generar tablas de una vía o de dos vías (con la cláusula `TABLES`) para cruzar variables y analizar relaciones.
+
+```
+sas
+PROC FREQ DATA=nombre_dataset;
+    TABLES variable_categorica; /* Tabla de una vía */
+RUN;
+
+PROC FREQ DATA=nombre_dataset;
+    TABLES variable1 * variable2; /* Tabla de dos vías */
+RUN;
+```
+
+## PROC MEANS/SUMMARY: La Radiografía Numérica de tus Datos
+
+Para variables numéricas, necesitas estadísticas descriptivas. `PROC MEANS` y `PROC SUMMARY` calculan medidas como la media, mediana, desviación estándar, mínimo, máximo, etc. La principal diferencia es que `PROC MEANS` imprime los resultados directamente en la ventana de salida, mientras que `PROC SUMMARY` generalmente requiere un `OUTPUT` para guardar los resultados en un nuevo dataset para su posterior uso.
+
+```
+sas
+PROC MEANS DATA=nombre_dataset;
+    VAR variable_numerica;
+RUN;
+
+PROC SUMMARY DATA=nombre_dataset NWAY; /* NWAY para no incluir subtotales */
+    VAR variable_numerica;
+    OUTPUT OUT=summary_data MEAN= avg_variable STD= std_variable;
+RUN;
+```
+
+## PROC SORT: Ordenando el Caos
+
+Aunque simple, `PROC SORT` es vital. Te permite ordenar un dataset según los valores de una o más variables. Esto es un prerrequisito para muchas otras operaciones en SAS, especialmente para realizar merges (unir datasets) usando la cláusula `BY`. Ordenar los datos también es fundamental para presentar reportes de manera clara y organizada.
+
+```
+sas
+PROC SORT DATA=nombre_dataset;
+    BY variable_orden; /* Orden ascendente */
+RUN;
+
+PROC SORT DATA=nombre_dataset;
+    BY DESCENDING variable_orden; /* Orden descendente */
+RUN;
+```
+
+## Conclusión y CTA
+
+Con estos 5 PROCs (`PRINT`, `CONTENTS`, `FREQ`, `MEANS/SUMMARY`, `SORT`), ya tienes una base sólida para empezar a aportar valor como analista de datos utilizando SAS. Son las herramientas esenciales que te permitirán explorar, entender y preparar tus datos para análisis más avanzados.
+
+Practica con el dataset que usamos en el post de SQL. ¿Qué `PROC` usarías para saber cuántos clientes hay por cada ciudad? ¡Comparte tu código en los comentarios!
