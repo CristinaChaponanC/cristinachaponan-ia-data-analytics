@@ -176,8 +176,8 @@ Una vez los datos están en SAS, es crucial realizar **limpieza básica** antes 
 ```sas
 PROC FORMAT;
 	VALUE $sexoFmt
-		"H" = "Hombre"
-		"M" = "Mujer";
+		"F" = "Femenino"
+		"M" = "Masculino";
 RUN;
 
 DATA datos2;
