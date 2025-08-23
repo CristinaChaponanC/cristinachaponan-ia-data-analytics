@@ -1,0 +1,319 @@
+---
+title: 'Bloque 01 — Registro y acceso a SAS OnDemand (tutorial paso a paso)'
+summary: 'Guía completa para crear un SAS Profile, registrarse en SAS OnDemand y acceder a SAS Studio. Incluye capturas, instrucciones detalladas y un primer recorrido por la interfaz para comenzar a trabajar en la nube con SAS.'
+date: 2025-08-22 10:00:00
+lastmod: 2025-08-22 10:00:00
+tags: ['SAS', 'SAS OnDemand', 'SAS Studio', 'Tutorial', 'Registro', 'Cloud Analytics', 'Data Science']
+draft: false
+images: ['/imagenes/posts/python-logos-librerias.jpg']
+authors: ['default']
+---
+
+# Manos a la obra
+
+Este documento guía a los alumnos para registrarse en SAS OnDemand, activar la cuenta, acceder a SAS Studio y familiarizarse con su interfaz mediante ejercicios iniciales.
+
+## Proceso de registro paso a paso
+
+1. **Crear un SAS Profile:** SAS OnDemand utiliza el sistema de cuentas generales de SAS. Si no se tiene uno, el primer paso es crear un SAS Profile (registro gratuito en la página de SAS). Este perfil es simplemente una cuenta con usuario/contraseña que sirve para todos los servicios de SAS. (Si ya tienes un SAS Profile, puedes usar el existente.)
+
+2. **Registrarse en SAS OnDemand:** Con el SAS Profile listo y activado, ingresa a la página de bienvenida de SAS OnDemand for Academics: [welcome.oda.sas.com](https://welcome.oda.sas.com). Inicia sesión con tu SAS Profile y sigue el proceso de registro específico de ODA. Se te pedirá que elijas la región del servidor más adecuada (por ejemplo, “East U.S.” o “West Europe” según tu ubicación; esto afecta dónde se alojarán tus datos para mejor rendimiento). También deberás aceptar los términos de uso de SAS ODA.
+
+Haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image1.png" style={ { width: "5.90556in", height: "2.36319in", display: "block", margin: "0 auto" } } alt="Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;." loading="lazy"/>
+<em>Figura 1. Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;.</em>
+
+Haz clic en “Don’t have a SAS Profile?”:
+
+<img src="/static/Bloque_01_images/media/image2.png" style={ { width: "4.49021in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos." loading="lazy"/>
+<em>Figura 2. Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos.</em>
+
+Completa tus datos de acuerdo con las preguntas solicitadas:
+
+<img src="/static/Bloque_01_images/media/image3.png" style={ { width: "4.61523in", height: "9.10544in", display: "block", margin: "0 auto" } } alt="Formulario de creación de SAS Profile: datos personales y de contacto." loading="lazy"/>
+<em>Figura 3. Formulario de creación de SAS Profile: datos personales y de contacto.</em>
+
+Marca las casillas “Proteger mi cuenta con autenticación en dos pasos (2FA)” y “Acepto los términos de uso y condiciones.*” y luego haz clic en “Crear perfil”:
+
+<img src="/static/Bloque_01_images/media/image4.png" style={ { width: "5.90556in", height: "8.28333in", display: "block", margin: "0 auto" } } alt="Marcar 2FA y aceptar términos; botón &quot;Crear perfil&quot;." loading="lazy"/>
+<em>Figura 4. Marcar 2FA y aceptar términos; botón &quot;Crear perfil&quot;.</em>
+
+Aparecerá el siguiente mensaje:
+
+<img src="/static/Bloque_01_images/media/image5.png" style={ { width: "5.90556in", height: "5.55in", display: "block", margin: "0 auto" } } alt="Aviso de verificación: revisar correo para activar el perfil." loading="lazy"/>
+<em>Figura 5. Aviso de verificación: revisar correo para activar el perfil.</em>
+
+Recibirás un correo de SAS; haz clic en “Active su perfil SAS”.
+
+<img src="/static/Bloque_01_images/media/image6.png" style={ { width: "5.90556in", height: "3.24583in", display: "block", margin: "0 auto" } } alt="Correo de activación de SAS: enlace &quot;Active su perfil SAS&quot;." loading="lazy"/>
+<em>Figura 6. Correo de activación de SAS: enlace &quot;Active su perfil SAS&quot;.</em>
+
+Escribe la contraseña dos veces y haz clic en “Establecer contraseña”:
+
+<img src="/static/Bloque_01_images/media/image7.png" style={ { width: "4.27143in", height: "7.75108in", display: "block", margin: "0 auto" } } alt="Establecer contraseña del SAS Profile (dos veces)." loading="lazy"/>
+<em>Figura 7. Establecer contraseña del SAS Profile (dos veces).</em>
+
+Aparecerá el siguiente mensaje; haz clic en “Continuar”:
+
+<img src="/static/Bloque_01_images/media/image8.png" style={ { width: "4.24017in", height: "5.56328in", display: "block", margin: "0 auto" } } alt="Confirmación de contraseña establecida; botón &quot;Continuar&quot;." loading="lazy"/>
+<em>Figura 8. Confirmación de contraseña establecida; botón &quot;Continuar&quot;.</em>
+
+Haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image1.png" style={ { width: "5.90556in", height: "2.36319in", display: "block", margin: "0 auto" } } alt="Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;." loading="lazy"/>
+
+Escribe tu correo y contraseña, marca “Accept the terms of the license, the terms of use and conditions, and the use of cookies.” y haz clic en “Sign In”.
+
+Nota: Si ya iniciaste sesión previamente, puedes omitir los pasos de “Sign In” cuando se repitan más adelante.
+
+<img src="/static/Bloque_01_images/media/image2.png" style={ { width: "4.49021in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos." loading="lazy"/>
+
+Haz clic en “Registro”:
+
+<img src="/static/Bloque_01_images/media/image9.png" style={ { width: "5.90556in", height: "3.41597in", display: "block", margin: "0 auto" } } alt="Portal de ODA: opción &quot;Registro&quot;." loading="lazy"/>
+<em>Figura 9. Portal de ODA: opción &quot;Registro&quot;.</em>
+
+Haz clic en “Estados Unidos” y luego en “Entregar”:
+
+<img src="/static/Bloque_01_images/media/image10.png" style={ { width: "5.90556in", height: "3.19306in", display: "block", margin: "0 auto" } } alt="Selección de región: &quot;Estados Unidos&quot;; botón &quot;Entregar&quot;." loading="lazy"/>
+<em>Figura 10. Selección de región: &quot;Estados Unidos&quot;; botón &quot;Entregar&quot;.</em>
+
+Haz clic en “Sí”:
+
+<img src="/static/Bloque_01_images/media/image11.png" style={ { width: "5.2299in", height: "2.07321in", display: "block", margin: "0 auto" } } alt="Confirmación del registro (diálogo &quot;Sí&quot;)." loading="lazy"/>
+<em>Figura 11. Confirmación del registro (diálogo &quot;Sí&quot;).</em>
+
+Aparecerá el siguiente mensaje:
+
+<img src="/static/Bloque_01_images/media/image12.png" style={ { width: "2.73997in", height: "1.96902in", display: "block", margin: "0 auto" } } alt="Mensaje de registro enviado/pendiente de activación." loading="lazy"/>
+<em>Figura 12. Mensaje de registro enviado/pendiente de activación.</em>
+
+3.  **Esperar la activación:** El registro en la plataforma ODA puede tardar algunos minutos en completarse. Internamente, SAS está creando tu espacio de trabajo en la nube. Normalmente toma entre 5 y 10 minutos; recibirás una notificación por correo electrónico cuando tu cuenta de SAS OnDemand esté lista para usarse. Nota: no intentes registrarte múltiples veces; simplemente espera el correo de confirmación.
+
+Aparecerá el siguiente mensaje; haz clic en “DE ACUERDO”:
+
+<img src="/static/Bloque_01_images/media/image13.png" style={ { width: "5.90556in", height: "1.99236in", display: "block", margin: "0 auto" } } alt="Confirmación de recepción de solicitud; botón &quot;DE ACUERDO&quot;." loading="lazy"/>
+<em>Figura 13. Confirmación de recepción de solicitud; botón &quot;DE ACUERDO&quot;.</em>
+
+Recibirás el siguiente mensaje con tu usuario de SAS:
+
+<img src="/static/Bloque_01_images/media/image14.png" style={ { width: "4.30268in", height: "6.52174in", display: "block", margin: "0 auto" } } alt="Correo con usuario asignado de SAS OnDemand." loading="lazy"/>
+<em>Figura 14. Correo con usuario asignado de SAS OnDemand.</em>
+
+Si en algún momento olvidas la contraseña, haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image1.png" style={ { width: "5.90556in", height: "2.36319in", display: "block", margin: "0 auto" } } alt="Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;." loading="lazy"/>
+
+Haz clic en “Forgot Password?”:
+
+<img src="/static/Bloque_01_images/media/image2.png" style={ { width: "4.49021in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos." loading="lazy"/>
+
+Ingresa tu correo y haz clic en “Enviar”:
+
+<img src="/static/Bloque_01_images/media/image15.png" style={ { width: "5.90556in", height: "4.92708in", display: "block", margin: "0 auto" } } alt="Restablecer contraseña: ingresar correo y enviar." loading="lazy"/>
+<em>Figura 15. Restablecer contraseña: ingresar correo y enviar.</em>
+
+Aparecerá el siguiente mensaje para restablecer la contraseña:
+
+<img src="/static/Bloque_01_images/media/image16.png" style={ { width: "5.90556in", height: "5.19722in", display: "block", margin: "0 auto" } } alt="Correo de restablecimiento de contraseña: confirmación." loading="lazy"/>
+<em>Figura 16. Correo de restablecimiento de contraseña: confirmación.</em>
+
+4.  **Acceder a SAS Studio (OnDemand):** Una vez que tengas la confirmación, ya puedes acceder al entorno. Desde [welcome.oda.sas.com](https://welcome.oda.sas.com) o [oda.sas.com](https://oda.sas.com), al iniciar sesión verás el portal de SAS OnDemand. Allí suele aparecer un botón para “Launch SAS Studio” (lanzar SAS Studio) u otras aplicaciones disponibles. Haz clic en SAS Studio. Esto abrirá SAS Studio directamente en tu navegador, conectándote al servidor SAS en la nube con tu cuenta.
+
+Haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image1.png" style={ { width: "5.90556in", height: "2.36319in", display: "block", margin: "0 auto" } } alt="Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;." loading="lazy"/>
+
+Escribe tu correo y contraseña, marca “Accept the terms of the license, the terms of use and conditions, and the use of cookies.” y haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image2.png" style={ { width: "4.49021in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos." loading="lazy"/>
+
+Aparecerá el mensaje “Inicialización en curso…”:
+
+<img src="/static/Bloque_01_images/media/image17.png" style={ { width: "5.90556in", height: "2.14583in", display: "block", margin: "0 auto" } } alt="Portal ODA: &quot;Inicialización en curso...&quot;." loading="lazy"/>
+<em>Figura 17. Portal ODA: &quot;Inicialización en curso...&quot;.</em>
+
+Haz clic en “Lanzamiento”:
+
+<img src="/static/Bloque_01_images/media/image18.png" style={ { width: "5.90556in", height: "2.28958in", display: "block", margin: "0 auto" } } alt="Portal ODA: botón &quot;Lanzamiento&quot; de SAS Studio." loading="lazy"/>
+<em>Figura 18. Portal ODA: botón &quot;Lanzamiento&quot; de SAS Studio.</em>
+
+Aparecerá SAS Studio:
+
+<img src="/static/Bloque_01_images/media/image19.png" style={ { width: "5.90556in", height: "2.05in", display: "block", margin: "0 auto" } } alt="SAS Studio abierto en el navegador (vista general)." loading="lazy"/>
+<em>Figura 19. SAS Studio abierto en el navegador (vista general).</em>
+
+5.  **Opcional - otras interfaces:** SAS OnDemand también permite el uso de otros clientes SAS si fuera necesario, por ejemplo SAS Enterprise Guide o utilidades como Enterprise Miner y Forecast Server, a través de versiones especiales que se conectan a la nube . Sin embargo, para este curso nos enfocaremos en SAS Studio, ya que ofrece todas las funciones necesarias vía web. (En caso de que prefieras EG, podrías instalar SAS Enterprise Guide localmente y conectarlo a SAS ODA, pero no es necesario ni lo cubriremos en detalle.)
+
+**Ejercicio práctico inicial: verificar acceso a SAS Studio**
+
+Ingresa a SAS OnDemand con tu cuenta recién creada y lanza SAS Studio. Deberías ver la interfaz de SAS Studio cargando en tu navegador.
+
+Haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image1.png" style={ { width: "5.90556in", height: "2.36319in", display: "block", margin: "0 auto" } } alt="Página de bienvenida de SAS OnDemand: botón &quot;Sign In&quot;." loading="lazy"/>
+
+Escribe tu correo y contraseña, marca “Accept the terms of the license, the terms of use and conditions, and the use of cookies.” y haz clic en “Sign In”:
+
+<img src="/static/Bloque_01_images/media/image2.png" style={ { width: "4.49021in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Pantalla de inicio de sesión de SAS (SAS Profile) con enlace &quot;Don&#x27;t have a SAS Profile?&quot; y aceptación de términos." loading="lazy"/>
+
+Aparecerá el mensaje “Inicialización en curso…”:
+
+<img src="/static/Bloque_01_images/media/image17.png" style={ { width: "5.90556in", height: "2.14583in", display: "block", margin: "0 auto" } } alt="Portal ODA: &quot;Inicialización en curso...&quot;." loading="lazy"/>
+
+Haz clic en “Lanzamiento”:
+
+<img src="/static/Bloque_01_images/media/image18.png" style={ { width: "5.90556in", height: "2.28958in", display: "block", margin: "0 auto" } } alt="Portal ODA: botón &quot;Lanzamiento&quot; de SAS Studio." loading="lazy"/>
+
+Aparecerá SAS Studio:
+
+<img src="/static/Bloque_01_images/media/image19.png" style={ { width: "5.90556in", height: "2.05in", display: "block", margin: "0 auto" } } alt="SAS Studio abierto en el navegador (vista general)." loading="lazy"/>
+
+Confirma que en la esquina superior aparece tu nombre de usuario y que puedes ver en el panel de navegación algunas secciones como *Files (Mis archivos)*, *Libraries (Librerías)*, etc. (Explicadas en la siguiente sección).
+
+<img src="/static/Bloque_01_images/media/image20.png" style={ { width: "5.90556in", height: "0.50833in", display: "block", margin: "0 auto" } } alt="Usuario autenticado visible en la esquina superior." loading="lazy"/>
+<em>Figura 20. Usuario autenticado visible en la esquina superior.</em>
+
+Si has llegado hasta aquí, ¡felicitaciones! Ya estás listo para usar SAS sin haber instalado nada en tu PC. En la siguiente parte exploraremos la interfaz de SAS Studio y realizaremos algunas operaciones básicas.
+
+## Navegación en SAS Studio
+
+Ahora que tenemos SAS Studio abierto en el navegador, es importante familiarizarnos con su **interfaz** y organización, ya que será nuestra herramienta de trabajo. La pantalla principal de SAS Studio se divide en dos áreas principales (ver figura abajo):
+
+*Interfaz de SAS Studio (versión OnDemand):* A la **izquierda** se encuentra el panel de navegación, que incluye secciones para explorar **archivos y carpetas**, acceder a **librerías de datos SAS**, utilizar **tareas y snippets** predefinidos, etc. A la **derecha** se encuentra el área de trabajo principal, donde se muestran las ventanas de **código**, el **log** de ejecución y los **resultados** en pestañas independientes. En esta imagen de ejemplo, la sección de tareas (“Tasks”) está expandida a la izquierda y a la derecha se visualiza un resultado gráfico generado por una tarea de análisis.
+
+Izquierda:
+
+<img src="/static/Bloque_01_images/media/image21.png" style={ { width: "3.2192in", height: "2.33366in", display: "block", margin: "0 auto" } } alt="Panel izquierdo de SAS Studio (Tasks expandido)." loading="lazy"/>
+<em>Figura 21. Panel izquierdo de SAS Studio (Tasks expandido).</em>
+
+Derecha:
+
+<img src="/static/Bloque_01_images/media/image22.png" style={ { width: "5.90556in", height: "1.02292in", display: "block", margin: "0 auto" } } alt="Área de trabajo derecha: pestañas de código, log y resultados." loading="lazy"/>
+<em>Figura 22. Área de trabajo derecha: pestañas de código, log y resultados.</em>
+
+Como se describió, **el panel de navegación izquierdo** permite acceder rápidamente a distintos recursos:
+
+-   **Files (Archivos):** Muestra el sistema de archivos en el servidor SAS asignado a tu cuenta, incluyendo tus carpetas personales (por ejemplo *My Folder* en OnDemand) y cualquier otro directorio al que tengas acceso. Aquí podrás crear, abrir y organizar tus **programas SAS (.sas)**, cargar conjuntos de datos locales a la nube, etc. (Por defecto, esta es la sección que aparece abierta al iniciar SAS Studio).
+
+<img src="/static/Bloque_01_images/media/image23.png" style={ { width: "2.93791in", height: "2.09404in", display: "block", margin: "0 auto" } } alt="Sección Files: archivos y carpetas (My Folder)." loading="lazy"/>
+<em>Figura 23. Sección Files: archivos y carpetas (My Folder).</em>
+
+-   **Libraries (Librerías):** Listado de *librerías SAS* disponibles en la sesión. Una librería en SAS es una referencia a una ubicación que contiene tablas de datos. Por ejemplo, verás librerías estándar como **SASHELP** (que contiene múltiples tablas de muestra que vienen con SAS) y **WORK** (una librería temporal para datos que crees en la sesión actual). Puedes expandir una librería para ver qué tablas(datasets) contiene, y haciendo doble clic en una tabla se abrirá en una pestaña de datos para exploración.
+
+<img src="/static/Bloque_01_images/media/image24.png" style={ { width: "1.88568in", height: "3.15669in", display: "block", margin: "0 auto" } } alt="Sección Libraries: librerías SAS (SASHELP, WORK, etc.)." loading="lazy"/>
+<em>Figura 24. Sección Libraries: librerías SAS (SASHELP, WORK, etc.).</em>
+
+-   **Tasks & Utilities (Tareas y utilidades):** Es un conjunto de *tareas predefinidas* (similar a asistentes) que SAS proporciona para realizar análisis comunes sin escribir código. Están categorizadas (por ejemplo: estadísticas descriptivas, gráficos, regresión, etc.). Si seleccionas una tarea, SAS Studio muestra un formulario donde puedes elegir la tabla de entrada y configurar opciones; luego al ejecutar, generará automáticamente el código SAS correspondiente y el resultado. Esta es la funcionalidad point-and-click que aprovecha SAS Studio, muy útil para nuevos usuarios. (Por detrás, estas tareas generan PROC y pasos DATA que el usuario avanzado podría escribir a mano; SAS Studio incluso permite ver el código SAS generado por cada tarea).
+
+<img src="/static/Bloque_01_images/media/image25.png" style={ { width: "3.29213in", height: "5.80289in", display: "block", margin: "0 auto" } } alt="Sección Tasks &amp; Utilities: listado de tareas predefinidas." loading="lazy"/>
+<em>Figura 25. Sección Tasks &amp; Utilities: listado de tareas predefinidas.</em>
+
+-   **Snippets (Fragmentos de código):** Son pequeños **ejemplos de código SAS reutilizables**. SAS Studio incluye varios snippets útiles (por ejemplo, código para importar datos, para mostrar contenido de una tabla, etc.). Puedes insertar estos fragmentos en tu programa con un doble clic, lo que ayuda a construir scripts rápidamente sin recordar cada sintaxis.
+
+<img src="/static/Bloque_01_images/media/image26.png" style={ { width: "2.47951in", height: "2.62537in", display: "block", margin: "0 auto" } } alt="Sección Snippets: fragmentos de código reutilizables." loading="lazy"/>
+<em>Figura 26. Sección Snippets: fragmentos de código reutilizables.</em>
+
+-   **Otros:** Dependiendo de la versión, puede haber secciones adicionales, como *File Shortcuts* (accesos directos a archivos frecuentes) o en SAS Viya aparecen secciones para funciones específicas. En SAS Studio 3.x (ODA) las principales son las mencionadas.
+
+<img src="/static/Bloque_01_images/media/image27.png" style={ { width: "2.15655in", height: "0.67718in", display: "block", margin: "0 auto" } } alt="Secciones adicionales del panel izquierdo (accesos/atajos)." loading="lazy"/>
+<em>Figura 27. Secciones adicionales del panel izquierdo (accesos/atajos).</em>
+
+A la derecha, el **área de trabajo** funciona con pestañas múltiples: al abrir SAS Studio inicialmente, verás una pestaña llamada *Program1* (un editor de código vacío listo para escribir SAS) . Conforme abras datasets (que se mostrarán en pestañas de tipo tabla), o abras logs/resultados de tareas ejecutadas, irán apareciendo nuevas pestañas. Puedes alternar entre la pestaña de **Código (Program)**, la pestaña de **Log** y la de **Results** fácilmente. Cada vez que ejecutes un programa, SAS reutilizará esas pestañas o abrirá nuevas según corresponda.
+
+<img src="/static/Bloque_01_images/media/image22.png" style={ { width: "5.90556in", height: "1.02292in", display: "block", margin: "0 auto" } } alt="Área de trabajo derecha: pestañas de código, log y resultados." loading="lazy"/>
+
+**Ejecutar código:** Para correr un programa SAS que hayas escrito, debes pulsar el botón de **“Run” (Ejecutar)**, representado por el ícono de un *“hombre corriendo”* en la barra de herramientas superior. SAS Studio entonces enviará tu código al servidor SAS para procesarlo. Si el código se ejecuta correctamente, automáticamente se abrirá la pestaña **Results** con la salida o reportes generados (por ejemplo, una lista de datos o una tabla de estadísticas) . Si en cambio ocurre algún error en el código, SAS Studio mostrará la pestaña **Log** resaltando mensajes de error; dentro del log hay una sección de "*Errores, avisos y notas*" donde puedes expandir *Errores* para leer la descripción detallada del problema . **Revisar el Log** después de cada ejecución es una buena práctica, ya que allí SAS reporta cualquier incidente, advertencia o nota informativa sobre tu ejecución. En resumen, el flujo típico es: escribes o generas código en el Editor -&gt; **Run** -&gt; examinas **Results** (si todo salió bien) y verificas **Log** (para asegurarte de que no haya errores ni alertas).
+
+**Guardado de archivos:** Cuando trabajes en SAS Studio (ODA), tus programas SAS se pueden guardar en la sección de **Files** (en tu carpeta My Folder o subcarpetas que crees). Los resultados y logs no se guardan automáticamente, pero puedes descargarlos o copiarlos si lo necesitas. Recuerda periódicamente guardar tus scripts .sas para no perder tu trabajo (SAS Studio OnDemand tiene un repositorio persistente asociado a tu cuenta).
+
+**Ejercicio práctico de navegación:**
+
+Ahora realizaremos un breve ejercicio para afianzar estos conceptos:
+
+1.  **Explorar datos de ejemplo:** En el panel de **Libraries**, encuentra la librería SASHELP . Esta librería contiene datos de ejemplo proporcionados por SAS. Expándela y busca la tabla **CLASS** (un clásico dataset de ejemplo con información de estudiantes). Haz doble clic en CLASS . Debería abrirse una nueva pestaña mostrando el contenido de la tabla (columnas como Name, Sex, Age, Height, Weight y filas con datos). Navega por los datos para familiarizarte con la vista de tabla. *(Esta acción no requiere escribir código; SAS Studio te permite visualizar datasets de forma interactiva.)*
+
+<img src="/static/Bloque_01_images/media/image28.png" style={ { width: "2.90666in", height: "7.89694in", display: "block", margin: "0 auto" } } alt="Librería SASHELP expandida con tablas de ejemplo." loading="lazy"/>
+<em>Figura 28. Librería SASHELP expandida con tablas de ejemplo.</em>
+
+<img src="/static/Bloque_01_images/media/image29.png" style={ { width: "5.90556in", height: "2.11181in", display: "block", margin: "0 auto" } } alt="Vista de la tabla SASHELP.CLASS abierta." loading="lazy"/>
+<em>Figura 29. Vista de la tabla SASHELP.CLASS abierta.</em>
+
+1.  **Crear y ejecutar un programa SAS sencillo:** Cambia a la pestaña *Program1* (el editor de código). Si la cerraste, puedes crear un nuevo programa con **File -&gt; New Program**. En el editor, escribe el siguiente código SAS mínimo:
+
+```sas
+PROC PRINT DATA=sashelp.class;
+RUN;
+```
+
+<img src="/static/Bloque_01_images/media/image30.png" style={ { width: "5.90556in", height: "2.13194in", display: "block", margin: "0 auto" } } alt="Editor Program1 con PROC PRINT de sashelp.class." loading="lazy"/>
+<em>Figura 30. Editor Program1 con PROC PRINT de sashelp.class.</em>
+
+Este código le indica a SAS que imprima (liste) el contenido de la tabla SASHELP.CLASS que acabas de explorar. Ahora presiona el botón **Run** (▶). Observa cómo aparece la pestaña **Results** mostrando la lista de registros de la tabla CLASS en formato tabular (output del PROC PRINT). Revisa también la pestaña **Log** para confirmar que no hubo errores: deberías ver mensajes en azul indicando la ejecución del PROC PRINT y cuántas observaciones/procesamiento realizó.
+
+Pestaña “RESULTADOS”:
+
+<img src="/static/Bloque_01_images/media/image31.png" style={ { width: "5.90556in", height: "3.05069in", display: "block", margin: "0 auto" } } alt="Pestaña Results con salida del PROC PRINT." loading="lazy"/>
+<em>Figura 31. Pestaña Results con salida del PROC PRINT.</em>
+
+Pestaña “LOG”:
+
+<img src="/static/Bloque_01_images/media/image32.png" style={ { width: "5.90556in", height: "6.53056in", display: "block", margin: "0 auto" } } alt="Pestaña Log con mensajes de ejecución." loading="lazy"/>
+<em>Figura 32. Pestaña Log con mensajes de ejecución.</em>
+
+1.  **Usar una tarea en lugar de código (opcional):** Como alternativa, utiliza una **tarea** predefinida: ve al panel izquierdo *Tasks & Utilities* y, bajo “Statistics”, elige “Summary Statistics” (Estadísticas de sumarización). Selecciónala; en su interfaz escoge *sashelp.class* como conjunto de datos y pide calcular, por ejemplo, la media de *Height* y *Weight* por *Sex*. Ejecuta la tarea: SAS Studio generará automáticamente el código SAS (que puedes visualizar) y mostrará los resultados (estadísticas calculadas) en la pestaña Results. Observa cómo obtienes salida sin escribir código manualmente. Esto demuestra la potencia del enfoque point-and-click. (Puedes comparar el código generado con lo que hubieras escrito manualmente para consolidar el aprendizaje).
+
+Haz clic en “Estadísticas de sumarización”:
+
+<img src="/static/Bloque_01_images/media/image33.png" style={ { width: "3.1046in", height: "4.51105in", display: "block", margin: "0 auto" } } alt="Tarea &quot;Summary Statistics&quot; seleccionada." loading="lazy"/>
+<em>Figura 33. Tarea &quot;Summary Statistics&quot; seleccionada.</em>
+
+Aparecerá la pestaña “Estadísticas de sumarización”; haz clic en el ícono <img src="/static/Bloque_01_images/media/image34.png" style={ { width: "0.36463in", height: "0.38547in", display: "block", margin: "0 auto" } } alt="Ícono para seleccionar la fuente de datos en la tarea." loading="lazy"/>
+<em>Figura 34. Ícono para seleccionar la fuente de datos en la tarea.</em> que está a la derecha de “Seleccionar una fuente de datos”, y luego elige “SASHELP”:
+
+<img src="/static/Bloque_01_images/media/image35.png" style={ { width: "5.90556in", height: "4.83403in", display: "block", margin: "0 auto" } } alt="Selector de datos: librería SASHELP." loading="lazy"/>
+<em>Figura 35. Selector de datos: librería SASHELP.</em>
+
+Luego haz clic en “CLASS” y después en “Aceptar”:
+
+<img src="/static/Bloque_01_images/media/image36.png" style={ { width: "5.90556in", height: "4.75694in", display: "block", margin: "0 auto" } } alt="Selector de datos: dataset CLASS." loading="lazy"/>
+<em>Figura 36. Selector de datos: dataset CLASS.</em>
+
+<img src="/static/Bloque_01_images/media/image37.png" style={ { width: "5.90556in", height: "4.88889in", display: "block", margin: "0 auto" } } alt="Confirmación de selección de dataset (Aceptar)." loading="lazy"/>
+<em>Figura 37. Confirmación de selección de dataset (Aceptar).</em>
+
+Calcular la media:
+
+<img src="/static/Bloque_01_images/media/image38.png" style={ { width: "4.63606in", height: "7.26143in", display: "block", margin: "0 auto" } } alt="Configurar variables y estadísticos (media por Sex)." loading="lazy"/>
+<em>Figura 38. Configurar variables y estadísticos (media por Sex).</em>
+
+Selecciona las estadísticas:
+
+<img src="/static/Bloque_01_images/media/image39.png" style={ { width: "4.68815in", height: "4.55272in", display: "block", margin: "0 auto" } } alt="Selección de estadísticas a calcular." loading="lazy"/>
+<em>Figura 39. Selección de estadísticas a calcular.</em>
+
+Marca la opción “Crear conjunto de datos de salida”:
+
+<img src="/static/Bloque_01_images/media/image40.png" style={ { width: "4.60481in", height: "2.22948in", display: "block", margin: "0 auto" } } alt="Opción activada: &quot;Crear conjunto de datos de salida&quot;." loading="lazy"/>
+<em>Figura 40. Opción activada: &quot;Crear conjunto de datos de salida&quot;.</em>
+
+Revisa la pestaña “INFORMACIÓN”:
+
+<img src="/static/Bloque_01_images/media/image41.png" style={ { width: "4.61523in", height: "5.04237in", display: "block", margin: "0 auto" } } alt="Pestaña INFORMATION: resumen de la configuración." loading="lazy"/>
+<em>Figura 41. Pestaña INFORMATION: resumen de la configuración.</em>
+
+Pestaña “CÓDIGO”:
+
+<img src="/static/Bloque_01_images/media/image42.png" style={ { width: "5.90556in", height: "4.39583in", display: "block", margin: "0 auto" } } alt="Pestaña CODE: código SAS generado automáticamente." loading="lazy"/>
+<em>Figura 42. Pestaña CODE: código SAS generado automáticamente.</em>
+
+Pestaña “RESULTADOS”:
+
+<img src="/static/Bloque_01_images/media/image43.png" style={ { width: "5.90556in", height: "1.90903in", display: "block", margin: "0 auto" } } alt="Pestaña RESULTS: resultados de Summary Statistics." loading="lazy"/>
+<em>Figura 43. Pestaña RESULTS: resultados de Summary Statistics.</em>
+
+Este ejercicio combina **navegación por datos** y **ejecución de código**. Con ello, deberías sentirte cómodo moviéndote por la interfaz de SAS Studio: explorando librerías, editando programas y corriendo análisis. En bloques posteriores profundizaremos en la programación SAS (Data step, PROCs, etc.), pero por ahora el objetivo es dominar el entorno de trabajo.
+
+**¡Enhorabuena!** Has completado la introducción al entorno SAS. En resumen, aprendimos **qué es SAS y su importancia en la industria**, entendimos las **opciones de entorno** (Studio, EG, Viya) y configuramos nuestro acceso a SAS **OnDemand para practicar**. También navegamos la interfaz de **SAS Studio** y ejecutamos un primer comando. Esto sienta las bases para adentrarnos en temas técnicos más profundos con SAS en las siguientes sesiones, combinando teoría y práctica de forma interactiva, al estilo de las mejores instituciones académicas. Continuemos con confianza hacia el Bloque 2, donde empezaremos a **programar en SAS** y a trabajar con datos de manera más detallada. ¡Adelante!
+
