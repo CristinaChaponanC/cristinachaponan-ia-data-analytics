@@ -6,7 +6,7 @@
   <title>Taller SAS · Bloque 5 · Presentador (único archivo)</title>
   <!--  
     Presentación PEID en un único archivo (HTML+CSS+JS)
-    Bloque 5 · Sesión 2: Visualización y Exportación de Resultados en SAS (Gráficos, KPIs y Presentación de Datos)
+    Bloque 5 · Sesión 2: Visualización y Exportación de Resultados en SAS (Gráficos, KPIs y Presentación)
     Funciones: navegación teclado/click/toque, overview, panel presentador con notas y timer,
     puntero láser, pantalla en negro, fullscreen, contenteditable y export a PDF.
   -->
@@ -221,7 +221,7 @@
             <div class="pager" id="pager">1 / 1</div>
             <div class="progress" aria-hidden="true"><i id="bar"></i></div>
           </footer>
-          <aside class="notes" hidden>Este es el bloque final del proceso analítico: transformar análisis técnicos en comunicación empresarial impactante con visualizaciones y reportes.</aside>
+          <aside class="notes" hidden>Bloque final del taller. Convertimos análisis técnicos en comunicación empresarial impactante mediante visualización y exportación.</aside>
         </section>
 
         <!-- ============ SLIDE 2 · Agenda ============ -->
@@ -230,17 +230,16 @@
           <main class="content">
             <h2 class="slide-title">Agenda (90 min)</h2>
             <ul class="bullets">
-              <li>15′ – Fundamentos de visualización con PROC SGPLOT y preparación de agregados</li>
-              <li>20′ – Gráficos básicos y avanzados: series, barras, distribuciones y paneles</li>
-              <li>10′ – KPIs rápidos con PROC MEANS, PROC FREQ y PROC REPORT</li>
-              <li>15′ – Exportación profesional: ODS EXCEL, ODS PDF y PROC EXPORT</li>
-              <li>10′ – Automatización de reportes con macros parametrizadas</li>
-              <li>20′ – Actividad práctica: crear dashboard ejecutivo completo</li>
+              <li>20′ – Fundamentos de visualización con PROC SGPLOT</li>
+              <li>25′ – Creación de gráficos básicos: barras, series, boxplots</li>
+              <li>20′ – Cálculo de KPIs y métricas ejecutivas</li>
+              <li>15′ – Exportación de resultados: PROC EXPORT y ODS</li>
+              <li>10′ – Actividad práctica: dashboard completo</li>
             </ul>
             <p><strong>Objetivo:</strong> Transformar análisis técnicos en comunicación empresarial impactante</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden">Este bloque es el corazón del procesamiento de datos. Los participantes aprenderán a combinar múltiples fuentes para crear vistas analíticas integradas.</aside>
+          <aside class="notes" hidden>Bloque final que cierra el ciclo completo: desde datos crudos hasta presentación ejecutiva.</aside>
         </section>
 
         <!-- ============ SLIDE 3 · Resultados de aprendizaje ============ -->
@@ -249,42 +248,72 @@
           <main class="content">
             <h2 class="slide-title">Resultados de aprendizaje</h2>
             <ul class="check">
-              <li>Domina <strong>PROC SGPLOT</strong> para crear visualizaciones básicas y avanzadas profesionales</li>
-              <li>Construye <strong>gráficos especializados</strong>: series temporales, barras, distribuciones y paneles</li>
-              <li>Calcula <strong>KPIs ejecutivos</strong> rápidamente con PROC MEANS, PROC FREQ y PROC REPORT</li>
-              <li>Exporta <strong>resultados profesionales</strong> usando ODS EXCEL, ODS PDF y PROC EXPORT</li>
-              <li>Automatiza <strong>paquetes de reportes</strong> con macros parametrizadas para distribución</li>
-              <li>Integra <strong>resultados SAS con herramientas BI</strong> para dashboards interactivos empresariales</li>
+              <li>Crea <strong>visualizaciones efectivas</strong> con PROC SGPLOT para diferentes tipos de datos</li>
+              <li>Genera <strong>gráficos básicos</strong>: barras, series temporales, boxplots e histogramas</li>
+              <li>Calcula y presenta <strong>KPIs ejecutivos</strong> con procedimientos estadísticos</li>
+              <li>Exporta <strong>resultados y reportes</strong> usando PROC EXPORT y ODS HTML/PDF</li>
+              <li>Integra resultados SAS con <strong>herramientas externas</strong> como Power BI</li>
+              <li>Construye un <strong>dashboard completo</strong> desde datos hasta presentación</li>
             </ul>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Este bloque transforma a los participantes en comunicadores de datos, capaces de crear reportes ejecutivos impactantes.</aside>
+          <aside class="notes" hidden>Competencias esenciales para convertir análisis técnicos en comunicación empresarial efectiva.</aside>
         </section>
 
-        <!-- ============ SLIDE 4 · Fundamentos de Visualización ============ -->
-        <section class="slide" data-title="Fundamentos de Visualización" data-template="visualization-basics">
-          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPLOT</span></div><div class="module-badge">BLOQUE 5</div></header>
+        <!-- ============ SLIDE 4 · Fundamentos de visualización ============ -->
+        <section class="slide" data-title="Fundamentos de visualización" data-template="concepts">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Fundamentos</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">Fundamentos de Visualización con PROC SGPLOT</h2>
+            <h2 class="slide-title">Fundamentos de visualización de datos en SAS</h2>
             <div class="cols">
               <div>
-                <p><strong>Configuración inicial:</strong></p>
-                <pre><code class="language-sas">/* Habilitar gráficos SG */
-options nocenter validvarname=v7;
-ods graphics on;
+                <p><strong>PROC SGPLOT como herramienta principal:</strong></p>
+                <ul class="bullets">
+                  <li>Procedimiento moderno para visualizaciones</li>
+                  <li>Genera automáticamente ejes y leyendas</li>
+                  <li>Opciones para personalizar títulos y estilos</li>
+                  <li>Ideal para exploración rápida</li>
+                  <li>Perfecto para reportes ejecutivos</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Tipos de gráficos y aplicaciones:</strong></p>
+                <ul class="bullets">
+                  <li><strong>VBAR/HBAR:</strong> Distribuciones de categorías</li>
+                  <li><strong>SERIES:</strong> Tendencias temporales</li>
+                  <li><strong>VBOX/HBOX:</strong> Dispersión de variables numéricas</li>
+                  <li><strong>HISTOGRAM:</strong> Distribuciones de frecuencia</li>
+                  <li><strong>SCATTER:</strong> Relaciones entre variables</li>
+                </ul>
+              </div>
+            </div>
+            <p><strong>Principio:</strong> Seleccionar el tipo correcto es crucial para comunicar el mensaje</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">Mostrar cómo ODS GRAPHICS ON habilita automáticamente los gráficos. Enfatizar diferencias con visualización básica.</aside>
+        </section>
 
-/* Preparación de datos integrados */
-proc sql;
-    create table work.ventas_cli as
-    select v.*, c.id_char as id_cliente, 
-           c.nombre_completo, c.pais, 
-           c.sexo_full, c.email_dominio
-    from work.ventas_prep v 
-    left join work.clientes_prep c 
-        on v.id_cliente_char=c.id_char;
+        <!-- ============ SLIDE 5 · Creación de agregados para visualización ============ -->
+        <section class="slide" data-title="Creación de agregados" data-template="aggregates">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Preparación datos</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Creación de agregados para visualización</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Agregados temporales:</strong></p>
+                <pre><code class="language-sas">/* Serie temporal: ventas mensuales */
+proc sql; 
+    create table work.ventas_mensual as
+    select mes_venta as mes
+         , sum(monto_total) as monto_mes
+    from work.ventas_prep
+    group by mes_venta
+    order by mes_venta; 
 quit;</code></pre>
-                <p><strong>Agregados para visualización:</strong></p>
-                <pre><code class="language-sas">/* KPIs por categoría */
+              </div>
+              <div>
+                <p><strong>Agregados por dimensiones de negocio:</strong></p>
+                <pre><code class="language-sas">/* KPI por categoría */
 proc sql; 
     create table work.kpi_categoria as
     select categoria
@@ -295,15 +324,24 @@ proc sql;
     order by monto_total desc; 
 quit;</code></pre>
               </div>
+            </div>
+            <p><strong>Principio:</strong> Crear datasets específicos para cada visualización mejora rendimiento</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Mostrar cómo usar datos integrados de bloques anteriores. Enfatizar importancia de agregación previa.</aside>
+        </section>
+
+        <!-- ============ SLIDE 6 · Gráficos de series temporales ============ -->
+        <section class="slide" data-title="Gráficos de series temporales" data-template="series">
+          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPLOT</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Gráficos de series temporales con PROC SGPLOT</h2>
+            <div class="cols">
               <div>
-                <p><strong>Tipos de gráficos y aplicaciones:</strong></p>
-                <ul class="bullets">
-                  <li><strong>VBAR/HBAR:</strong> Comparaciones categóricas</li>
-                  <li><strong>SERIES:</strong> Tendencias temporales</li>
-                  <li><strong>SCATTER:</strong> Relaciones entre variables</li>
-                  <li><strong>VBOX/HBOX:</strong> Distribuciones y outliers</li>
-                  <li><strong>HISTOGRAM:</strong> Frecuencias y distribuciones</li>
-                </ul>
+                <p><strong>Configuración inicial:</strong></p>
+                <pre><code class="language-sas">/* Habilitar gráficos SG */
+options nocenter validvarname=v7;
+ods graphics on;</code></pre>
                 <p><strong>Serie temporal básica:</strong></p>
                 <pre><code class="language-sas">/* Ventas mensuales */
 proc sgplot data=work.ventas_mensual;
@@ -314,587 +352,264 @@ proc sgplot data=work.ventas_mensual;
 run; 
 title;</code></pre>
               </div>
+              <div>
+                <p><strong>Series múltiples:</strong></p>
+                <pre><code class="language-sas">/* Por país y mes */
+proc sgplot data=work.ventas_mes_pais;
+    title "Ventas mensuales por país";
+    series x=mes y=monto_mes / group=pais;
+    yaxis label="Monto" grid;
+    xaxis label="Mes";
+run; 
+title;</code></pre>
+              </div>
             </div>
+            <p><strong>Aplicación:</strong> Ideales para mostrar tendencias y patrones temporales</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>PROC SGPLOT es la herramienta moderna de SAS para visualización. Automáticamente genera elementos como ejes, leyendas y escalas.</aside>
+          <aside class="notes" hidden>Mostrar series simples primero, luego múltiples con GROUP. Explicar marcadores y personalización básica.</aside>
         </section>
 
-        <!-- ============ SLIDE 5 · Gráficos Básicos ============ -->
-        <section class="slide" data-title="Gráficos Básicos" data-template="basic-plots">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Visualización efectiva</span></div><div class="module-badge">BLOQUE 5</div></header>
+        <!-- ============ SLIDE 7 · Gráficos de barras ============ -->
+        <section class="slide" data-title="Gráficos de barras" data-template="bars">
+          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPLOT</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">Gráficos Básicos con PROC SGPLOT</h2>
+            <h2 class="slide-title">Gráficos de barras: comparación de categorías</h2>
             <div class="cols">
               <div>
-                <p><strong>Gráficos de barras (comparaciones):</strong></p>
-                <pre><code class="language-sas">/* Barras por categoría (ordenadas) */
+                <p><strong>Barras verticales ordenadas:</strong></p>
+                <pre><code class="language-sas">/* Por categoría */
 proc sgplot data=work.kpi_categoria;
     title "Ventas por categoría";
     vbar categoria / response=monto_total 
-                    datalabel 
-                    categoryorder=respdesc;
+                     datalabel 
+                     categoryorder=respdesc;
     yaxis label="Monto" grid;
-run; 
-title;
-
-/* Top 10 vendedores (horizontal) */
-proc sgplot data=work.kpi_vendedor(obs=10);
-    title "Top 10 vendedores";
-    hbar vendedor / response=monto_total 
-                   datalabel 
-                   categoryorder=respdesc;
-    xaxis label="Monto" grid;
 run; 
 title;</code></pre>
               </div>
               <div>
-                <p><strong>Distribuciones y dispersión:</strong></p>
-                <pre><code class="language-sas">/* Boxplot por categoría */
+                <p><strong>Barras horizontales (Top N):</strong></p>
+                <pre><code class="language-sas">/* Top 10 vendedores */
+proc sgplot data=work.kpi_vendedor(obs=10);
+    title "Top 10 vendedores por monto";
+    hbar vendedor / response=monto_total 
+                    datalabel 
+                    categoryorder=respdesc;
+    xaxis label="Monto" grid;
+run; 
+title;</code></pre>
+              </div>
+            </div>
+            <p><strong>Opciones clave:</strong> DATALABEL muestra valores, CATEGORYORDER=RESPDESC ordena por monto</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Enfatizar diferencia entre VBAR y HBAR. Mostrar opciones de ordenamiento y etiquetas de datos.</aside>
+        </section>
+          
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Diferencia entre formato permanente (DATA step) vs temporal (PROC step). WHERE vs IF.</aside>
+        </section>
+
+        <!-- ============ SLIDE 8 · Gráficos de distribución ============ -->
+        <section class="slide" data-title="Gráficos de distribución" data-template="distribution">
+          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPLOT</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Gráficos de distribución y dispersión</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Boxplots (cajas):</strong></p>
+                <pre><code class="language-sas">/* Distribución por categoría */
 proc sgplot data=work.ventas_cli_prod_vend;
     title "Distribución de monto por categoría";
     vbox monto_total / category=categoria;
     yaxis label="Monto por transacción" grid;
 run; 
-title;
-
-/* Histograma con densidad */
-proc sgplot data=work.ventas_cli_prod_vend;
+title;</code></pre>
+                <p><strong>Histogramas:</strong></p>
+                <pre><code class="language-sas">proc sgplot data=work.ventas_cli_prod_vend;
     title "Histograma de monto_total";
     histogram monto_total; 
     density monto_total;
     xaxis label="Monto"; 
-    yaxis label="Frecuencia";
-run; 
-title;
-
-/* Scatter plot */
+run;</code></pre>
+              </div>
+              <div>
+                <p><strong>Diagramas de dispersión:</strong></p>
+                <pre><code class="language-sas">/* Cantidad vs monto */
 proc sgplot data=work.ventas_cli_prod_vend;
-    title "Cantidad vs Monto";
+    title "Cantidad vs Monto (scatter)";
     scatter x=cantidad y=monto_total / 
             transparency=0.1;
-    xaxis grid; yaxis grid;
+    xaxis grid; 
+    yaxis grid;
 run; 
 title;</code></pre>
               </div>
             </div>
+            <p><strong>Aplicación:</strong> Analizar dispersión, outliers y relaciones entre variables</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Cada tipo de gráfico tiene propósitos específicos: barras para comparar, boxplots para distribuciones, scatter para relaciones.</aside>
+          <aside class="notes" hidden>Boxplots muestran cuartiles y outliers. Histograma + densidad da distribución completa. Scatter para correlaciones.</aside>
+        </section>
+            </div>
+            <p><strong>Principio:</strong> Detectar inconsistencias antes de que afecten el análisis</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">Mostrar cómo crear reportes de calidad para compartir con el equipo de datos.</aside>
         </section>
 
-        <!-- ============ SLIDE 6 · KPIs Rápidos ============ -->
-        <section class="slide" data-title="KPIs Rápidos" data-template="quick-kpis">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Procedimientos estadísticos</span></div><div class="module-badge">BLOQUE 5</div></header>
+        <!-- ============ SLIDE 9 · Paneles y facetas ============ -->
+        <section class="slide" data-title="Paneles múltiples" data-template="panels">
+          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPANEL</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">KPIs Rápidos con Procedimientos Estadísticos</h2>
+            <h2 class="slide-title">Gráficos con paneles y facetas múltiples</h2>
             <div class="cols">
               <div>
-                <p><strong>PROC MEANS para variables numéricas:</strong></p>
-                <pre><code class="language-sas">/* Estadísticas por categoría */
-proc means data=work.ventas_cli_prod_vend 
-           mean sum maxdec=2;
-    class categoria;
-    var monto_total;
-    title 'KPIs de Monto por Categoría';
-run; 
-title;
-
-/* Múltiples variables */
-proc means data=work.ventas_cli_prod_vend 
-           n mean stddev min max maxdec=2;
-    var monto_total cantidad precio_unitario;
-    title 'Estadísticas Descriptivas';
-run; 
-title;</code></pre>
-                <p><strong>PROC FREQ para categóricas:</strong></p>
-                <pre><code class="language-sas">/* Distribución de transacciones */
-proc freq data=work.ventas_cli_prod_vend;
-    tables categoria / nocum;
-    title 'Ventas por Categoría';
+                <p><strong>Paneles por categorías:</strong></p>
+                <pre><code class="language-sas">/* Ventas por categoría por vendedor */
+proc sgpanel data=work.ventas_cli_prod_vend;
+    title "Monto por categoría (panel)";
+    panelby vendedor / columns=3 rows=2;
+    vbox monto_total / category=categoria;
+    rowaxis grid;
+    colaxis grid;
 run; 
 title;</code></pre>
               </div>
               <div>
-                <p><strong>PROC REPORT ejecutivo:</strong></p>
-                <pre><code class="language-sas">/* Reporte KPI con totales */
-proc report data=work.kpi_vendedor nowd;
-    title "KPI por vendedor";
-    columns vendedor n_ventas unidades 
-            monto_total;
-    define vendedor   / display "Vendedor";
-    define n_ventas   / analysis sum 
-                        "#Ventas";
-    define unidades   / analysis sum 
-                        "Unidades";
-    define monto_total/ analysis sum 
-                        format=dollar12.2 
-                        "Monto total";
-    rbreak after / summarize;
+                <p><strong>Series temporales múltiples:</strong></p>
+                <pre><code class="language-sas">/* Evolución por categoría */
+proc sgpanel data=work.ventas_mensual_cat;
+    title "Ventas mensuales por categoría";
+    panelby categoria / columns=2 rows=2;
+    series x=mes y=monto_mes / markers;
+    rowaxis grid;
 run; 
 title;</code></pre>
-                <p><strong>PROC TABULATE (tablas cruzadas):</strong></p>
-                <pre><code class="language-sas">/* País vs Categoría */
-proc tabulate data=work.ventas_cli_prod_vend 
-              format=dollar12.2;
-    title "Monto por País y Categoría";
-    class pais categoria;
-    var monto_total;
-    table pais, categoria*monto_total*
-                (sum mean);
-run; 
-title;</code></pre>
+                <p><strong>Aplicación:</strong> Comparar patrones entre subgrupos de manera eficiente</p>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Los procedimientos estadísticos generan KPIs automáticamente sin programación manual. PROC MEANS, FREQ y REPORT son fundamentales.</aside>
+          <aside class="notes" hidden>SGPANEL permite comparar múltiples subgrupos en una sola visualización organizada.</aside>
         </section>
-        <section class="slide" data-title="Integración Progresiva" data-template="integration">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Construcción de DataMarts</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Usar el dataset del curso datos_curso_sas.csv para ejemplos en vivo.</aside>
+        </section>
+
+        <!-- ============ SLIDE 10 · Cálculo de KPIs ============ -->
+        <section class="slide" data-title="KPIs y métricas clave" data-template="kpis">
+          <header class="brand brand--compact"><div class="brand-lines"><span>KPIs</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">Integración Progresiva de Fuentes y Construcción de DataMarts</h2>
+            <h2 class="slide-title">Cálculo de KPIs y métricas ejecutivas</h2>
             <div class="cols">
               <div>
-                <p><strong>Paso 1: Enriquecer con Clientes</strong></p>
-                <pre><code class="language-sas">/* Integración 1: Ventas + Clientes */
-proc sql;
-    create table work.ventas_cli as
-    select v.*
-         , c.id_char as id_cliente
-         , c.nombre_completo, c.sexo_full
-         , c.pais, c.email, c.email_dominio
-         , c.vendedor as vendedor_asignado
-    from work.ventas_validas v
-    inner join work.clientes_nodup c
-        on v.id_cliente_char = c.id_char;
-quit;</code></pre>
-                <p><strong>Paso 2: Añadir Productos</strong></p>
-                <pre><code class="language-sas">/* Integración 2: + Productos */
-proc sql;
-    create table work.ventas_cli_prod as
-    select vc.*
-         , p.categoria
-         , p.precio_unitario_num as precio_unitario
-    from work.ventas_cli vc
-    left join work.productos_nodup p
-        on strip(vc.producto) = p.producto_char;
+                <p><strong>Agregación por categoría:</strong></p>
+                <pre><code class="language-sas">proc sql;
+    create table work.kpi_categoria as
+    select categoria,
+           sum(monto_total) as monto_total,
+           count(*) as n_ventas,
+           sum(cantidad) as unidades,
+           calculated monto_total / calculated unidades 
+               as precio_prom format=dollar8.2
+    from work.ventas_cli_prod_vend
+    group by categoria
+    order by monto_total desc;
 quit;</code></pre>
               </div>
               <div>
-                <p><strong>Paso 3: Completar con Vendedores</strong></p>
-                <pre><code class="language-sas">/* Integración 3: + Vendedores */
-proc sql;
-    create table work.ventas_cli_prod_vend as
-    select vcp.*
-         , v.vendedor_char as vendedor
-         , v.region as region_vendedor
-         , v.fecha_ingreso_d
-         , v.objetivo_mensual
-    from work.ventas_cli_prod vcp
-    left join work.vendedores_nodup v
-        on strip(vcp.vendedor_asignado) = v.vendedor_char;
-quit;</code></pre>
-                <p><strong>DataMart RFM con Segmentación</strong></p>
-                <pre><code class="language-sas">/* DataMart final con análisis RFM */
-proc sql;
-    create table work.dm_clientes as
-    select c.id_char as id, c.nombre_completo
-         , k.n_transacciones as F  /* Frequency */
-         , k.total_monto as M      /* Monetary */
-         , intck('day', k.ultima_compra, today()) as R_dias
-         , case when k.total_monto >= 5000 then 'VIP'
-                when k.total_monto >= 2000 then 'Premium'
-                else 'Regular' end as segmento length=12
-    from work.clientes_nodup c
-    left join work.kpi_cliente k on c.id_char = k.id_cliente;
+                <p><strong>KPI por vendedor:</strong></p>
+                <pre><code class="language-sas">proc sql;
+    create table work.kpi_vendedor as
+    select vendedor,
+           sum(monto_total) as monto_total format=dollar12.2,
+           count(*) as n_ventas,
+           sum(cantidad) as unidades,
+           calculated monto_total / calculated n_ventas 
+               as ticket_promedio format=dollar8.2
+    from work.ventas_cli_prod_vend
+    group by vendedor
+    order by monto_total desc;
 quit;</code></pre>
               </div>
             </div>
+            <p><strong>Aplicación:</strong> Métricas listas para dashboards ejecutivos</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>La integración paso a paso permite verificar la calidad en cada etapa. El DataMart RFM es fundamental para segmentación de clientes.</aside>
+          <aside class="notes" hidden>KPIs se calculan con SQL para mayor flexibilidad y se formatean para presentación.</aside>
         </section>
 
-        <!-- ============ SLIDE 7 · Exportación Profesional ============ -->
-        <section class="slide" data-title="Exportación Profesional" data-template="export-professional">
-          <header class="brand brand--compact"><div class="brand-lines"><span>ODS y PROC EXPORT</span></div><div class="module-badge">BLOQUE 5</div></header>
+        <!-- ============ SLIDE 11 · Exportación y formatos ============ -->
+        <section class="slide" data-title="Exportación de resultados" data-template="export">
+          <header class="brand brand--compact"><div class="brand-lines"><span>ODS Export</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">Exportación Profesional con ODS</h2>
+            <h2 class="slide-title">Exportación de gráficos y reportes</h2>
             <div class="cols">
               <div>
-                <p><strong>ODS EXCEL (paquetes multi-hoja):</strong></p>
-                <pre><code class="language-sas">/* Paquete ejecutivo Excel */
-%let OUTDIR = /home/&sysuserid/Salida;
+                <p><strong>Excel multi-hoja:</strong></p>
+                <pre><code class="language-sas">ods excel file="paquete_b5.xlsx" 
+    style=HTMLBlue options(frozen_headers='on');
 
-ods excel file="&OUTDIR/paquete_b5.xlsx" 
-          style=HTMLBlue 
-          options(frozen_headers='on' 
-                  sheet_interval='none');
-
-ods excel options(sheet_name='Mensual');
+ods excel options(sheet_name='Resumen');
 proc report data=work.ventas_mensual nowd; 
     columns mes monto_mes; 
-    define monto_mes/format=dollar12.2; 
 run;
 
 ods excel options(sheet_name='Categorias');
 proc report data=work.kpi_categoria nowd; 
     columns categoria monto_total n_ventas; 
-    define monto_total/format=dollar12.2; 
 run;
 
 ods excel close;</code></pre>
               </div>
               <div>
-                <p><strong>ODS PDF (reportes formales):</strong></p>
-                <pre><code class="language-sas">/* Informe PDF compacto */
-ods pdf file="&OUTDIR/reporte_b5.pdf" 
-        style=Pearl notoc;
-    title "Reporte ejecutivo — Bloque 5";
+                <p><strong>PDF ejecutivo:</strong></p>
+                <pre><code class="language-sas">ods pdf file="reporte_b5.pdf" 
+    style=Pearl notoc;
     
-    proc sgplot data=work.ventas_mensual; 
-        series x=mes y=monto_mes / markers; 
-        yaxis grid; 
-    run;
-    
-    proc report data=work.kpi_vendedor(obs=10) 
-                nowd; 
-        columns vendedor monto_total n_ventas; 
-        define monto_total/format=dollar12.2; 
-    run;
-    
-ods pdf close;</code></pre>
-                <p><strong>PROC EXPORT (integración BI):</strong></p>
-                <pre><code class="language-sas">/* Para herramientas externas */
-proc export data=work.kpi_categoria 
-    outfile="&OUTDIR/kpi_categoria_b5.csv" 
-    dbms=csv replace; 
+title "Reporte ejecutivo — Bloque 5";
+
+proc sgplot data=work.ventas_mensual; 
+    series x=mes y=monto_mes / markers; 
 run;
 
-proc export data=work.kpi_vendedor  
-    outfile="&OUTDIR/kpi_vendedor_b5.xlsx" 
-    dbms=xlsx replace; 
-run;</code></pre>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>ODS permite crear reportes profesionales multi-formato. Excel para ejecutivos, PDF para distribución formal, CSV para integración BI.</aside>
-        </section>
-
-        <!-- ============ SLIDE 8 · Automatización de Reportes ============ -->
-        <section class="slide" data-title="Automatización de Reportes" data-template="automation-reports">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Macros para reportes</span></div><div class="module-badge">BLOQUE 5</div></header>
-          <main class="content">
-            <h2 class="slide-title">Automatización de Reportes con Macros</h2>
-            <div class="cols">
-              <div>
-                <p><strong>Macro empaquetadora completa:</strong></p>
-                <pre><code class="language-sas">/* Paquete automatizado */
-%macro paquete_b5(out=&OUTDIR, topN=10);
-    %put NOTE: Generando paquete Bloque 5 
-              en &out (Top &topN vendedores).;
-    
-    /* Excel multi-hoja */
-    ods excel file="&out/paquete_b5_macro.xlsx" 
-              style=HTMLBlue 
-              options(frozen_headers='on' 
-                      sheet_interval='none');
-        ods excel options(sheet_name='Mensual');  
-        proc report data=work.ventas_mensual nowd; 
-            columns mes monto_mes; 
-            define monto_mes/format=dollar12.2; 
-        run;
-        
-        ods excel options(sheet_name='TopVend');  
-        proc report data=work.kpi_vendedor
-                           (obs=&topN) nowd; 
-            columns vendedor monto_total n_ventas; 
-            define monto_total/format=dollar12.2; 
-        run;
-    ods excel close;</code></pre>
-              </div>
-              <div>
-                <p><strong>PDF + Gráficos automáticos:</strong></p>
-                <pre><code class="language-sas">    /* PDF con visualizaciones */
-    ods pdf file="&out/reporte_b5_macro.pdf" 
-            style=Pearl notoc;
-        title "Reporte ejecutivo — Bloque 5";
-        
-        proc sgplot data=work.ventas_mensual; 
-            series x=mes y=monto_mes / markers; 
-            yaxis grid; 
-        run;
-        
-        proc sgplot data=work.kpi_categoria; 
-            vbar categoria / response=monto_total 
-                            categoryorder=respdesc; 
-        run;
-        
-        proc report data=work.kpi_vendedor
-                           (obs=&topN) nowd; 
-            columns vendedor monto_total n_ventas; 
-            define monto_total/format=dollar12.2; 
-        run; 
-        title;
-    ods pdf close;
-%mend;
-
-/* Ejecutar paquete */
-%paquete_b5(topN=15)</code></pre>
-                <p><strong>Integración con BI:</strong></p>
-                <pre><code class="language-sas">/* Exportar para Power BI/Tableau */
-%macro exportar_bi();
-    proc export data=work.ventas_mensual 
-        outfile="&OUTDIR/bi_mensual.csv" 
-        dbms=csv replace; 
-    run;
-%mend;</code></pre>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Las macros permiten parametrizar reportes recurrentes. Un solo comando genera paquetes completos multi-formato para diferentes audiencias.</aside>
-        </section>
-        /* Lógica de validación */
-    %end;
-%mend;</code></pre>
-              </div>
-              <div>
-                <p><strong>ETL Automático completo:</strong></p>
-                <pre><code class="language-sas">/* Macro principal del ETL */
-%macro etl_completo(fecha_proceso=);
-    /* 1. Limpieza y preparación */
-    %validar_archivo(tabla=RAW.ventas);
-    %validar_archivo(tabla=RAW.clientes);
-    
-    /* 2. Transformaciones */
-    proc sql;
-        create table &output_lib..ventas_clean as
-        select *, "&fecha_proceso"d as fecha_proceso format=date9.
-        from RAW.ventas
-        where fecha_venta <= "&fecha_proceso"d
-          and monto_total >= &umbral_monto;
-    quit;
-    
-    /* 3. Integración progresiva */
-    %integrar_fuentes(fecha=&fecha_proceso);
-    
-    /* 4. Construcción DataMart */
-    %construir_datamart(fecha=&fecha_proceso);
-    
-    /* 5. Reportes de auditoría */
-    %generar_auditoria(fecha=&fecha_proceso);
-%mend;
-
-/* Ejecución */
-%etl_completo(fecha_proceso=%sysfunc(today()));</code></pre>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>La automatización permite ejecutar todo el ETL con un solo comando. Las macrovariables facilitan la configuración sin modificar código.</aside>
-        </section>
-             when total_monto >= 2000 then 'Premium'
-             when total_monto > 0 then 'Regular'
-             else 'Sin Compras'
-           end as segmento length=12
-         , case
-             when n_transacciones >= 10 then 'Muy Activo'
-             when n_transacciones >= 5 then 'Activo'
-             when n_transacciones >= 1 then 'Ocasional'
-             else 'Inactivo'
-           end as actividad length=12
-    from work.kpi_cliente as k;
-quit;</code></pre>
-              </div>
-              <div>
-                <p><strong>Uso de CALCULATED:</strong></p>
-                <pre><code class="language-sas">/* Filtrar por ticket promedio calculado */
-proc sql;
-    create table work.alto_ticket as
-    select id, nombre_completo
-         , n_transacciones
-         , total_monto
-         , case when n_transacciones > 0 
-                then total_monto/n_transacciones 
-                else . end as ticket_promedio
-    from work.kpi_cliente
-    having calculated ticket_promedio > 300;
-quit;</code></pre>
-                <p><strong>Principio:</strong> CALCULATED permite referenciar columnas creadas en la misma consulta</p>
-              </div>
-            </div>
-            <p><strong>Ventaja:</strong> Lógica condicional compleja directamente en SQL sin DATA steps adicionales</p>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden">CASE WHEN es fundamental para crear categorizaciones dinámicas. CALCULATED evita subconsultas innecesarias.</aside>
-        </section>
-
-        <!-- ============ SLIDE 8 · DATA Step: SET, MERGE y Variables FIRST/LAST ============ -->
-        <section class="slide" data-title="DATA Step: SET, MERGE y FIRST/LAST" data-template="data-step-advanced">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Control granular</span></div><div class="module-badge">BLOQUE 3</div></header>
-          <main class="content">
-            <h2 class="slide-title">DATA Step: SET/MERGE y Variables Automáticas FIRST./LAST.</h2>
-            <div class="cols">
-              <div>
-                <p><strong>MERGE - Combinación horizontal:</strong></p>
-                <pre><code class="language-sas">/* Agregar métricas por cliente */
-proc sql;
-    create table work.metricas_cliente as
-    select id_cliente as id
-         , count(*) as num_compras
-         , sum(monto_total) as total_gastado
-    from work.ventas_prep
-    group by id_cliente;
-quit;
-
-/* Ordenar para MERGE */
-proc sort data=work.clientes_prep; by id; run;
-proc sort data=work.metricas_cliente; by id; run;
-
-/* MERGE con indicadores IN= */
-data work.cliente_completo;
-    merge work.clientes_prep(in=tiene_datos_cliente) 
-          work.metricas_cliente(in=tiene_ventas);
-    by id;
-    
-    if tiene_datos_cliente and tiene_ventas then 
-        tipo = 'Cliente Activo';
-    else if tiene_datos_cliente and not tiene_ventas then 
-        tipo = 'Cliente Sin Ventas';
-    
-    if tiene_datos_cliente; /* Solo clientes válidos */
-run;</code></pre>
-              </div>
-              <div>
-                <p><strong>Variables FIRST./LAST. por grupos:</strong></p>
-                <pre><code class="language-sas">/* Encontrar última compra por cliente */
-proc sort data=work.ventas_prep out=work.ventas_ordenadas;
-    by id_cliente fecha_venta_d;
+proc report data=work.kpi_vendedor(obs=10) nowd; 
+    columns vendedor monto_total n_ventas; 
 run;
 
-data work.ultima_compra;
-    set work.ventas_ordenadas;
-    by id_cliente fecha_venta_d;
-    
-    retain fecha_ultima_compra monto_ultima_compra;
-    
-    if first.id_cliente then do;
-        fecha_ultima_compra = .;
-        monto_ultima_compra = .;
-    end;
-    
-    /* Actualizar con cada registro */
-    fecha_ultima_compra = fecha_venta_d;
-    monto_ultima_compra = monto_total;
-    
-    /* Solo salida en último registro del cliente */
-    if last.id_cliente then output;
-    
-    format fecha_ultima_compra date9.;
-    keep id_cliente fecha_ultima_compra monto_ultima_compra;
-run;</code></pre>
-                <p><strong>Gestión de duplicados con NODUPKEY</strong></p>
+ods pdf close; title;</code></pre>
               </div>
             </div>
+            <p><strong>Aplicación:</strong> Reportes listos para compartir con stakeholders</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden">FIRST./LAST. son fundamentales para procesamiento por grupos. MERGE requiere ordenamiento previo pero ofrece máximo control.</aside>
+          <aside class="notes" hidden>ODS permite crear reportes profesionales en múltiples formatos de una sola ejecución.</aside>
+        </section>
         </section>
 
-        <!-- ============ SLIDE 8 · Auditoría y Monitoreo ============ -->
-        <section class="slide" data-title="Auditoría y Monitoreo" data-template="audit">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Control de Calidad ETL</span></div><div class="module-badge">BLOQUE 5</div></header>
+        <!-- ============ SLIDE 12 · Actividad práctica de visualización ============ -->
+        <section class="slide" data-title="Actividad práctica" data-template="activity">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica guiada</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
-            <h2 class="slide-title">Sistema de Auditoría y Monitoreo ETL</h2>
-            <div class="cols">
-              <div>
-                <p><strong>Macro de Auditoría Automatizada:</strong></p>
-                <pre><code class="language-sas">/* Sistema de auditoría completo */
-%macro auditoria_etl(tabla_base=, tabla_resultado=, fecha_proceso=);
-    proc sql;
-        create table AUDIT.log_proceso_&fecha_proceso as
-        select "&tabla_base" as tabla_origen length=50
-             , "&tabla_resultado" as tabla_destino length=50
-             , datetime() as timestamp_proceso format=datetime20.
-             , (select count(*) from &tabla_base) as registros_origen
-             , (select count(*) from &tabla_resultado) as registros_destino
-             , calculated registros_destino - calculated registros_origen as diferencia
-             , case when calculated diferencia = 0 then 'OK'
-                    when calculated diferencia < 0 then 'PÉRDIDA'
-                    else 'INCREMENTO' end as status length=12
-        from (select 1 as dummy);
-    quit;
-    
-    /* Reporte de problemas */
-    %if &syserr ne 0 %then %do;
-        %put ERROR: Fallo en auditoría de &tabla_base;
-    %end;
-%mend;</code></pre>
-              </div>
-              <div>
-                <p><strong>Validaciones específicas ETL:</strong></p>
-                <pre><code class="language-sas">/* Macro para detectar duplicados post-integración */
-%macro check_duplicados(tabla=, key_fields=);
-    proc sql;
-        create table _temp_check as
-        select &key_fields, count(*) as n_duplicados
-        from &tabla
-        group by &key_fields
-        having count(*) > 1;
-    quit;
-    
-    proc sql noprint;
-        select count(*) into :n_problemas
-        from _temp_check;
-    quit;
-    
-    %if &n_problemas > 0 %then %do;
-        %put WARNING: &n_problemas grupos con duplicados en &tabla;
-        proc print data=_temp_check;
-            title "Duplicados encontrados en &tabla";
-        run;
-    %end;
-    %else %do;
-        %put INFO: No se encontraron duplicados en &tabla;
-    %end;
-%mend;
-
-/* Ejecutar auditorías */
-%auditoria_etl(tabla_base=RAW.ventas, tabla_resultado=work.dm_final);
-%check_duplicados(tabla=work.dm_final, key_fields=id_cliente, fecha_venta);</code></pre>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>La auditoría automatizada es esencial para detectar problemas en producción. Los logs permiten rastrear cada transformación.</aside>
-        </section>
-
-        <!-- ============ SLIDE 9 · Actividad práctica Dashboard ============ -->
-        <section class="slide" data-title="Actividad práctica Dashboard" data-template="activity">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica visualización</span></div><div class="module-badge">BLOQUE 5</div></header>
-          <main class="content">
-            <h2 class="slide-title">Actividad práctica: Dashboard ejecutivo completo (20 min)</h2>
-            <p><strong>Usando los datasets integrados del curso:</strong></p>
+            <h2 class="slide-title">Actividad práctica de visualización (10 min)</h2>
+            <p><strong>Usando work.ventas_cli_prod_vend:</strong></p>
             <ol class="refs">
-              <li><strong>Agregados básicos:</strong> Crear KPIs mensuales, por categoría y vendedor</li>
-              <li><strong>Visualizaciones core:</strong> Serie temporal, barras por categoría, top vendedores</li>
-              <li><strong>Gráficos avanzados:</strong> Distribuciones por segmento y scatter plots</li>
-              <li><strong>KPIs ejecutivos:</strong> Usar PROC MEANS y PROC REPORT con totales</li>
-              <li><strong>Exportación Excel:</strong> Paquete multi-hoja con gráficos y tablas</li>
-              <li><strong>Reporte PDF:</strong> Documento ejecutivo con visualizaciones integradas</li>
-              <li><strong>Automatización:</strong> Macro parametrizada para generar dashboard completo</li>
+              <li><strong>Series temporal:</strong> Crear gráfico de ventas por mes</li>
+              <li><strong>Barras:</strong> Top 5 categorías por monto total</li>
+              <li><strong>Distribución:</strong> Boxplot de monto por vendedor</li>
+              <li><strong>KPIs:</strong> Calcular ticket promedio por categoría</li>
+              <li><strong>Exportar:</strong> Generar PDF con los 4 elementos anteriores</li>
             </ol>
-            <p><strong>Entrega:</strong> Paquete ejecutivo (Excel + PDF) y archivos CSV para integración BI</p>
+            <p><strong>Entrega:</strong> Archivo PDF con visualizaciones y script comentado</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Esta actividad integra todo el flujo de visualización: de datos procesados a reportes ejecutivos listos para presentación.</aside>
+          <aside class="notes" hidden>Circular para asistir. Enfatizar títulos descriptivos y formateo de ejes.</aside>
         </section>
 
-        <!-- ============ SLIDE 10 · Cierre y próximos pasos ============ -->
-        <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
+        <!-- ============ SLIDE 13 · Cierre y próximos pasos ============ -->
+        <section class="slide" data-title="Cierre" data-template="wrap">
           <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
             <h2 class="slide-title">Cierre y evaluación</h2>
@@ -902,32 +617,30 @@ run;</code></pre>
               <div>
                 <p><strong>Preguntas de verificación:</strong></p>
                 <ul class="bullets">
-                  <li>¿Cuándo usar cada tipo de gráfico en PROC SGPLOT?</li>
-                  <li>¿Cómo generar KPIs rápidos con procedimientos estadísticos?</li>
-                  <li>¿Cuáles son las diferencias entre ODS EXCEL, PDF y PROC EXPORT?</li>
-                  <li>¿Cómo automatizar paquetes de reportes con macros?</li>
+                  <li>¿Cuáles son los 4 tipos principales de gráficos en SGPLOT?</li>
+                  <li>¿Cómo se calcula un KPI usando PROC SQL?</li>
+                  <li>¿Qué ventaja tiene ODS EXCEL sobre PROC EXPORT?</li>
+                  <li>¿Cuándo usar SGPANEL vs SGPLOT individual?</li>
                 </ul>
               </div>
               <div>
-                <p><strong>Integración empresarial:</strong></p>
+                <p><strong>Competencias logradas:</strong></p>
                 <ul class="bullets">
-                  <li><strong>Power BI/Tableau:</strong> Dashboards interactivos con datos SAS</li>
-                  <li><strong>Reportes ejecutivos:</strong> Paquetes automatizados multi-formato</li>
-                  <li><strong>Flujo completo:</strong> Desde datos brutos hasta insights accionables</li>
+                  <li><strong>Visualización:</strong> Series, barras, distribución, paneles</li>
+                  <li><strong>KPIs:</strong> Agregación y cálculo de métricas clave</li>
+                  <li><strong>Exportación:</strong> PDF y Excel ejecutivos</li>
+                  <li><strong>Presentación:</strong> Formateo y comunicación efectiva</li>
                 </ul>
               </div>
             </div>
-            <p><strong>Logro:</strong> Han dominado la comunicación visual de datos y generación de reportes empresariales</p>
+            <p><strong>Recordatorio:</strong> La visualización efectiva convierte datos en insights</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Este bloque completa el ciclo analítico. Los participantes pueden ahora comunicar efectivamente sus hallazgos a cualquier audiencia.</aside>
+          <aside class="notes" hidden>Enfatizar que la visualización es el puente entre análisis técnico y decisiones de negocio.</aside>
         </section>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Este bloque completa el ciclo analítico. Los participantes pueden ahora comunicar efectivamente sus hallazgos a cualquier audiencia.</aside>
         </section>
 
-        <!-- ============ SLIDE 11 · Recursos adicionales ============ -->
+        <!-- ============ SLIDE 14 · Recursos adicionales ============ -->
         <section class="slide" data-title="Recursos adicionales" data-template="resources">
           <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 5</div></header>
           <main class="content">
@@ -936,81 +649,27 @@ run;</code></pre>
               <div>
                 <p><strong>Documentación SAS:</strong></p>
                 <ul class="bullets">
-                  <li><strong>PROC SGPLOT User Guide:</strong> Visualizaciones modernas</li>
-                  <li><strong>ODS Graphics User's Guide:</strong> Gráficos estadísticos avanzados</li>
-                  <li><strong>ODS User's Guide:</strong> Sistema de exportación completo</li>
-                  <li><strong>Statistical Procedures:</strong> PROC MEANS, FREQ, REPORT</li>
-                </ul>
-                <p><strong>Mejores prácticas visualización:</strong></p>
-                <ul class="bullets">
-                  <li>Selección apropiada de tipo de gráfico</li>
-                  <li>Títulos descriptivos y etiquetas claras</li>
-                  <li>Formatos numéricos consistentes</li>
-                  <li>Jerarquía de información por audiencia</li>
+                  <li><strong>PROC SGPLOT:</strong> Gráficos básicos y de distribución</li>
+                  <li><strong>PROC SGPANEL:</strong> Paneles múltiples y facetas</li>
+                  <li><strong>ODS EXCEL:</strong> Exportación multi-hoja</li>
+                  <li><strong>ODS PDF:</strong> Reportes ejecutivos compactos</li>
                 </ul>
               </div>
               <div>
-                <p><strong>Integración BI:</strong></p>
-                <ul class="bullets">
-                  <li><strong>Power BI:</strong> Conectores y archivos CSV/Excel</li>
-                  <li><strong>Tableau:</strong> Importación directa de datasets SAS</li>
-                  <li><strong>Qlik Sense:</strong> Integración con archivos exportados</li>
-                  <li><strong>R/Python:</strong> Intercambio vía CSV y conectores ODBC</li>
-                </ul>
-                <p><strong>Recursos avanzados:</strong></p>
-                <ul class="bullets">
-                  <li>SAS Visual Analytics para dashboards interactivos</li>
-                  <li>PROC SGPANEL para visualizaciones múltiples</li>
-                  <li>Estilos ODS personalizados para marca corporativa</li>
-                  <li>Automatización con SAS Stored Processes</li>
-                </ul>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>La visualización es una competencia clave en analytics. Estos principios se aplican en cualquier herramienta de BI moderna.</aside>
-        </section>
-              <div>
-                <p><strong>Herramientas complementarias:</strong></p>
-                <ul class="bullets">
-                  <li><strong>SAS Data Integration Studio:</strong> ETL visual</li>
-                  <li><strong>SAS Enterprise Guide:</strong> Flujos de trabajo</li>
-                  <li><strong>Git:</strong> Control de versiones de scripts</li>
-                  <li><strong>Crontab/Task Scheduler:</strong> Automatización temporal</li>
-                </ul>
-                <p><strong>Extensiones del curso:</strong></p>
-                <ul class="bullets">
-                  <li>ETL en tiempo real con SAS Event Stream Processing</li>
-                  <li>Big Data ETL con SAS Viya</li>
-                  <li>Calidad de datos con SAS Data Quality</li>
-                </ul>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>ETL es una competencia trasversal esencial en el mundo de datos. Estos principios se aplican en cualquier stack tecnológico.</aside>
-        </section>
-                  <li><strong>PROC SQL User's Guide:</strong> JOINs, agregaciones y subconsultas</li>
-                  <li><strong>DATA Step Processing:</strong> MERGE, SET y variables FIRST./LAST.</li>
-                  <li><strong>Functions and CALL Routines:</strong> INTCK, INTNX, CASE WHEN</li>
-                  <li><strong>PROC TRANSPOSE:</strong> Reestructuración largo/ancho</li>
-                </ul>
-              </div>
-              <div>
-                <p><strong>Mejores prácticas:</strong></p>
+                <p><strong>Mejores prácticas de visualización:</strong></p>
                 <ul class="check">
-                  <li>Documentar lógica de combinación y reglas de negocio</li>
-                  <li>Validar integridad referencial después de JOINs</li>
-                  <li>Usar nombres descriptivos para datasets intermedios</li>
-                  <li>Implementar controles de calidad en DataMarts</li>
-                  <li>Optimizar consultas para grandes volúmenes</li>
+                  <li>Títulos descriptivos y contextuales</li>
+                  <li>Formateo consistente de ejes y valores</li>
+                  <li>Uso de grillas para facilitar lectura</li>
+                  <li>Colores y estilos apropiados para audiencia</li>
+                  <li>Exportación en formatos adecuados</li>
                 </ul>
               </div>
             </div>
-            <p><em>Los DataMarts bien construidos son la base de la inteligencia de negocio</em></p>
+            <p><em>Los gráficos efectivos comunican insights de manera instantánea</em></p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Preparar para Bloque 4 donde se construirán ETL completos usando estas técnicas como fundamento.</aside>
+          <aside class="notes" hidden">La visualización es la herramienta clave para transformar análisis en decisiones de negocio.</aside>
         </section>
 
       </div>
@@ -1069,7 +728,7 @@ run;</code></pre>
     const help = qs('#help'); const blackout = qs('#blackout'); const laser = qs('#laser');
     const clock = qs('#clock'); let tStart = 0, tElapsed = 0, tRunning = false, tHandle = null;
 
-    const KEY = 'peidDeckState_b3s2';
+    const KEY = 'peidDeckState_b2s1';
     const save = () => localStorage.setItem(KEY, JSON.stringify({ idx, tElapsed, tRunning }));
     const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{ return {}; } };
 
