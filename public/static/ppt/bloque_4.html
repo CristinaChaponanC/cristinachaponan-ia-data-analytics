@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Taller SAS · Bloque 2 · Cristina Chapoñan</title>
+  <title>Taller SAS · Bloque 4 · Cristina Chapoñan</title>
   <!--  
-    Presentación PEID en un único archivo (HTML+CSS+JS)
-    Bloque 2 · Sesión 1: Preparación de datos en SAS (DATA step vs PROC step, Importación y Calidad)
+    Presentación PEID e          <aside class="notes" hidden>Este es el bloque más avanzado del curso. Los participantes aprenderán a crear procesos ETL empresariales completos con validaciones y auditoría.</aside> un único archivo (HTML+CSS+JS)
+    Bloque 4 · Sesión 2: Flujos ETL en SAS (Extract, Transform, Load y Automatización de Procesos)
     Funciones: navegación teclado/click/toque, overview, panel presentador con notas y timer,
     puntero láser, pantalla en negro, fullscreen, contenteditable y export a PDF.
   -->
@@ -209,9 +209,9 @@
             <div class="module-badge" id="badge">BLOQUE 2</div>
           </header>
           <main class="content">
-            <h1 class="course-title" contenteditable="true">Taller SAS · Bloque 2: Preparación de Datos en SAS</h1>
+            <h1 class="course-title" contenteditable="true">Taller SAS · Bloque 4: Flujos ETL (Extract, Transform, Load)</h1>
             <div class="meta">
-              <span class="label">Enfoque:</span><span class="value">Data Step, PROC Step, Importación y Calidad</span>
+              <span class="label">Enfoque:</span><span class="value">ETL (Extract-Transform-Load), Validación de Calidad y Automatización</span>
             </div>
             <div class="meta">
               <span class="label">Docente:</span><span class="value" contenteditable="true">Cristina Chapoñan</span>
@@ -226,156 +226,212 @@
 
         <!-- ============ SLIDE 2 · Agenda ============ -->
         <section class="slide" data-title="Agenda (90 min)" data-template="agenda">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Taller SAS · Bloque 2</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Taller SAS · Bloque 4</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
             <h2 class="slide-title">Agenda (90 min)</h2>
             <ul class="bullets">
-              <li>15′ – Data Step vs PROC Step: conceptos y diferencias fundamentales</li>
-              <li>20′ – Carga de datos desde Excel/CSV en SAS Studio (OnDemand)</li>
-              <li>25′ – Limpieza de datos básica: valores faltantes, formatos y filtros</li>
-              <li>20′ – Validación de datos: inconsistencias, tipos y validaciones lógicas</li>
-              <li>10′ – Actividad práctica integrada con dataset del curso</li>
+              <li>20′ – Conceptos ETL: Extract, Transform, Load y arquitectura de procesos</li>
+              <li>25′ – Validación integral: duplicados, reglas de negocio e integridad referencial</li>
+              <li>20′ – Integración progresiva de fuentes y construcción de DataMarts</li>
+              <li>15′ – Parametrización, automatización y sistemas de auditoría</li>
+              <li>10′ – Actividad práctica: construcción de pipeline ETL completo</li>
             </ul>
-            <p><strong>Objetivo:</strong> Datos precisos, consistentes y listos para análisis</p>
+            <p><strong>Objetivo:</strong> Crear soluciones de datos empresariales confiables y reproducibles</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Este bloque es fundamental para la calidad de datos. Enfatizar que sin datos limpios, los análisis posteriores serán incorrectos.</aside>
+          <aside class="notes" hidden">Este bloque es el corazón del procesamiento de datos. Los participantes aprenderán a combinar múltiples fuentes para crear vistas analíticas integradas.</aside>
         </section>
 
         <!-- ============ SLIDE 3 · Resultados de aprendizaje ============ -->
         <section class="slide" data-title="Resultados de aprendizaje" data-template="goals">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Resultados</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Resultados</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
             <h2 class="slide-title">Resultados de aprendizaje</h2>
             <ul class="check">
-              <li>Comprende las <strong>diferencias fundamentales</strong> entre DATA step y PROC step</li>
-              <li>Importa datos desde <strong>Excel y CSV</strong> usando PROC IMPORT y el asistente</li>
-              <li>Aplica técnicas de <strong>limpieza básica</strong>: missing values, formatos y filtros</li>
-              <li>Implementa <strong>validaciones de calidad</strong>: tipos, rangos y consistencia lógica</li>
-              <li>Utiliza funciones de <strong>manipulación de texto</strong> y transformación de datos</li>
-              <li>Crea un <strong>flujo de preparación</strong> reproducible y documentado</li>
+              <li>Diseña <strong>procesos ETL completos</strong> con extracción, transformación y carga sistemática</li>
+              <li>Implementa <strong>validaciones integrales</strong> de calidad: duplicados, reglas de negocio e integridad</li>
+              <li>Construye <strong>sistemas de integración progresiva</strong> combinando múltiples fuentes</li>
+              <li>Desarrolla <strong>DataMarts empresariales</strong> con análisis RFM y segmentación avanzada</li>
+              <li>Automatiza procesos con <strong>parametrización y macros</strong> para flujos reproducibles</li>
+              <li>Implementa <strong>auditoría y trazabilidad</strong> para sistemas ETL de clase empresarial</li>
             </ul>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Estos conocimientos son la base para todos los análisis posteriores. Sin datos limpios, no hay análisis válidos.</aside>
+          <aside class="notes" hidden>Este bloque convierte a los participantes en arquitectos de datos, capaces de diseñar soluciones ETL empresariales completas.</aside>
         </section>
 
-        <!-- ============ SLIDE 4 · Data Step vs PROC Step ============ -->
-        <section class="slide" data-title="Data Step vs PROC Step" data-template="concepts">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Conceptos fundamentales</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 4 · Conceptos ETL ============ -->
+        <section class="slide" data-title="Conceptos ETL" data-template="etl-concepts">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Extract-Transform-Load</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
-            <h2 class="slide-title">Data Step vs PROC Step: diferencias clave</h2>
+            <h2 class="slide-title">Conceptos ETL: Extract, Transform, Load</h2>
             <div class="cols">
               <div>
-                <p><strong>DATA Step (Imperativo):</strong></p>
+                <p><strong>Extract (Extracción):</strong></p>
                 <ul class="bullets">
-                  <li>Crea o modifica datasets</li>
-                  <li>Procesamiento registro a registro (row-wise)</li>
-                  <li>Transformaciones personalizadas</li>
-                  <li>Control de flujo con IF/THEN/ELSE</li>
-                  <li>Ejemplo: crear variables, filtrar, combinar</li>
+                  <li>Obtener datos de fuentes originales</li>
+                  <li>CSV, Excel, bases de datos, APIs</li>
+                  <li>PROC IMPORT y LIBNAME</li>
+                  <li>Detección automática de tipos</li>
                 </ul>
+                <pre><code class="language-sas">/* Extracción de múltiples fuentes */
+%let PATH = /home/&sysuserid/My Folder;
+
+proc import datafile="&PATH/clientes.csv"
+    out=work.clientes_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;
+
+proc import datafile="&PATH/ventas.csv"
+    out=work.ventas_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;</code></pre>
               </div>
               <div>
-                <p><strong>PROC Step (Declarativo):</strong></p>
+                <p><strong>Transform (Transformación):</strong></p>
                 <ul class="bullets">
-                  <li>Analiza datos existentes</li>
-                  <li>Rutinas optimizadas predefinidas</li>
-                  <li>Menos código para tareas estándar</li>
-                  <li>Resultados sin modificar estructura</li>
-                  <li>Ejemplo: PRINT, SORT, MEANS, FREQ</li>
+                  <li>Limpieza y estandarización</li>
+                  <li>Validación y reglas de negocio</li>
+                  <li>Integración de fuentes múltiples</li>
+                  <li>Cálculo de variables derivadas</li>
+                </ul>
+                <p><strong>Load (Carga):</strong></p>
+                <ul class="bullets">
+                  <li>Almacenamiento en destino final</li>
+                  <li>DataMarts y data warehouses</li>
+                  <li>Exportación en múltiples formatos</li>
+                  <li>Reportes de proceso y auditoría</li>
                 </ul>
               </div>
             </div>
-            <p><strong>Flujo típico:</strong> DATA para preparar → PROC para analizar</p>
+            <p><strong>Principio:</strong> Sistemático, reproducible, auditable y escalable</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>ETL es la metodología estándar para mover datos desde fuentes hasta destinos analíticos, aplicando transformaciones y validaciones.</aside>
         </section>
 
-        <!-- ============ SLIDE 5 · Importación de datos ============ -->
-        <section class="slide" data-title="Importación desde Excel/CSV" data-template="import">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Carga de datos</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 5 · Validación Integral ============ -->
+        <section class="slide" data-title="Validación Integral" data-template="validation">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Calidad de datos</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
-            <h2 class="slide-title">Carga de datos desde Excel/CSV en SAS OnDemand</h2>
+            <h2 class="slide-title">Validación Integral: Duplicados, Reglas de Negocio e Integridad</h2>
             <div class="cols">
               <div>
-                <p><strong>1. Subir archivos al servidor:</strong></p>
-                <ul class="bullets">
-                  <li>Files (Home) → Upload</li>
-                  <li>Seleccionar CSV/Excel desde PC</li>
-                  <li>Verificar carga exitosa</li>
-                </ul>
-                <p><strong>2. Import Wizard (Point & Click):</strong></p>
-                <ul class="bullets">
-                  <li>File → Import Data</li>
-                  <li>Detección automática de tipo</li>
-                  <li>Configurar opciones y destino</li>
-                </ul>
+                <p><strong>Detección de Duplicados:</strong></p>
+                <pre><code class="language-sas">/* Eliminar duplicados por clave primaria */
+proc sort data=work.clientes_prep out=work.clientes_nodup 
+          nodupkey dupout=work.clientes_dups; 
+    by id_char; 
+run;
+
+proc sort data=work.ventas_prep out=work.ventas_nodup 
+          nodupkey dupout=work.ventas_dups; 
+    by id_venta; 
+run;
+
+/* Resumen de duplicados */
+proc sql;
+    create table work.dup_resumen as
+    select 'clientes' as tabla length=16, 
+           count(*) as n from work.clientes_dups 
+    union all
+    select 'ventas', count(*) from work.ventas_dups;
+quit;</code></pre>
               </div>
               <div>
-                <p><strong>3. PROC IMPORT (Código):</strong></p>
-                <pre><code class="language-sas">/* CSV */
-PROC IMPORT DATAFILE="/home/usuario/datos.csv"
-    OUT=work.datos
-    DATAROW=2;
-RUN;
-
-/* Excel */
-PROC IMPORT DATAFILE="/home/usuario/datos.xlsx"
-    OUT=work.datos
-    DBMS=xlsx REPLACE;
-    SHEET="Hoja1";
-    GETNAMES=YES;
-RUN;</code></pre>
-              </div>
-            </div>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Demostrar ambos métodos. Siempre verificar con PROC CONTENTS después de importar.</aside>
-        </section>
-
-        <!-- ============ SLIDE 6 · Limpieza básica: valores faltantes ============ -->
-        <section class="slide" data-title="Limpieza: valores faltantes" data-template="cleaning-missing">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Limpieza de datos</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Limpieza básica: valores faltantes (missing)</h2>
-            <div class="cols">
-              <div>
-                <p><strong>Detección de missing:</strong></p>
-                <pre><code class="language-sas">/* Contar missing por variable */
-PROC MEANS DATA=work.datos NMISS N;
-    VAR edad salario;
-RUN;
-
-/* Missing en variables carácter */
-PROC FREQ DATA=work.datos;
-    TABLES pais / MISSING;
-RUN;</code></pre>
-                <p><strong>En SAS:</strong></p>
-                <ul class="bullets">
-                  <li>Numérico: <code>.</code> (punto)</li>
-                  <li>Carácter: cadena vacía</li>
-                </ul>
-              </div>
-              <div>
-                <p><strong>Estrategias de tratamiento:</strong></p>
-                <pre><code class="language-sas">/* Imputar con valor fijo */
-DATA work.datos_clean;
-    SET work.datos;
-    IF MISSING(edad) THEN edad = 30;
-    IF MISSING(pais) THEN pais = 'Desconocido';
-RUN;
-
-/* Filtrar casos incompletos */
-DATA work.datos_completos;
-    SET work.datos;
-    IF NOT MISSING(edad) AND NOT MISSING(salario);
-RUN;</code></pre>
+                <p><strong>Validaciones de Reglas de Negocio:</strong></p>
+                <pre><code class="language-sas">/* Validación de ventas */
+data work.ventas_chk;
+    set work.ventas_nodup;
+    length err_tipo $40;
+    err_tipo='';
+    if monto_total < 0 then err_tipo='monto_negativo';
+    else if cantidad <= 0 then err_tipo='cantidad_no_positiva';
+    else if missing(fecha_venta_d) then err_tipo='fecha_invalida';
+    if err_tipo ne '' then output;
+run;</code></pre>
+                <p><strong>Integridad Referencial:</strong></p>
+                <pre><code class="language-sas">/* Ventas deben referenciar clientes existentes */
+proc sql;
+    create table work.ventas_ref_cli as
+    select v.*
+    from work.ventas_nodup v
+    left join work.clientes_nodup c
+        on v.id_cliente_char = c.id_char
+    where c.id_char is missing;
+quit;</code></pre>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enfatizar que la estrategia depende del contexto del análisis. Missing != 0.</aside>
+          <aside class="notes" hidden>La validación es crítica en ETL. Separar datos válidos de problemáticos permite procesamiento diferenciado y trazabilidad de errores.</aside>
+        </section>
+
+        <!-- ============ SLIDE 6 · Integración Progresiva ============ -->
+        <section class="slide" data-title="Integración Progresiva" data-template="integration">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Construcción de DataMarts</span></div><div class="module-badge">BLOQUE 4</div></header>
+          <main class="content">
+            <h2 class="slide-title">Integración Progresiva de Fuentes y Construcción de DataMarts</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Paso 1: Enriquecer con Clientes</strong></p>
+                <pre><code class="language-sas">/* Integración 1: Ventas + Clientes */
+proc sql;
+    create table work.ventas_cli as
+    select v.*
+         , c.id_char as id_cliente
+         , c.nombre_completo, c.sexo_full
+         , c.pais, c.email, c.email_dominio
+         , c.vendedor as vendedor_asignado
+    from work.ventas_validas v
+    inner join work.clientes_nodup c
+        on v.id_cliente_char = c.id_char;
+quit;</code></pre>
+                <p><strong>Paso 2: Añadir Productos</strong></p>
+                <pre><code class="language-sas">/* Integración 2: + Productos */
+proc sql;
+    create table work.ventas_cli_prod as
+    select vc.*
+         , p.categoria
+         , p.precio_unitario_num as precio_unitario
+    from work.ventas_cli vc
+    left join work.productos_nodup p
+        on strip(vc.producto) = p.producto_char;
+quit;</code></pre>
+              </div>
+              <div>
+                <p><strong>Paso 3: Completar con Vendedores</strong></p>
+                <pre><code class="language-sas">/* Integración 3: + Vendedores */
+proc sql;
+    create table work.ventas_cli_prod_vend as
+    select vcp.*
+         , v.vendedor_char as vendedor
+         , v.region as region_vendedor
+         , v.fecha_ingreso_d
+         , v.objetivo_mensual
+    from work.ventas_cli_prod vcp
+    left join work.vendedores_nodup v
+        on strip(vcp.vendedor_asignado) = v.vendedor_char;
+quit;</code></pre>
+                <p><strong>DataMart RFM con Segmentación</strong></p>
+                <pre><code class="language-sas">/* DataMart final con análisis RFM */
+proc sql;
+    create table work.dm_clientes as
+    select c.id_char as id, c.nombre_completo
+         , k.n_transacciones as F  /* Frequency */
+         , k.total_monto as M      /* Monetary */
+         , intck('day', k.ultima_compra, today()) as R_dias
+         , case when k.total_monto >= 5000 then 'VIP'
+                when k.total_monto >= 2000 then 'Premium'
+                else 'Regular' end as segmento length=12
+    from work.clientes_nodup c
+    left join work.kpi_cliente k on c.id_char = k.id_cliente;
+quit;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La integración paso a paso permite verificar la calidad en cada etapa. El DataMart RFM es fundamental para segmentación de clientes.</aside>
         </section>
 
         <!-- ============ SLIDE 7 · Formatos y filtros ============ -->
@@ -428,200 +484,362 @@ RUN;</code></pre>
           <aside class="notes" hidden>Diferencia entre formato permanente (DATA step) vs temporal (PROC step). WHERE vs IF.</aside>
         </section>
 
-        <!-- ============ SLIDE 8 · Validación de tipos y consistencia ============ -->
-        <section class="slide" data-title="Validación de datos" data-template="validation">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Validación</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 7 · Parametrización y Automatización ============ -->
+        <section class="slide" data-title="Parametrización y Automatización" data-template="automation">
+          <header class="brand brand--compact"><div class="brand-lines"><span>ETL Automático</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
-            <h2 class="slide-title">Validación: tipos de datos y consistencia lógica</h2>
+            <h2 class="slide-title">Parametrización y Automatización del ETL</h2>
             <div class="cols">
               <div>
-                <p><strong>Control de tipos:</strong></p>
-                <pre><code class="language-sas">/* Verificar tipos */
-PROC CONTENTS DATA=work.datos SHORT;
-RUN;
+                <p><strong>Macrovariables para flexibilidad:</strong></p>
+                <pre><code class="language-sas">/* Parámetros configurables */
+%let periodo = '31DEC2023'd;
+%let umbral_monto = 1000;
+%let ruta_base = /data/raw/;
+%let output_lib = WORK;
 
-/* Conversión de tipos */
-DATA work.datos_fix;
-    SET work.datos;
-    /* Texto a número */
-    edad_num = INPUT(edad_char, BEST12.);
-    /* Número a texto */
-    id_char = PUT(id_num, 8.);
-RUN;</code></pre>
+/* Macro para validación genérica */
+%macro validar_archivo(tabla=, campos=);
+    proc contents data=&tabla out=_temp_contents noprint;
+    run;
+    
+    proc sql noprint;
+        select count(*) into :n_obs
+        from &tabla;
+    quit;
+    
+    %put INFO: Tabla &tabla tiene &n_obs observaciones;
+    
+    /* Verificar campos obligatorios */
+    %if &campos ne %then %do;
+        /* Lógica de validación */
+    %end;
+%mend;</code></pre>
               </div>
               <div>
-                <p><strong>Validaciones lógicas:</strong></p>
-                <pre><code class="language-sas">/* Rangos válidos */
-DATA work.datos_valid;
-    SET work.datos;
-    /* Fechas en rango lógico */
-    IF NOT ('01JAN2019'd <= fecha <= TODAY())
-        THEN flag_fecha = 1;
-    /* Valores no negativos */
-    IF monto < 0 THEN flag_monto = 1;
-    /* Emails válidos (básico) */
-    IF NOT INDEX(email, '@') THEN flag_email = 1;
-RUN;</code></pre>
-              </div>
-            </div>
-            <p><strong>Principio:</strong> Detectar inconsistencias antes de que afecten el análisis</p>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-        </section>
+                <p><strong>ETL Automático completo:</strong></p>
+                <pre><code class="language-sas">/* Macro principal del ETL */
+%macro etl_completo(fecha_proceso=);
+    /* 1. Limpieza y preparación */
+    %validar_archivo(tabla=RAW.ventas);
+    %validar_archivo(tabla=RAW.clientes);
+    
+    /* 2. Transformaciones */
+    proc sql;
+        create table &output_lib..ventas_clean as
+        select *, "&fecha_proceso"d as fecha_proceso format=date9.
+        from RAW.ventas
+        where fecha_venta <= "&fecha_proceso"d
+          and monto_total >= &umbral_monto;
+    quit;
+    
+    /* 3. Integración progresiva */
+    %integrar_fuentes(fecha=&fecha_proceso);
+    
+    /* 4. Construcción DataMart */
+    %construir_datamart(fecha=&fecha_proceso);
+    
+    /* 5. Reportes de auditoría */
+    %generar_auditoria(fecha=&fecha_proceso);
+%mend;
 
-        <!-- ============ SLIDE 9 · Ejemplos prácticos integrados ============ -->
-        <section class="slide" data-title="Ejemplos prácticos de limpieza" data-template="practical-examples">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Ejemplos prácticos de limpieza</h2>
-            <div class="cols">
-              <div>
-                <p><strong>Normalización de texto:</strong></p>
-                <pre><code class="language-sas">/* Limpiar y estandarizar */
-DATA work.datos_clean;
-    SET work.datos;
-    /* Normalizar país */
-    pais = PROPCASE(STRIP(pais));
-    /* Limpiar email */
-    email = LOWCASE(STRIP(email));
-    /* Crear categorías */
-    IF edad < 18 THEN grupo_edad = 'Menor';
-    ELSE IF edad <= 65 THEN grupo_edad = 'Adulto';
-    ELSE grupo_edad = 'Senior';
-RUN;</code></pre>
-              </div>
-              <div>
-                <p><strong>Detección de duplicados:</strong></p>
-                <pre><code class="language-sas">/* Identificar y remover duplicados */
-PROC SORT DATA=work.datos 
-    OUT=work.datos_nodup 
-    NODUPKEY DUPOUT=work.duplicados;
-    BY id_cliente;
-RUN;
-
-/* Reportar duplicados encontrados */
-PROC PRINT DATA=work.duplicados;
-    TITLE 'Registros duplicados detectados';
-RUN;</code></pre>
+/* Ejecución */
+%etl_completo(fecha_proceso=%sysfunc(today()));</code></pre>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Usar el dataset del curso datos_curso_sas.csv para ejemplos en vivo.</aside>
+          <aside class="notes" hidden>La automatización permite ejecutar todo el ETL con un solo comando. Las macrovariables facilitan la configuración sin modificar código.</aside>
+        </section>
+             when total_monto >= 2000 then 'Premium'
+             when total_monto > 0 then 'Regular'
+             else 'Sin Compras'
+           end as segmento length=12
+         , case
+             when n_transacciones >= 10 then 'Muy Activo'
+             when n_transacciones >= 5 then 'Activo'
+             when n_transacciones >= 1 then 'Ocasional'
+             else 'Inactivo'
+           end as actividad length=12
+    from work.kpi_cliente as k;
+quit;</code></pre>
+              </div>
+              <div>
+                <p><strong>Uso de CALCULATED:</strong></p>
+                <pre><code class="language-sas">/* Filtrar por ticket promedio calculado */
+proc sql;
+    create table work.alto_ticket as
+    select id, nombre_completo
+         , n_transacciones
+         , total_monto
+         , case when n_transacciones > 0 
+                then total_monto/n_transacciones 
+                else . end as ticket_promedio
+    from work.kpi_cliente
+    having calculated ticket_promedio > 300;
+quit;</code></pre>
+                <p><strong>Principio:</strong> CALCULATED permite referenciar columnas creadas en la misma consulta</p>
+              </div>
+            </div>
+            <p><strong>Ventaja:</strong> Lógica condicional compleja directamente en SQL sin DATA steps adicionales</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">CASE WHEN es fundamental para crear categorizaciones dinámicas. CALCULATED evita subconsultas innecesarias.</aside>
         </section>
 
-        <!-- ============ SLIDE 10 · Actividad práctica integrada ============ -->
-        <section class="slide" data-title="Actividad práctica" data-template="activity">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica guiada</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 8 · DATA Step: SET, MERGE y Variables FIRST/LAST ============ -->
+        <section class="slide" data-title="DATA Step: SET, MERGE y FIRST/LAST" data-template="data-step-advanced">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Control granular</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Actividad práctica integrada (20 min)</h2>
-            <p><strong>Usando datos_curso_sas.csv:</strong></p>
+            <h2 class="slide-title">DATA Step: SET/MERGE y Variables Automáticas FIRST./LAST.</h2>
+            <div class="cols">
+              <div>
+                <p><strong>MERGE - Combinación horizontal:</strong></p>
+                <pre><code class="language-sas">/* Agregar métricas por cliente */
+proc sql;
+    create table work.metricas_cliente as
+    select id_cliente as id
+         , count(*) as num_compras
+         , sum(monto_total) as total_gastado
+    from work.ventas_prep
+    group by id_cliente;
+quit;
+
+/* Ordenar para MERGE */
+proc sort data=work.clientes_prep; by id; run;
+proc sort data=work.metricas_cliente; by id; run;
+
+/* MERGE con indicadores IN= */
+data work.cliente_completo;
+    merge work.clientes_prep(in=tiene_datos_cliente) 
+          work.metricas_cliente(in=tiene_ventas);
+    by id;
+    
+    if tiene_datos_cliente and tiene_ventas then 
+        tipo = 'Cliente Activo';
+    else if tiene_datos_cliente and not tiene_ventas then 
+        tipo = 'Cliente Sin Ventas';
+    
+    if tiene_datos_cliente; /* Solo clientes válidos */
+run;</code></pre>
+              </div>
+              <div>
+                <p><strong>Variables FIRST./LAST. por grupos:</strong></p>
+                <pre><code class="language-sas">/* Encontrar última compra por cliente */
+proc sort data=work.ventas_prep out=work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+run;
+
+data work.ultima_compra;
+    set work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+    
+    retain fecha_ultima_compra monto_ultima_compra;
+    
+    if first.id_cliente then do;
+        fecha_ultima_compra = .;
+        monto_ultima_compra = .;
+    end;
+    
+    /* Actualizar con cada registro */
+    fecha_ultima_compra = fecha_venta_d;
+    monto_ultima_compra = monto_total;
+    
+    /* Solo salida en último registro del cliente */
+    if last.id_cliente then output;
+    
+    format fecha_ultima_compra date9.;
+    keep id_cliente fecha_ultima_compra monto_ultima_compra;
+run;</code></pre>
+                <p><strong>Gestión de duplicados con NODUPKEY</strong></p>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">FIRST./LAST. son fundamentales para procesamiento por grupos. MERGE requiere ordenamiento previo pero ofrece máximo control.</aside>
+        </section>
+
+        <!-- ============ SLIDE 8 · Auditoría y Monitoreo ============ -->
+        <section class="slide" data-title="Auditoría y Monitoreo" data-template="audit">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Control de Calidad ETL</span></div><div class="module-badge">BLOQUE 4</div></header>
+          <main class="content">
+            <h2 class="slide-title">Sistema de Auditoría y Monitoreo ETL</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Macro de Auditoría Automatizada:</strong></p>
+                <pre><code class="language-sas">/* Sistema de auditoría completo */
+%macro auditoria_etl(tabla_base=, tabla_resultado=, fecha_proceso=);
+    proc sql;
+        create table AUDIT.log_proceso_&fecha_proceso as
+        select "&tabla_base" as tabla_origen length=50
+             , "&tabla_resultado" as tabla_destino length=50
+             , datetime() as timestamp_proceso format=datetime20.
+             , (select count(*) from &tabla_base) as registros_origen
+             , (select count(*) from &tabla_resultado) as registros_destino
+             , calculated registros_destino - calculated registros_origen as diferencia
+             , case when calculated diferencia = 0 then 'OK'
+                    when calculated diferencia < 0 then 'PÉRDIDA'
+                    else 'INCREMENTO' end as status length=12
+        from (select 1 as dummy);
+    quit;
+    
+    /* Reporte de problemas */
+    %if &syserr ne 0 %then %do;
+        %put ERROR: Fallo en auditoría de &tabla_base;
+    %end;
+%mend;</code></pre>
+              </div>
+              <div>
+                <p><strong>Validaciones específicas ETL:</strong></p>
+                <pre><code class="language-sas">/* Macro para detectar duplicados post-integración */
+%macro check_duplicados(tabla=, key_fields=);
+    proc sql;
+        create table _temp_check as
+        select &key_fields, count(*) as n_duplicados
+        from &tabla
+        group by &key_fields
+        having count(*) > 1;
+    quit;
+    
+    proc sql noprint;
+        select count(*) into :n_problemas
+        from _temp_check;
+    quit;
+    
+    %if &n_problemas > 0 %then %do;
+        %put WARNING: &n_problemas grupos con duplicados en &tabla;
+        proc print data=_temp_check;
+            title "Duplicados encontrados en &tabla";
+        run;
+    %end;
+    %else %do;
+        %put INFO: No se encontraron duplicados en &tabla;
+    %end;
+%mend;
+
+/* Ejecutar auditorías */
+%auditoria_etl(tabla_base=RAW.ventas, tabla_resultado=work.dm_final);
+%check_duplicados(tabla=work.dm_final, key_fields=id_cliente, fecha_venta);</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La auditoría automatizada es esencial para detectar problemas en producción. Los logs permiten rastrear cada transformación.</aside>
+        </section>
+
+        <!-- ============ SLIDE 9 · Actividad práctica ETL ============ -->
+        <section class="slide" data-title="Actividad práctica ETL" data-template="activity">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica ETL</span></div><div class="module-badge">BLOQUE 4</div></header>
+          <main class="content">
+            <h2 class="slide-title">Actividad práctica: Implementar ETL completo (25 min)</h2>
+            <p><strong>Usando los 4 datasets del curso (clientes, ventas, productos, vendedores):</strong></p>
             <ol class="refs">
-              <li><strong>Importar:</strong> Usar PROC IMPORT para cargar el dataset</li>
-              <li><strong>Explorar:</strong> PROC CONTENTS y PROC MEANS para entender los datos</li>
-              <li><strong>Limpiar:</strong> Tratar valores faltantes en variables clave</li>
-              <li><strong>Validar:</strong> Verificar rangos lógicos (edad, salario, monto)</li>
-              <li><strong>Transformar:</strong> Crear categorías y aplicar formatos</li>
-              <li><strong>Reportar:</strong> Generar resumen de calidad de datos</li>
+              <li><strong>Extract:</strong> Implementar validación de calidad con macros para cada fuente</li>
+              <li><strong>Transform:</strong> Limpiar y estandarizar datos usando las técnicas aprendidas</li>
+              <li><strong>Load:</strong> Realizar integración progresiva paso a paso (ventas+clientes, +productos, +vendedores)</li>
+              <li><strong>DataMart:</strong> Construir tabla analítica final con métricas RFM</li>
+              <li><strong>Automatización:</strong> Encapsular todo en una macro principal parametrizada</li>
+              <li><strong>Auditoría:</strong> Implementar controles de calidad y logs de proceso</li>
             </ol>
-            <p><strong>Entrega:</strong> Script completo con comentarios y 1 captura del resumen final</p>
+            <p><strong>Entrega:</strong> Script ETL completo, DataMart final y reporte de auditoría con métricas de calidad</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Circular por las pantallas para asistir. Enfatizar documentación del proceso de limpieza.</aside>
+          <aside class="notes" hidden>Esta actividad integra todo el flujo ETL. Los participantes construirán su primer proceso automatizado de integración empresarial.</aside>
         </section>
 
-        <!-- ============ SLIDE 11 · Cierre y próximos pasos ============ -->
+        <!-- ============ SLIDE 10 · Cierre y próximos pasos ============ -->
         <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
             <h2 class="slide-title">Cierre y evaluación</h2>
             <div class="cols">
               <div>
                 <p><strong>Preguntas de verificación:</strong></p>
                 <ul class="bullets">
-                  <li>¿Cuál es la diferencia principal entre DATA step y PROC step?</li>
-                  <li>¿Cómo detectamos valores faltantes en SAS?</li>
-                  <li>¿Para qué sirven los formatos personalizados?</li>
-                  <li>¿Qué validaciones aplicarías a un dataset de ventas?</li>
+                  <li>¿Qué significa ETL y cuáles son sus fases principales?</li>
+                  <li>¿Cómo implementar validación de calidad en cada etapa?</li>
+                  <li>¿Para qué sirve la integración progresiva de fuentes?</li>
+                  <li>¿Cómo automatizar un proceso ETL con macros paramétricas?</li>
                 </ul>
               </div>
               <div>
                 <p><strong>Próximos bloques:</strong></p>
                 <ul class="bullets">
-                  <li><strong>Bloque 3:</strong> Análisis exploratorio y visualización</li>
-                  <li><strong>Bloque 4:</strong> Automatización y mejores prácticas</li>
-                  <li><strong>Aplicación:</strong> Los datos limpios son la base de todo análisis válido</li>
+                  <li><strong>Bloque 5:</strong> Visualización y exportación de resultados</li>
+                  <li><strong>Aplicación:</strong> ETL automatizado es la base de pipelines de datos empresariales</li>
+                  <li><strong>Industria:</strong> Principios aplicables a cualquier herramienta BI/Analytics</li>
                 </ul>
               </div>
             </div>
-            <p><strong>Recordatorio:</strong> Guardar scripts de limpieza para reutilización</p>
+            <p><strong>Logro:</strong> Han dominado la construcción de pipelines ETL escalables y auditables</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enfatizar que la preparación de datos es 70% del trabajo en proyectos reales de análisis.</aside>
+          <aside class="notes" hidden>Este bloque establece las bases para cualquier proceso de integración de datos empresarial. ETL es universal en Analytics.</aside>
         </section>
 
-        <!-- ============ SLIDE 12 · Recursos adicionales ============ -->
+        <!-- ============ SLIDE 11 · Recursos adicionales ============ -->
         <section class="slide" data-title="Recursos adicionales" data-template="resources">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 4</div></header>
           <main class="content">
             <h2 class="slide-title">Recursos y referencias</h2>
             <div class="cols">
               <div>
                 <p><strong>Documentación SAS:</strong></p>
                 <ul class="bullets">
-                  <li><strong>PROC IMPORT:</strong> Importación de datos externos</li>
-                  <li><strong>DATA Step:</strong> Manipulación registro por registro</li>
-                  <li><strong>PROC FORMAT:</strong> Creación de formatos personalizados</li>
-                  <li><strong>Funciones de texto:</strong> STRIP, UPCASE, LOWCASE, PROPCASE</li>
+                  <li><strong>Macro Language Reference:</strong> Automatización avanzada</li>
+                  <li><strong>PROC SQL User Guide:</strong> Técnicas ETL con SQL</li>
+                  <li><strong>DATA Step Programming:</strong> Transformaciones complejas</li>
+                  <li><strong>SAS/ACCESS:</strong> Conexión con bases de datos empresariales</li>
+                </ul>
+                <p><strong>Mejores prácticas ETL:</strong></p>
+                <ul class="bullets">
+                  <li>Validación temprana (fail fast principle)</li>
+                  <li>Logs detallados en cada etapa</li>
+                  <li>Parametrización para flexibilidad</li>
+                  <li>Pruebas unitarias de transformaciones</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Herramientas complementarias:</strong></p>
+                <ul class="bullets">
+                  <li><strong>SAS Data Integration Studio:</strong> ETL visual</li>
+                  <li><strong>SAS Enterprise Guide:</strong> Flujos de trabajo</li>
+                  <li><strong>Git:</strong> Control de versiones de scripts</li>
+                  <li><strong>Crontab/Task Scheduler:</strong> Automatización temporal</li>
+                </ul>
+                <p><strong>Extensiones del curso:</strong></p>
+                <ul class="bullets">
+                  <li>ETL en tiempo real con SAS Event Stream Processing</li>
+                  <li>Big Data ETL con SAS Viya</li>
+                  <li>Calidad de datos con SAS Data Quality</li>
+                </ul>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>ETL es una competencia trasversal esencial en el mundo de datos. Estos principios se aplican en cualquier stack tecnológico.</aside>
+        </section>
+                  <li><strong>PROC SQL User's Guide:</strong> JOINs, agregaciones y subconsultas</li>
+                  <li><strong>DATA Step Processing:</strong> MERGE, SET y variables FIRST./LAST.</li>
+                  <li><strong>Functions and CALL Routines:</strong> INTCK, INTNX, CASE WHEN</li>
+                  <li><strong>PROC TRANSPOSE:</strong> Reestructuración largo/ancho</li>
                 </ul>
               </div>
               <div>
                 <p><strong>Mejores prácticas:</strong></p>
                 <ul class="check">
-                  <li>Documentar cada paso de limpieza</li>
-                  <li>Validar datos antes y después de transformaciones</li>
-                  <li>Crear flujos reproducibles</li>
-                  <li>Mantener datasets originales intactos</li>
-                  <li>Reportar calidad de datos al equipo</li>
+                  <li>Documentar lógica de combinación y reglas de negocio</li>
+                  <li>Validar integridad referencial después de JOINs</li>
+                  <li>Usar nombres descriptivos para datasets intermedios</li>
+                  <li>Implementar controles de calidad en DataMarts</li>
+                  <li>Optimizar consultas para grandes volúmenes</li>
                 </ul>
               </div>
             </div>
-            <p><em>Los datos de calidad son la base de decisiones de calidad</em></p>
+            <p><em>Los DataMarts bien construidos son la base de la inteligencia de negocio</em></p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Preparar para siguientes bloques donde usaremos datos limpios para análisis avanzados.</aside>
-        </section>
-
-        <!-- ============ SLIDE 13 · Actividad guiada ============ -->
-        <section class="slide" data-title="Actividad guiada" data-template="activity">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Actividad guiada (15–18 min)</h2>
-            <ol class="refs">
-              <li>Importa <code>clientes.csv</code> y <code>ventas.xlsx</code> en <code>WORK</code>.</li>
-              <li>Normaliza <em>email</em> y <em>pais</em>; elimina duplicados por <em>id_cliente</em>.</li>
-              <li>Valida fechas (2019–2025) y montos (≥ 0); registra incidencias en <code>qc_log</code>.</li>
-              <li>Integra con <strong>PROC SQL (LEFT JOIN)</strong>; reporta #clientes sin ventas.</li>
-            </ol>
-            <p><em>Entrega:</em> 1 captura de <code>qc_log</code> y 1 de la tabla final (5 filas).</p>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Si queda tiempo, crear pivot de monto por canal con TRANSPOSE.</aside>
-        </section>
-
-        <!-- ============ SLIDE 14 · Cierre ============ -->
-        <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Cierre y evaluación</h2>
-            <ul class="bullets">
-              <li>Preguntas flash: ¿Qué exige <code>MERGE</code>? ¿Cómo marcar <em>FIRST./LAST.</em>? ¿Para qué sirve <code>NODUPKEY</code>?</li>
-              <li>Guardar scripts y bitácora; preparar <em>mini-ETL</em> para el bloque 4.</li>
-              <li>Recordatorio: subir datasets a la ruta del proyecto.</li>
-            </ul>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enlazar con Bloque 3 (combinaciones más profundas y funciones).</aside>
+          <aside class="notes" hidden>Preparar para Bloque 4 donde se construirán ETL completos usando estas técnicas como fundamento.</aside>
         </section>
 
       </div>
@@ -680,7 +898,7 @@ RUN;</code></pre>
     const help = qs('#help'); const blackout = qs('#blackout'); const laser = qs('#laser');
     const clock = qs('#clock'); let tStart = 0, tElapsed = 0, tRunning = false, tHandle = null;
 
-    const KEY = 'peidDeckState_b2s1';
+    const KEY = 'peidDeckState_b3s2';
     const save = () => localStorage.setItem(KEY, JSON.stringify({ idx, tElapsed, tRunning }));
     const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{ return {}; } };
 

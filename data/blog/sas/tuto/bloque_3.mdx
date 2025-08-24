@@ -1,0 +1,601 @@
+---
+title: "Bloque 03 — Procesamiento y Combinación de Datos en SAS"
+summary: "Profundizamos en cómo combinar y transformar datos en SAS usando PROC SQL (JOINs, agregaciones, subconsultas) y DATA step (MERGE/SET, lógica fila a fila, FIRST./LAST.). Construirás KPIs con GROUP BY, segmentaciones con CASE WHEN y CALCULATED, gestionarás duplicados con PROC SORT (NODUPKEY), reestructurarás tablas con PROC TRANSPOSE y cerrarás con un DataMart integrado y controles de calidad de datos. Al finalizar, sabrás cuándo elegir PROC SQL o DATA step según la complejidad, volumen y necesidades de negocio."
+date: 2025-08-24 10:00:00
+lastmod: 2025-08-24 10:00:00
+tags: ['SAS','PROC SQL','DATA Step','Integración de datos','JOIN','MERGE','SET','GROUP BY','KPIs','CASE WHEN','CALCULATED','FIRST/LAST','PROC SORT','NODUPKEY','PROC TRANSPOSE','DataMart','Calidad de datos','SAS Studio']
+draft: false
+images: ['/imagenes/posts/python-logos-librerias.jpg']
+authors: ['default']
+---
+
+# Procesamiento y Combinación de Datos en SAS
+
+## Introducción
+
+En este bloque profundizaremos en las técnicas fundamentales de **procesamiento y combinación de datos** en SAS. Abordaremos tanto PROC SQL como el DATA step para crear flujos de procesamiento robustos que integren múltiples fuentes de datos. Al final, los participantes comprenderán cómo realizar JOINs complejos, calcular KPIs agregados, combinar datasets usando diferentes estrategias, y construir datamarts integrados que consoliden información de múltiples fuentes. Este conocimiento es esencial para **transformar datos dispersos en información analítica consolidada**.
+
+## 1. PROC SQL vs. DATA Step para Combinación de Datos
+
+SAS ofrece dos enfoques principales para combinar y procesar datos: **PROC SQL** (basado en el estándar SQL) y el **DATA step con MERGE/SET**. Cada uno tiene ventajas específicas según el contexto y complejidad de la operación.
+
+- **PROC SQL para combinaciones:** PROC SQL es ideal para **combinaciones complejas, agregaciones y filtros avanzados**. Permite realizar JOINs entre múltiples tablas con sintaxis estándar SQL, calcular métricas agregadas con GROUP BY, aplicar filtros con HAVING sobre agregados, y crear subconsultas anidadas para lógicas complejas. Las ventajas incluyen: sintaxis familiar para usuarios de bases de datos, operaciones en una sola instrucción (no requiere ordenamiento previo), capacidad de crear tablas temporales dentro de la consulta, y optimización automática de SAS para grandes volúmenes. Es especialmente útil para generar reportes agregados, crear KPIs por grupos, identificar registros huérfanos entre tablas, y realizar filtros complejos con múltiples condiciones.
+
+```sas
+/* Ejemplo de INNER JOIN con agregación */
+proc sql;
+    create table work.resumen_cliente as
+    select c.id, c.nombre_completo, c.pais
+         , count(v.id_venta) as num_transacciones
+         , sum(v.monto_total) as total_monto
+         , mean(v.monto_total) as ticket_promedio
+    from work.clientes c
+    inner join work.ventas v
+        on c.id = v.id_cliente
+    group by c.id, c.nombre_completo, c.pais
+    having total_monto > 1000
+    order by total_monto desc;
+quit;
+```
+
+- **DATA step con MERGE/SET para combinaciones:** El DATA step ofrece **mayor control granular** sobre el procesamiento fila por fila. Permite lógica condicional compleja durante la combinación, uso de variables automáticas FIRST./LAST. para procesamiento por grupos, retención de variables entre iteraciones con RETAIN, y aplicación de transformaciones personalizadas durante la combinación. Es especialmente potente para: procesar grandes volúmenes con optimización de memoria, aplicar lógica compleja que no se puede expresar fácilmente en SQL, realizar combinaciones con condiciones dinámicas, y mantener control total sobre el orden de procesamiento.
+
+```sas
+/* Ejemplo de MERGE con lógica condicional */
+proc sort data=work.clientes; by id; run;
+proc sort data=work.agg_ventas; by id; run;
+
+data work.cliente_enriquecido;
+    merge work.clientes(in=cli) work.agg_ventas(in=ven);
+    by id;
+    
+    /* Clasificar según disponibilidad de datos */
+    if cli and ven then status = 'Cliente Activo';
+    else if cli and not ven then status = 'Cliente Sin Ventas';
+    else if not cli and ven then status = 'Venta Huérfana';
+    
+    /* Solo conservar clientes válidos */
+    if cli;
+run;
+```
+
+- **Cuándo usar cada enfoque:** Usar **PROC SQL** cuando se necesiten agregaciones complejas, múltiples JOINs en una operación, subconsultas o filtros sobre agregados (HAVING). Usar **DATA step** cuando se requiera lógica condicional compleja, procesamiento fila por fila con FIRST./LAST., transformaciones que no se pueden expresar en SQL, o cuando se necesite optimización de memoria para volúmenes muy grandes.
+
+## 2. Tipos de JOINs en PROC SQL
+
+Los JOINs son fundamentales para combinar información de múltiples tablas. SAS SQL soporta todos los tipos estándar de JOIN, cada uno con propósitos específicos según las necesidades del análisis.
+
+- **INNER JOIN - Intersección:** El INNER JOIN devuelve **solo las filas que tienen coincidencias en ambas tablas**. Es útil para análisis que requieren datos completos de ambas fuentes, como calcular métricas solo para clientes que tienen ventas, o crear reportes que necesiten información validada de múltiples tablas.
+
+```sas
+/* INNER JOIN: Solo clientes con ventas */
+proc sql;
+    create table work.clientes_con_ventas as
+    select c.id, c.nombre_completo, c.sexo_full
+         , v.id_venta, v.producto, v.cantidad, v.monto_total, v.fecha_venta_d
+    from work.clientes_prep as c
+    inner join work.ventas_prep as v
+        on c.id = v.id_cliente;
+quit;
+```
+
+- **LEFT JOIN - Preservar tabla izquierda:** El LEFT JOIN conserva **todas las filas de la tabla izquierda**, completando con missing values cuando no hay coincidencias en la tabla derecha. Es esencial para análisis de cobertura, identificar clientes sin actividad, y crear vistas completas que no pierdan registros principales.
+
+```sas
+/* LEFT JOIN: Todos los clientes, con o sin ventas */
+proc sql;
+    create table work.clientes_completo as
+    select c.id, c.nombre_completo, c.sexo_full
+         , v.id_venta, v.producto, v.cantidad, v.monto_total, v.fecha_venta_d
+    from work.clientes_prep as c
+    left join work.ventas_prep as v
+        on c.id = v.id_cliente;
+quit;
+```
+
+- **FULL JOIN - Unión completa:** El FULL JOIN conserva **todas las filas de ambas tablas**, útil para auditorías de integridad referencial, identificar registros huérfanos en cualquier dirección, y análisis de calidad de datos. Requiere usar COALESCE para consolidar claves que puedan estar en cualquier tabla.
+
+```sas
+/* FULL JOIN: Detectar registros huérfanos en cualquier dirección */
+proc sql;
+    create table work.auditoria_completa as
+    select coalesce(c.id, v.id_cliente) as id_master length=20
+         , c.id as id_en_clientes
+         , v.id_cliente as id_en_ventas
+         , c.nombre_completo, v.id_venta
+    from work.clientes_prep c
+    full join work.ventas_prep v
+        on c.id = v.id_cliente;
+quit;
+
+/* Identificar casos problemáticos */
+proc sql;
+    /* Ventas sin cliente correspondiente */
+    create table work.ventas_huerfanas as
+    select * from work.auditoria_completa
+    where id_en_clientes is null and id_en_ventas is not null;
+    
+    /* Clientes sin ventas */
+    create table work.clientes_sin_actividad as
+    select * from work.auditoria_completa
+    where id_en_ventas is null and id_en_clientes is not null;
+quit;
+```
+
+- **Consideraciones de rendimiento:** Para datasets grandes, asegúrese de que las variables de unión estén indexadas, use WHERE en lugar de HAVING cuando sea posible para filtrar antes de agregaciones, y considere crear tablas intermedias para consultas muy complejas.
+
+## 3. Agregaciones y KPIs con GROUP BY
+
+Las agregaciones son fundamentales para generar indicadores de negocio. PROC SQL permite calcular métricas por grupos usando GROUP BY junto con funciones agregadas como SUM, COUNT, MEAN, MIN, MAX.
+
+- **KPIs básicos por cliente:** El patrón más común es calcular métricas de resumen por cliente, consolidando todas sus transacciones en indicadores de alto nivel.
+
+```sas
+/* KPIs fundamentales por cliente */
+proc sql;
+    create table work.kpi_cliente as
+    select c.id
+         , c.nombre_completo
+         , count(v.id_venta) as n_transacciones
+         , sum(coalesce(v.monto_total,0)) as total_monto
+         , mean(v.monto_total) as ticket_promedio
+         , min(v.fecha_venta_d) as primera_compra format=date9.
+         , max(v.fecha_venta_d) as ultima_compra format=date9.
+    from work.clientes_prep c
+    left join work.ventas_prep v
+        on c.id = v.id_cliente
+    group by c.id, c.nombre_completo
+    order by calculated total_monto desc;
+quit;
+```
+
+- **Filtros con HAVING:** HAVING permite filtrar grupos **después de aplicar las agregaciones**, a diferencia de WHERE que filtra registros individuales antes de agrupar. Es esencial para identificar segmentos específicos basados en métricas calculadas.
+
+```sas
+/* Clientes VIP: más de $3,000 en compras totales */
+%let umbral_vip = 3000;
+proc sql;
+    create table work.clientes_vip as
+    select * from work.kpi_cliente
+    having total_monto >= &umbral_vip
+       and n_transacciones >= 3;
+quit;
+```
+
+- **KPIs por múltiples dimensiones:** Es posible crear agregaciones más complejas combinando datos de múltiples tablas y agrupando por diferentes dimensiones.
+
+```sas
+/* Adjuntar información de vendedor a las ventas */
+proc sql;
+    create table work.ventas_con_vendedor as
+    select v.*
+         , c.vendedor
+    from work.ventas_prep v
+    left join work.clientes_prep c
+        on v.id_cliente = c.id;
+quit;
+
+/* KPIs por producto */
+proc sql;
+    create table work.kpi_producto as
+    select producto
+         , count(*) as n_ventas
+         , sum(monto_total) as monto_total
+         , mean(monto_total) as ticket_promedio
+         , count(distinct id_cliente) as clientes_unicos
+    from work.ventas_prep
+    group by producto
+    order by monto_total desc;
+quit;
+
+/* KPIs por vendedor */
+proc sql;
+    create table work.kpi_vendedor as
+    select vendedor
+         , count(*) as n_ventas
+         , sum(monto_total) as monto_total
+         , mean(monto_total) as ticket_promedio
+         , count(distinct id_cliente) as clientes_atendidos
+    from work.ventas_con_vendedor
+    where vendedor is not missing
+    group by vendedor
+    order by monto_total desc;
+quit;
+```
+
+## 4. CASE WHEN y Variables Calculadas
+
+Las expresiones CASE WHEN permiten crear lógica condicional compleja dentro de consultas SQL, mientras que la palabra clave CALCULATED permite reutilizar columnas calculadas en la misma consulta.
+
+- **Segmentación con CASE WHEN:** Una aplicación común es crear segmentos de clientes basados en sus métricas de comportamiento.
+
+```sas
+/* Segmentación de clientes por nivel de gasto */
+proc sql;
+    create table work.segmento_cliente as
+    select k.*
+         , case
+             when total_monto >= 5000 then 'VIP'
+             when total_monto >= 2000 then 'Premium'
+             when total_monto > 0 then 'Regular'
+             else 'Sin Compras'
+           end as segmento length=12
+         , case
+             when n_transacciones >= 10 then 'Muy Activo'
+             when n_transacciones >= 5 then 'Activo'
+             when n_transacciones >= 1 then 'Ocasional'
+             else 'Inactivo'
+           end as actividad length=12
+    from work.kpi_cliente as k;
+quit;
+```
+
+- **Uso de CALCULATED:** CALCULATED permite referenciar columnas creadas en la misma consulta, especialmente útil en cláusulas HAVING o WHERE.
+
+```sas
+/* Filtrar por ticket promedio calculado */
+proc sql;
+    create table work.alto_ticket as
+    select id, nombre_completo
+         , n_transacciones
+         , total_monto
+         , case when n_transacciones > 0 
+                then total_monto/n_transacciones 
+                else . end as ticket_promedio
+    from work.kpi_cliente
+    having calculated ticket_promedio > 300;
+quit;
+```
+
+## 5. DATA Step - SET y MERGE
+
+El DATA step ofrece dos instrucciones principales para combinar datasets: SET para concatenación (unir filas) y MERGE para combinación por clave (unir columnas).
+
+- **SET - Concatenación vertical:** SET apila datasets uno tras otro, útil para consolidar datos de diferentes períodos o fuentes con estructura similar.
+
+```sas
+/* Separar ventas por año */
+proc sql;
+    create table work.ventas_2023 as
+    select * from work.ventas_prep 
+    where year(fecha_venta_d) = 2023;
+    
+    create table work.ventas_2024 as
+    select * from work.ventas_prep 
+    where year(fecha_venta_d) = 2024;
+quit;
+
+/* Concatenar años usando SET */
+data work.ventas_consolidadas;
+    set work.ventas_2023 work.ventas_2024;
+    /* Se pueden agregar transformaciones adicionales aquí */
+run;
+```
+
+- **MERGE - Combinación horizontal:** MERGE combina datasets por una clave común, similar a JOINs pero con mayor control sobre el procesamiento. Requiere que los datasets estén ordenados por la variable de combinación.
+
+```sas
+/* Preparar dataset agregado por cliente */
+proc sql;
+    create table work.metricas_cliente as
+    select id_cliente as id
+         , count(*) as num_compras
+         , sum(monto_total) as total_gastado
+    from work.ventas_prep
+    group by id_cliente;
+quit;
+
+/* Ordenar ambos datasets por la clave */
+proc sort data=work.clientes_prep; by id; run;
+proc sort data=work.metricas_cliente; by id; run;
+
+/* MERGE con indicadores IN= */
+data work.cliente_completo;
+    merge work.clientes_prep(in=tiene_datos_cliente) 
+          work.metricas_cliente(in=tiene_ventas);
+    by id;
+    
+    /* Crear indicadores de disponibilidad */
+    if tiene_datos_cliente and tiene_ventas then tipo = 'Cliente Activo';
+    else if tiene_datos_cliente and not tiene_ventas then tipo = 'Cliente Sin Ventas';
+    else if not tiene_datos_cliente and tiene_ventas then tipo = 'Venta Huérfana';
+    
+    /* Imputar valores faltantes */
+    if missing(num_compras) then num_compras = 0;
+    if missing(total_gastado) then total_gastado = 0;
+    
+    /* Filtrar según necesidades */
+    if tiene_datos_cliente; /* Solo conservar clientes válidos */
+run;
+```
+
+## 6. Variables Automáticas FIRST. y LAST.
+
+Cuando se usa BY en un DATA step, SAS crea automáticamente variables especiales FIRST.variable y LAST.variable que indican el primer y último registro de cada grupo.
+
+- **Identificar primera y última ocurrencia:** Estas variables son especialmente útiles para calcular métricas por grupo o filtrar registros específicos dentro de cada grupo.
+
+```sas
+/* Encontrar última compra por cliente */
+proc sort data=work.ventas_prep out=work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+run;
+
+data work.ultima_compra;
+    set work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+    
+    /* Conservar información de la última compra */
+    retain fecha_ultima_compra monto_ultima_compra;
+    
+    if first.id_cliente then do;
+        fecha_ultima_compra = .;
+        monto_ultima_compra = .;
+    end;
+    
+    /* Actualizar con cada registro del cliente */
+    fecha_ultima_compra = fecha_venta_d;
+    monto_ultima_compra = monto_total;
+    
+    /* Solo generar salida en el último registro del cliente */
+    if last.id_cliente then output;
+    
+    format fecha_ultima_compra date9.;
+    keep id_cliente fecha_ultima_compra monto_ultima_compra;
+run;
+```
+
+- **Clasificar clientes por frecuencia:** Las variables FIRST./LAST. permiten clasificar fácilmente registros según patrones dentro de cada grupo.
+
+```sas
+/* Identificar clientes con una sola compra vs múltiples */
+data work.clasificacion_frecuencia 
+     work.cliente_unica_compra 
+     work.cliente_multiple_compra;
+    set work.ventas_ordenadas;
+    by id_cliente;
+    
+    if first.id_cliente and last.id_cliente then do;
+        /* Cliente con una sola compra */
+        tipo_cliente = 'Compra Única';
+        output work.cliente_unica_compra;
+    end;
+    else if last.id_cliente then do;
+        /* Cliente con múltiples compras */
+        tipo_cliente = 'Múltiples Compras';
+        output work.cliente_multiple_compra;
+    end;
+    
+    /* Todas las clasificaciones */
+    if last.id_cliente then output work.clasificacion_frecuencia;
+run;
+```
+
+## 7. Gestión de Duplicados con PROC SORT
+
+PROC SORT no solo ordena datos, sino que también puede eliminar duplicados usando la opción NODUPKEY.
+
+- **Eliminar duplicados por clave:** Útil para limpiar datasets que pueden tener registros duplicados por error.
+
+```sas
+/* Eliminar posibles duplicados de clientes por ID */
+proc sort data=work.clientes_prep 
+          out=work.clientes_unicos 
+          nodupkey;
+    by id; /* Mantiene el primer registro para cada ID */
+run;
+
+/* Verificar cuántos duplicados se eliminaron */
+proc sql;
+    select count(*) as registros_originales from work.clientes_prep;
+    select count(*) as registros_unicos from work.clientes_unicos;
+quit;
+```
+
+- **Ordenamiento complejo:** PROC SORT permite ordenamientos sofisticados con múltiples variables y direcciones.
+
+```sas
+/* Ordenar ventas por cliente y fecha descendente */
+proc sort data=work.ventas_prep 
+          out=work.ventas_por_cliente_desc;
+    by id_cliente descending fecha_venta_d;
+run;
+```
+
+## 8. Transformación de Datos con PROC TRANSPOSE
+
+PROC TRANSPOSE permite cambiar la estructura de los datos de formato largo a ancho o viceversa.
+
+- **De largo a ancho:** Convertir múltiples filas por entidad en múltiples columnas.
+
+```sas
+/* Crear resumen de ventas por cliente y mes */
+proc sql;
+    create table work.ventas_cliente_mes as
+    select id_cliente
+         , intnx('month', fecha_venta_d, 0, 'beginning') as mes_inicio format=yymmn6.
+         , sum(monto_total) as total_mes
+    from work.ventas_prep
+    group by id_cliente, calculated mes_inicio;
+quit;
+
+/* Ordenar para TRANSPOSE */
+proc sort data=work.ventas_cliente_mes; 
+    by id_cliente mes_inicio; 
+run;
+
+/* Transponer: una columna por mes */
+proc transpose data=work.ventas_cliente_mes 
+              out=work.ventas_mes_columnas 
+              prefix=mes_;
+    by id_cliente;
+    id mes_inicio;
+    var total_mes;
+run;
+```
+
+## 9. Funciones de Fecha y Texto
+
+SAS proporciona funciones especializadas para manipular fechas y texto que son esenciales en el procesamiento de datos.
+
+- **Funciones de fecha INTCK e INTNX:** INTCK calcula intervalos entre fechas, INTNX calcula fechas futuras o pasadas.
+
+```sas
+/* Calcular edad de clientes y días desde última compra */
+proc sql;
+    create table work.analisis_temporal as
+    select c.id, c.nombre_completo, c.fecha_nac
+         , u.fecha_ultima_compra
+         , intck('year', c.fecha_nac, today()) as edad_anos
+         , intck('day', u.fecha_ultima_compra, today()) as dias_desde_ultima
+         , intnx('month', u.fecha_ultima_compra, 3, 'same') as proxima_campana format=date9.
+    from work.clientes_prep c
+    left join work.ultima_compra u
+        on c.id = u.id_cliente
+    where c.fecha_nac is not missing;
+quit;
+```
+
+- **Funciones de texto:** Permiten manipular y extraer información de campos de texto.
+
+```sas
+/* Crear códigos de cliente y extraer dominios de email */
+data work.clientes_enriquecidos;
+    set work.clientes_prep;
+    length codigo_cliente $15 dominio_email $50;
+    
+    /* Código compuesto: país + ID formateado */
+    codigo_cliente = catx('-', upcase(pais), put(input(id, best8.), z8.));
+    
+    /* Extraer dominio de email */
+    if not missing(email) and index(email, '@') > 0 then do;
+        dominio_email = substr(email, index(email, '@') + 1);
+    end;
+    else dominio_email = 'Sin Email Válido';
+run;
+```
+
+## 10. Construcción de DataMart Integrado
+
+Un DataMart consolida información de múltiples fuentes en una vista analítica integrada.
+
+```sas
+/* Paso 1: KPIs completos por cliente */
+proc sql;
+    create table work.kpis_finales as
+    select k.*
+         , case when n_transacciones > 0 
+                then total_monto/n_transacciones 
+                else . end as ticket_promedio
+    from work.kpi_cliente k;
+quit;
+
+/* Paso 2: Información del vendedor */
+proc sql;
+    create table work.info_vendedor as
+    select c.id
+         , c.vendedor
+         , v.region
+         , input(v.fecha_ingreso, ddmmyy10.) as fecha_ingreso_vendedor format=date9.
+         , v.objetivo_mensual
+    from work.clientes_prep c
+    left join work.vendedores v
+        on c.vendedor = v.vendedor;
+quit;
+
+/* Paso 3: DataMart final integrado */
+proc sql;
+    create table work.datamart_clientes as
+    select c.id, c.nombre_completo, c.sexo_full, c.pais, c.email
+         /* KPIs de comportamiento */
+         , k.n_transacciones, k.total_monto, k.ticket_promedio
+         , k.primera_compra, k.ultima_compra
+         /* Información temporal */
+         , u.fecha_ultima_compra, u.monto_ultima_compra
+         , intck('day', u.fecha_ultima_compra, today()) as dias_inactividad
+         /* Información del vendedor */
+         , v.vendedor, v.region, v.fecha_ingreso_vendedor, v.objetivo_mensual
+         /* Segmentación */
+         , case
+             when k.total_monto >= 5000 then 'VIP'
+             when k.total_monto >= 2000 then 'Premium'
+             when k.total_monto > 0 then 'Regular'
+             else 'Sin Compras'
+           end as segmento length=12
+         /* Recencia */
+         , case
+             when calculated dias_inactividad <= 30 then 'Reciente'
+             when calculated dias_inactividad <= 90 then 'Moderado'
+             when calculated dias_inactividad <= 180 then 'En Riesgo'
+             else 'Inactivo'
+           end as recencia length=12
+    from work.clientes_prep c
+    left join work.kpis_finales k on c.id = k.id
+    left join work.ultima_compra u on c.id = u.id_cliente
+    left join work.info_vendedor v on c.id = v.id
+    order by k.total_monto desc;
+quit;
+```
+
+## 11. Validaciones de Calidad de Datos
+
+Es fundamental implementar controles de calidad para identificar problemas en los datos integrados.
+
+```sas
+/* Control 1: Ventas sin cliente correspondiente */
+proc sql;
+    create table work.control_ventas_huerfanas as
+    select v.*
+    from work.ventas_prep v
+    left join work.clientes_prep c
+        on v.id_cliente = c.id
+    where c.id is null;
+    
+    /* Contar registros problemáticos */
+    select count(*) as ventas_sin_cliente 
+    from work.control_ventas_huerfanas;
+quit;
+
+/* Control 2: Emails inválidos */
+data work.control_emails;
+    set work.clientes_prep;
+    length problema_email $30;
+    
+    if missing(email) then problema_email = 'Email Faltante';
+    else if index(email, '@') = 0 then problema_email = 'Sin Arroba';
+    else if length(scan(email, 2, '@')) = 0 then problema_email = 'Dominio Vacío';
+    else problema_email = 'OK';
+    
+    if problema_email ne 'OK';
+run;
+
+/* Control 3: Duplicados potenciales */
+proc sql;
+    create table work.control_duplicados as
+    select nombre_completo, email, count(*) as n_duplicados
+    from work.clientes_prep
+    where not missing(nombre_completo) and not missing(email)
+    group by nombre_completo, email
+    having n_duplicados > 1;
+quit;
+```
+
+## Recursos Adicionales
+
+> **Referencias recomendadas** — Procesamiento y combinación de datos en SAS
+> 
+> 1. **PROC SQL User's Guide (SAS Help Center)** — Documentación completa de PROC SQL con ejemplos de JOINs, agregaciones y subconsultas.  
+>    Enlace: https://documentation.sas.com/doc/en/proc/9.4/n1qbkscrs8c6zqn1a0ajxs3yn7ha.htm
+> 
+> 2. **DATA Step Processing (SAS Help Center)** — Guía detallada del DATA step, incluyendo MERGE, SET y variables automáticas FIRST./LAST.  
+>    Enlace: https://documentation.sas.com/doc/en/basess/9.4/p0s9hgavnajsgsn1x4rkqzawjpz7.htm
+> 
+> 3. **Working with Time Series Data in SAS** — Tutorial especializado en funciones de fecha y manipulación temporal.  
+>    Enlace: https://blogs.sas.com/content/sgf/2019/01/25/working-with-time-series-data/
+> 
+> 4. **SAS Communities — Data Integration Forum** — Foro activo con preguntas y soluciones sobre combinación de datos.  
+>    Enlace: https://communities.sas.com/t5/SAS-Data-Management/bd-p/data_management
+> 
+> 5. **Efficient Data Processing in SAS (Rick Wicklin)** — Blog con técnicas avanzadas de optimización para procesamiento de grandes volúmenes.  
+>    Enlace: https://blogs.sas.com/content/iml/2018/05/30/efficient-data-processing-sas.html
+

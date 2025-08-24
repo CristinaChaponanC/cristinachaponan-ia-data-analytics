@@ -1,0 +1,525 @@
+---
+title: "Bloque 05 — Visualización y Exportación de Resultados en SAS"
+summary: "Cerramos el ciclo analítico con visualización y reporting: gráficos con PROC SGPLOT/SGPANEL/SGSCATTER, KPIs rápidos con PROC MEANS/FREQ, tablas ejecutivas con PROC REPORT/TABULATE y exportación profesional mediante ODS EXCEL/ODS PDF y PROC EXPORT. Verás cómo preparar agregados para paneles, guardar gráficos como imágenes, automatizar paquetes de reportes con macros y conectar resultados con herramientas externas (p. ej., Power BI). El foco es convertir análisis técnicos en comunicación clara, accionable y lista para stakeholders."
+date: 2025-08-24 10:00:00
+lastmod: 2025-08-24 10:00:00
+tags: ['SAS','Visualización','Reporting','KPIs','PROC SGPLOT','SGPANEL','SGSCATTER','PROC MEANS','PROC FREQ','PROC REPORT','PROC TABULATE','ODS','ODS EXCEL','ODS PDF','PROC EXPORT','Dashboards','Power BI','Automatización','SAS Studio','Gráficos']
+draft: false
+images: ['/imagenes/posts/sas-visualizacion-bloque5.jpg']
+authors: ['default']
+---
+
+# Hora de graficar
+
+## Introducción
+
+En este bloque abordaremos la fase final del proceso analítico: **visualización y exportación de resultados** para comunicar hallazgos de manera efectiva. Combinaremos las técnicas de procesamiento aprendidas en bloques anteriores para crear visualizaciones informativas, calcular KPIs ejecutivos y exportar resultados en formatos adecuados para diferentes audiencias. Al final, los participantes comprenderán cómo generar gráficos básicos con PROC SGPLOT, calcular indicadores rápidamente con procedimientos estadísticos, exportar datos y reportes usando PROC EXPORT y ODS, e integrar resultados con herramientas externas como Power BI. Este conocimiento es esencial para **transformar análisis técnicos en comunicación empresarial impactante**.
+
+## 1. Fundamentos de Visualización de Datos en SAS
+
+La visualización es crítica para comunicar patrones, tendencias y hallazgos de manera comprensible para diferentes audiencias técnicas y ejecutivas.
+
+- **PROC SGPLOT como herramienta principal:** PROC SGPLOT es el procedimiento moderno de SAS para crear visualizaciones básicas de forma rápida y efectiva. Permite generar gráficos de barras, líneas, diagramas de caja, histogramas y diagramas de dispersión con mínima programación. SAS automáticamente genera elementos como ejes, leyendas y escalas, mientras ofrece opciones para personalizar títulos, estadísticas mostradas y atributos estéticos. Es ideal para exploración rápida de datos y creación de gráficos para reportes ejecutivos.
+
+```sas
+/* Configuración inicial para gráficos */
+options nocenter validvarname=v7;
+ods graphics on; /* habilita gráficos SG */
+
+/* Preparación de datos integrados para visualización */
+proc sql;
+    create table work.ventas_cli as
+    select v.*, c.id_char as id_cliente, c.nombre_completo, c.pais, 
+           c.sexo_full, c.email_dominio, c.vendedor as vendedor_asignado
+    from work.ventas_prep v 
+    left join work.clientes_prep c on v.id_cliente_char=c.id_char;
+    
+    create table work.ventas_cli_prod as
+    select vc.*, p.categoria, p.precio_unitario_num as precio_unitario
+    from work.ventas_cli vc 
+    left join work.productos_prep p on strip(vc.producto)=p.producto_char;
+    
+    create table work.ventas_cli_prod_vend as
+    select vcp.*, v.vendedor_char as vendedor, v.region as region_vendedor, 
+           v.fecha_ingreso_d, v.objetivo_mensual
+    from work.ventas_cli_prod vcp 
+    left join work.vendedores_prep v on strip(vcp.vendedor_asignado)=v.vendedor_char;
+quit;
+```
+
+- **Tipos de gráficos y sus aplicaciones:** Cada tipo de gráfico tiene propósitos específicos: las barras verticales (VBAR) y horizontales (HBAR) son ideales para distribuciones de categorías, las series (SERIES) para tendencias temporales, los boxplots (VBOX/HBOX) para mostrar dispersión de variables numéricas, los histogramas (HISTOGRAM) para distribuciones de frecuencia, y los scatter plots (SCATTER) para relaciones entre variables. La selección apropiada del tipo de gráfico es crucial para comunicar el mensaje correcto.
+
+## 2. Creación de Agregados para Visualización
+
+Antes de graficar, es necesario crear los datasets agregados que contengan los KPIs y métricas que se desean visualizar.
+
+- **Agregados temporales:** Para análisis de tendencias, se crean resúmenes por períodos temporales.
+
+```sas
+/* Agregados para gráficos (KPIs rápidos) */
+/* 1.1 Ventas mensuales (serie temporal global) */
+proc sql; 
+    create table work.ventas_mensual as
+    select mes_venta as mes
+         , sum(monto_total) as monto_mes
+    from work.ventas_prep
+    group by mes_venta
+    order by mes_venta; 
+quit;
+
+/* 1.4 KPI por país y mes (para paneles) */
+proc sql; 
+    create table work.ventas_mes_pais as
+    select pais
+         , mes_venta as mes
+         , sum(monto_total) as monto_mes
+    from work.ventas_cli_prod_vend
+    group by pais, mes_venta; 
+quit;
+```
+
+- **Agregados por dimensiones de negocio:** Crear resúmenes por categorías, vendedores y otras dimensiones relevantes.
+
+```sas
+/* 1.2 KPI por categoría */
+proc sql; 
+    create table work.kpi_categoria as
+    select categoria, sum(monto_total) as monto_total, count(*) as n_ventas
+    from work.ventas_cli_prod_vend 
+    group by categoria 
+    order by monto_total desc; 
+quit;
+
+/* 1.3 KPI por vendedor */
+proc sql; 
+    create table work.kpi_vendedor as
+    select coalescec(vendedor,'(sin vendedor)') as vendedor length=200
+         , sum(monto_total) as monto_total, count(*) as n_ventas, sum(cantidad) as unidades
+    from work.ventas_cli_prod_vend 
+    group by calculated vendedor 
+    order by monto_total desc; 
+quit;
+```
+
+## 3. Gráficos Básicos con PROC SGPLOT
+
+PROC SGPLOT permite crear visualizaciones efectivas con sintaxis concisa y resultados profesionales.
+
+- **Gráficos de series temporales:** Ideales para mostrar tendencias y patrones a lo largo del tiempo.
+
+```sas
+/* Serie temporal: ventas mensuales */
+proc sgplot data=work.ventas_mensual;
+    title "Ventas mensuales (total)";
+    series x=mes y=monto_mes / markers;
+    yaxis label="Monto" grid; 
+    xaxis label="Mes";
+run; 
+title;
+```
+
+- **Gráficos de barras:** Efectivos para comparar categorías y mostrar rankings.
+
+```sas
+/* Barras por categoría (ordenadas por monto) */
+proc sgplot data=work.kpi_categoria;
+    title "Ventas por categoría";
+    vbar categoria / response=monto_total datalabel categoryorder=respdesc;
+    yaxis label="Monto" grid;
+run; 
+title;
+
+/* Top 10 vendedores (barras horizontales) */
+proc sgplot data=work.kpi_vendedor(obs=10);
+    title "Top 10 vendedores por monto";
+    hbar vendedor / response=monto_total datalabel categoryorder=respdesc;
+    xaxis label="Monto" grid;
+run; 
+title;
+```
+
+- **Gráficos de distribución:** Para analizar la dispersión y distribución de variables numéricas.
+
+```sas
+/* Caja (boxplot): distribución de monto por categoría */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Distribución de monto por categoría";
+    vbox monto_total / category=categoria;
+    yaxis label="Monto por transacción" grid;
+run; 
+title;
+
+/* Histograma del monto por transacción */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Histograma de monto_total";
+    histogram monto_total; 
+    density monto_total; /* curva de densidad */
+    xaxis label="Monto"; 
+    yaxis label="Frecuencia";
+run; 
+title;
+
+/* Dispersión: cantidad vs monto_total */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Cantidad vs Monto (scatter)";
+    scatter x=cantidad y=monto_total / transparency=0.1;
+    xaxis grid; 
+    yaxis grid;
+run; 
+title;
+```
+
+## 4. Visualizaciones Avanzadas con Paneles
+
+Para análisis más sofisticados, SAS ofrece PROC SGPANEL para crear múltiples gráficos organizados por dimensiones.
+
+- **Paneles por categorías:** Comparar patrones across diferentes grupos o segmentos.
+
+```sas
+/* Ventas mensuales por país (paneles) */
+proc sgpanel data=work.ventas_mes_pais;
+    title "Ventas mensuales por país";
+    panelby pais / layout=panel columns=3 onepanel;
+    series x=mes y=monto_mes / markers;
+    colaxis label="Mes"; 
+    rowaxis label="Monto" grid;
+run; 
+title;
+
+/* Barras por categoría, panel por sexo */
+proc sgpanel data=work.ventas_cli_prod_vend;
+    title "Monto por categoría (panel por sexo)";
+    panelby sexo_full / columns=2;
+    vbar categoria / response=monto_total stat=sum datalabel categoryorder=respdesc;
+    rowaxis label="Monto" grid;
+run; 
+title;
+```
+
+- **Matrices de dispersión:** Para explorar relaciones entre múltiples variables numéricas.
+
+```sas
+/* Matriz de dispersión para variables numéricas clave */
+proc sgscatter data=work.ventas_cli_prod_vend;
+    title "Matriz de dispersión (cantidad, monto, precio_unitario)";
+    matrix cantidad monto_total precio_unitario / diagonal=(histogram);
+run; 
+title;
+```
+
+## 5. Cálculo Rápido de KPIs con Procedimientos Estadísticos
+
+Los procedimientos estadísticos de SAS permiten generar indicadores ejecutivos de manera eficiente sin programación manual.
+
+- **PROC MEANS para variables numéricas:** Calcula automáticamente estadísticas descriptivas como promedios, sumas, mínimos y máximos, con capacidad de agrupar por categorías usando CLASS.
+
+```sas
+/* Ejemplo conceptual de PROC MEANS por categorías */
+proc means data=work.ventas_cli_prod_vend mean sum maxdec=2;
+    class categoria;
+    var monto_total;
+    title 'Estadísticas de Monto por Categoría';
+run; 
+title;
+
+/* PROC MEANS para múltiples variables */
+proc means data=work.ventas_cli_prod_vend n mean stddev min max maxdec=2;
+    var monto_total cantidad precio_unitario;
+    title 'Estadísticas Descriptivas de Variables Clave';
+run; 
+title;
+```
+
+- **PROC FREQ para variables categóricas:** Genera tablas de frecuencias y contingencia para análisis de distribuciones y asociaciones.
+
+```sas
+/* Distribución de transacciones por categoría */
+proc freq data=work.ventas_cli_prod_vend;
+    tables categoria / nocum;
+    title 'Distribución de Ventas por Categoría de Producto';
+run; 
+title;
+
+/* Tabla cruzada: país vs categoría */
+proc freq data=work.ventas_cli_prod_vend;
+    tables pais*categoria / norow nocol nopercent;
+    title 'Ventas por País y Categoría (Frecuencias Absolutas)';
+run; 
+title;
+```
+
+## 6. Reportes Ejecutivos con PROC REPORT
+
+PROC REPORT permite crear tablas formateadas profesionalmente con cálculos automáticos y formato empresarial.
+
+- **Reportes con totales y formatos:** Crear tablas ejecutivas con subtotales, rankings y formato monetario.
+
+```sas
+/* Reporte KPI por vendedor con totales */
+proc report data=work.kpi_vendedor nowd;
+    title "KPI por vendedor";
+    columns vendedor n_ventas unidades monto_total;
+    define vendedor   / display "Vendedor";
+    define n_ventas   / analysis sum "#Ventas";
+    define unidades   / analysis sum "Unidades";
+    define monto_total/ analysis sum format=dollar12.2 "Monto total";
+    rbreak after / summarize; /* fila total */
+run; 
+title;
+```
+
+- **Reportes con cálculos personalizados:** Incluir columnas calculadas y clasificaciones dinámicas.
+
+```sas
+/* Reporte por categoría con participación y clasificación */
+proc report data=work.kpi_categoria nowd;
+    title "Ranking de categorías por monto";
+    columns categoria monto_total pct contrib;
+    define categoria   / display "Categoría";
+    define monto_total / analysis sum format=dollar12.2 "Monto";
+    define pct         / computed format=percent8.2 "Participación";
+    define contrib     / computed "Nivel";
+    
+    compute pct;
+        /* % del total */
+        pct = _c2_ / (sum(_c2_));
+    endcomp;
+    
+    compute contrib / character length=12;
+        if _c2_ >= 0.3*sum(_c2_) then contrib='Alta';
+        else if _c2_ >= 0.1*sum(_c2_) then contrib='Media';
+        else contrib='Baja';
+    endcomp;
+run; 
+title;
+```
+
+## 7. Tablas Cruzadas con PROC TABULATE
+
+PROC TABULATE es ideal para crear tablas de contingencia complejas con estadísticas resumidas.
+
+```sas
+/* Tabla cruzada: País vs Categoría con estadísticas */
+proc tabulate data=work.ventas_cli_prod_vend format=dollar12.2;
+    title "Monto por País y Categoría";
+    class pais categoria;
+    var monto_total;
+    table pais, categoria*monto_total*(sum mean);
+run; 
+title;
+```
+
+## 8. Exportación con ODS EXCEL
+
+ODS EXCEL permite crear reportes profesionales multi-hoja con formato empresarial.
+
+- **Paquetes ejecutivos multi-hoja:** Consolidar múltiples análisis en un archivo Excel organizado.
+
+```sas
+/* Configuración de ruta de salida */
+%let PATH = /home/u64309813/Salida;
+%let OUTDIR = &PATH;
+
+/* ODS EXCEL: paquete ejecutivo multi-hoja */
+ods excel file="&OUTDIR/paquete_b5.xlsx" style=HTMLBlue 
+          options(frozen_headers='on' sheet_interval='none');
+
+ods excel options(sheet_name='Resumen mensual');
+proc report data=work.ventas_mensual nowd; 
+    columns mes monto_mes; 
+    define monto_mes/format=dollar12.2; 
+run;
+
+ods excel options(sheet_name='Categorias');
+proc report data=work.kpi_categoria nowd; 
+    columns categoria monto_total n_ventas; 
+    define monto_total/format=dollar12.2; 
+run;
+
+ods excel options(sheet_name='TopVendedores');
+proc report data=work.kpi_vendedor(obs=20) nowd; 
+    columns vendedor monto_total n_ventas unidades; 
+    define monto_total/format=dollar12.2; 
+run;
+
+ods excel close;
+```
+
+## 9. Reportes PDF con ODS PDF
+
+Para distribución formal, ODS PDF genera documentos profesionales con gráficos y tablas integrados.
+
+```sas
+/* ODS PDF: informe compacto para compartir */
+ods pdf file="&OUTDIR/reporte_b5.pdf" style=Pearl notoc;
+    title "Reporte ejecutivo — Bloque 5";
+    
+    proc sgplot data=work.ventas_mensual; 
+        series x=mes y=monto_mes / markers; 
+        yaxis grid; 
+    run;
+    
+    proc sgplot data=work.kpi_categoria; 
+        vbar categoria / response=monto_total datalabel categoryorder=respdesc; 
+    run;
+    
+    proc report data=work.kpi_vendedor(obs=10) nowd; 
+        columns vendedor monto_total n_ventas; 
+        define monto_total/format=dollar12.2; 
+    run;
+    
+ods pdf close; 
+title;
+```
+
+## 10. Exportación de Datos con PROC EXPORT
+
+Para integración con herramientas externas, PROC EXPORT genera archivos en formatos estándar.
+
+- **Exportación a CSV y Excel:** Formatos universales para consumo en otras herramientas.
+
+```sas
+/* Exportación de datasets para BI externo */
+proc export data=work.kpi_categoria 
+    outfile="&OUTDIR/kpi_categoria_b5.csv" 
+    dbms=csv replace; 
+run;
+
+proc export data=work.kpi_vendedor  
+    outfile="&OUTDIR/kpi_vendedor_b5.xlsx" 
+    dbms=xlsx replace; 
+run;
+
+proc export data=work.ventas_mensual 
+    outfile="&OUTDIR/ventas_mensual_b5.csv" 
+    dbms=csv replace; 
+run;
+```
+
+## 11. Generación de Gráficos como Imágenes
+
+Para presentaciones y documentos, los gráficos pueden exportarse como archivos de imagen independientes.
+
+```sas
+/* Guardar gráficos como PNG */
+ods listing gpath="&OUTDIR";
+ods graphics / reset imagename="g_ventas_mensual" imagefmt=png;
+proc sgplot data=work.ventas_mensual; 
+    series x=mes y=monto_mes / markers; 
+run;
+
+ods graphics / reset imagename="g_kpi_categoria" imagefmt=png;
+proc sgplot data=work.kpi_categoria; 
+    vbar categoria / response=monto_total categoryorder=respdesc; 
+run;
+```
+
+## 12. Automatización con Macros
+
+Para reportes recurrentes, las macros permiten parametrizar y automatizar la generación de reportes.
+
+- **Macro empaquetadora:** Crear un sistema automatizado para generar reportes completos.
+
+```sas
+/* Macro para generar paquete completo de reportes */
+%macro paquete_b5(out=&OUTDIR, topN=10);
+    %put NOTE: Generando paquete Bloque 5 en &out (Top &topN vendedores).;
+    
+    ods excel file="&out/paquete_b5_macro.xlsx" style=HTMLBlue 
+              options(frozen_headers='on' sheet_interval='none');
+        ods excel options(sheet_name='Mensual');  
+        proc report data=work.ventas_mensual nowd; 
+            columns mes monto_mes; 
+            define monto_mes/format=dollar12.2; 
+        run;
+        
+        ods excel options(sheet_name='Categorias');
+        proc report data=work.kpi_categoria nowd; 
+            columns categoria monto_total; 
+            define monto_total/format=dollar12.2; 
+        run;
+        
+        ods excel options(sheet_name='TopVend');  
+        proc report data=work.kpi_vendedor(obs=&topN) nowd; 
+            columns vendedor monto_total n_ventas; 
+            define monto_total/format=dollar12.2; 
+        run;
+    ods excel close;
+    
+    ods pdf file="&out/reporte_b5_macro.pdf" style=Pearl notoc;
+        title "Reporte ejecutivo — Bloque 5";
+        proc sgplot data=work.ventas_mensual; 
+            series x=mes y=monto_mes / markers; 
+            yaxis grid; 
+        run;
+        proc sgplot data=work.kpi_categoria; 
+            vbar categoria / response=monto_total categoryorder=respdesc; 
+        run;
+        proc report data=work.kpi_vendedor(obs=&topN) nowd; 
+            columns vendedor monto_total n_ventas; 
+            define monto_total/format=dollar12.2; 
+        run; 
+        title;
+    ods pdf close;
+%mend;
+
+/* Ejecutar el paquete de reportes */
+%paquete_b5(topN=15)
+```
+
+## 13. Integración con Herramientas de Business Intelligence
+
+Los resultados generados en SAS pueden integrarse fácilmente con herramientas especializadas de BI para crear dashboards interactivos.
+
+- **Flujo típico de integración:** El proceso usual consiste en preparar y limpiar datos en SAS, calcular KPIs y métricas, exportar resultados a formatos estándar (CSV/Excel), e importar estos archivos en herramientas como Power BI, Tableau o Qlik para crear visualizaciones interactivas y dashboards ejecutivos.
+
+- **Ventajas de la integración:** Esta aproximación combina las fortalezas de SAS (procesamiento robusto, validaciones, transformaciones complejas) con las capacidades de visualización interactiva de herramientas especializadas. SAS se enfoca en el procesamiento pesado y generación de métricas confiables, mientras que las herramientas de BI se especializan en presentación interactiva y user experience.
+
+## 14. Mejores Prácticas para Comunicación Visual
+
+- **Selección apropiada de gráficos:** Use barras para comparaciones categóricas, líneas para series temporales, boxplots para distribuciones, e histogramas para frecuencias. Evite gráficos de torta para más de 5 categorías.
+
+- **Formato y etiquetado:** Siempre incluya títulos descriptivos, etiquetas de ejes claras, y formatos numéricos apropiados (monedas, porcentajes). Use colores consistentes y significativos.
+
+- **Jerarquía de información:** Organice reportes con información más importante al principio, use resúmenes ejecutivos, y proporcione detalles progresivamente.
+
+- **Audiencia específica:** Adapte el nivel de detalle y formato según la audiencia (ejecutivos requieren resúmenes, analistas necesitan detalles técnicos).
+
+## 15. Formatos y Estilos Profesionales
+
+SAS ofrece múltiples opciones para mejorar la presentación visual de reportes y gráficos.
+
+```sas
+/* Configuración de formatos profesionales */
+proc datasets library=work nolist; 
+    modify kpi_vendedor; 
+    label monto_total='Monto total (USD)'; 
+quit;
+
+/* Catálogo de formatos personalizados */
+proc format; 
+    value segfmt 1='VIP' 2='Premium' 3='Regular' 4='Sin Compras'; 
+run;
+
+/* Opciones para reportes más limpios */
+options nodate nonumber;
+```
+
+## Recursos Adicionales
+
+> **Referencias recomendadas** — Visualización y exportación en SAS
+> 
+> 1. **SAS/GRAPH and ODS Graphics User's Guide** — Documentación completa de procedimientos gráficos y ODS.  
+>    Enlace: https://documentation.sas.com/doc/en/grstatproc/9.4/titlepage.htm
+> 
+> 2. **PROC SGPLOT Documentation** — Guía detallada de PROC SGPLOT con ejemplos prácticos.  
+>    Enlace: https://documentation.sas.com/doc/en/grstatproc/9.4/n109mqtbx8140qn1ca1r0b86mvwz.htm
+> 
+> 3. **ODS User's Guide** — Documentación oficial del Output Delivery System.  
+>    Enlace: https://documentation.sas.com/doc/en/odsug/9.4/titlepage.htm
+> 
+> 4. **SAS Visual Analytics Integration** — Guías para integrar SAS con herramientas de BI modernas.  
+>    Enlace: https://blogs.sas.com/content/sgf/2019/04/24/sas-visual-analytics-integration/
+> 
+> 5. **Statistical Graphics Procedures Guide** — Técnicas avanzadas de visualización estadística.  
+>    Enlace: https://documentation.sas.com/doc/en/grstatproc/9.4/p05c8kbkh0a83bn1lm5ygqsqc0kf.htm

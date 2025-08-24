@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Taller SAS · Bloque 2 · Cristina Chapoñan</title>
+  <title>Taller SAS · Bloque 3 · Cristina Chapoñan</title>
   <!--  
     Presentación PEID en un único archivo (HTML+CSS+JS)
-    Bloque 2 · Sesión 1: Preparación de datos en SAS (DATA step vs PROC step, Importación y Calidad)
+    Bloque 3 · Sesión 2: Procesamiento y Combinación de Datos (PROC SQL, DATA Step y Técnicas de Integración)
     Funciones: navegación teclado/click/toque, overview, panel presentador con notas y timer,
     puntero láser, pantalla en negro, fullscreen, contenteditable y export a PDF.
   -->
@@ -209,9 +209,9 @@
             <div class="module-badge" id="badge">BLOQUE 2</div>
           </header>
           <main class="content">
-            <h1 class="course-title" contenteditable="true">Taller SAS · Bloque 2: Preparación de Datos en SAS</h1>
+            <h1 class="course-title" contenteditable="true">Taller SAS · Bloque 3: Procesamiento y Combinación de Datos</h1>
             <div class="meta">
-              <span class="label">Enfoque:</span><span class="value">Data Step, PROC Step, Importación y Calidad</span>
+              <span class="label">Enfoque:</span><span class="value">PROC SQL, DATA Step, JOINs y Técnicas de Integración</span>
             </div>
             <div class="meta">
               <span class="label">Docente:</span><span class="value" contenteditable="true">Cristina Chapoñan</span>
@@ -226,156 +226,180 @@
 
         <!-- ============ SLIDE 2 · Agenda ============ -->
         <section class="slide" data-title="Agenda (90 min)" data-template="agenda">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Taller SAS · Bloque 2</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Taller SAS · Bloque 3</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
             <h2 class="slide-title">Agenda (90 min)</h2>
             <ul class="bullets">
-              <li>15′ – Data Step vs PROC Step: conceptos y diferencias fundamentales</li>
-              <li>20′ – Carga de datos desde Excel/CSV en SAS Studio (OnDemand)</li>
-              <li>25′ – Limpieza de datos básica: valores faltantes, formatos y filtros</li>
-              <li>20′ – Validación de datos: inconsistencias, tipos y validaciones lógicas</li>
-              <li>10′ – Actividad práctica integrada con dataset del curso</li>
+              <li>20′ – PROC SQL vs DATA Step: cuándo usar cada enfoque</li>
+              <li>25′ – Tipos de JOINs: INNER, LEFT, FULL - casos de uso prácticos</li>
+              <li>20′ – Agregaciones y KPIs con GROUP BY, HAVING y CASE WHEN</li>
+              <li>15′ – Variables automáticas FIRST./LAST. y gestión de duplicados</li>
+              <li>10′ – Actividad práctica: construcción de DataMart integrado</li>
             </ul>
-            <p><strong>Objetivo:</strong> Datos precisos, consistentes y listos para análisis</p>
+            <p><strong>Objetivo:</strong> Transformar datos dispersos en información analítica consolidada</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Este bloque es fundamental para la calidad de datos. Enfatizar que sin datos limpios, los análisis posteriores serán incorrectos.</aside>
+          <aside class="notes" hidden">Este bloque es el corazón del procesamiento de datos. Los participantes aprenderán a combinar múltiples fuentes para crear vistas analíticas integradas.</aside>
         </section>
 
         <!-- ============ SLIDE 3 · Resultados de aprendizaje ============ -->
         <section class="slide" data-title="Resultados de aprendizaje" data-template="goals">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Resultados</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Resultados</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
             <h2 class="slide-title">Resultados de aprendizaje</h2>
             <ul class="check">
-              <li>Comprende las <strong>diferencias fundamentales</strong> entre DATA step y PROC step</li>
-              <li>Importa datos desde <strong>Excel y CSV</strong> usando PROC IMPORT y el asistente</li>
-              <li>Aplica técnicas de <strong>limpieza básica</strong>: missing values, formatos y filtros</li>
-              <li>Implementa <strong>validaciones de calidad</strong>: tipos, rangos y consistencia lógica</li>
-              <li>Utiliza funciones de <strong>manipulación de texto</strong> y transformación de datos</li>
-              <li>Crea un <strong>flujo de preparación</strong> reproducible y documentado</li>
+              <li>Domina <strong>PROC SQL</strong> para JOINs complejos y agregaciones avanzadas</li>
+              <li>Combina datasets usando <strong>DATA step</strong> con MERGE/SET y control granular</li>
+              <li>Implementa <strong>todos los tipos de JOIN</strong>: INNER, LEFT, FULL con casos prácticos</li>
+              <li>Calcula <strong>KPIs agregados</strong> con GROUP BY, HAVING y segmentación CASE WHEN</li>
+              <li>Utiliza <strong>variables automáticas</strong> FIRST./LAST. para procesamiento por grupos</li>
+              <li>Construye <strong>DataMarts integrados</strong> consolidando múltiples fuentes de datos</li>
             </ul>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Estos conocimientos son la base para todos los análisis posteriores. Sin datos limpios, no hay análisis válidos.</aside>
+          <aside class="notes" hidden>Este bloque transforma a los participantes en expertos en integración de datos, habilidad crítica para cualquier analista.</aside>
         </section>
 
-        <!-- ============ SLIDE 4 · Data Step vs PROC Step ============ -->
-        <section class="slide" data-title="Data Step vs PROC Step" data-template="concepts">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Conceptos fundamentales</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 4 · PROC SQL vs DATA Step ============ -->
+        <section class="slide" data-title="PROC SQL vs DATA Step" data-template="concepts">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Enfoques de combinación</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Data Step vs PROC Step: diferencias clave</h2>
+            <h2 class="slide-title">PROC SQL vs DATA Step: cuándo usar cada enfoque</h2>
             <div class="cols">
               <div>
-                <p><strong>DATA Step (Imperativo):</strong></p>
+                <p><strong>PROC SQL (ideal para):</strong></p>
                 <ul class="bullets">
-                  <li>Crea o modifica datasets</li>
-                  <li>Procesamiento registro a registro (row-wise)</li>
+                  <li>JOINs complejos con múltiples tablas</li>
+                  <li>Agregaciones con GROUP BY y HAVING</li>
+                  <li>Subconsultas y filtros avanzados</li>
+                  <li>Sintaxis familiar (estándar SQL)</li>
+                  <li>Operaciones en una sola instrucción</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>DATA Step (ideal para):</strong></p>
+                <ul class="bullets">
+                  <li>Control granular fila por fila</li>
+                  <li>Lógica condicional compleja</li>
+                  <li>Variables FIRST./LAST. por grupos</li>
                   <li>Transformaciones personalizadas</li>
-                  <li>Control de flujo con IF/THEN/ELSE</li>
-                  <li>Ejemplo: crear variables, filtrar, combinar</li>
-                </ul>
-              </div>
-              <div>
-                <p><strong>PROC Step (Declarativo):</strong></p>
-                <ul class="bullets">
-                  <li>Analiza datos existentes</li>
-                  <li>Rutinas optimizadas predefinidas</li>
-                  <li>Menos código para tareas estándar</li>
-                  <li>Resultados sin modificar estructura</li>
-                  <li>Ejemplo: PRINT, SORT, MEANS, FREQ</li>
+                  <li>Optimización de memoria grandes volúmenes</li>
                 </ul>
               </div>
             </div>
-            <p><strong>Flujo típico:</strong> DATA para preparar → PROC para analizar</p>
+            <p><strong>Principio:</strong> PROC SQL para operaciones tipo base de datos, DATA step para control total y lógica compleja</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">PROC SQL para operaciones tipo base de datos, DATA step para lógica compleja y control total. Ambos enfoques son complementarios.</aside>
         </section>
 
-        <!-- ============ SLIDE 5 · Importación de datos ============ -->
-        <section class="slide" data-title="Importación desde Excel/CSV" data-template="import">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Carga de datos</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 5 · Tipos de JOINs en PROC SQL ============ -->
+        <section class="slide" data-title="Tipos de JOINs" data-template="joins">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Combinación de datos</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Carga de datos desde Excel/CSV en SAS OnDemand</h2>
+            <h2 class="slide-title">Tipos de JOINs en PROC SQL: casos de uso prácticos</h2>
             <div class="cols">
               <div>
-                <p><strong>1. Subir archivos al servidor:</strong></p>
-                <ul class="bullets">
-                  <li>Files (Home) → Upload</li>
-                  <li>Seleccionar CSV/Excel desde PC</li>
-                  <li>Verificar carga exitosa</li>
-                </ul>
-                <p><strong>2. Import Wizard (Point & Click):</strong></p>
-                <ul class="bullets">
-                  <li>File → Import Data</li>
-                  <li>Detección automática de tipo</li>
-                  <li>Configurar opciones y destino</li>
-                </ul>
+                <p><strong>INNER JOIN - Solo coincidencias:</strong></p>
+                <pre><code class="language-sas">/* Solo clientes con ventas */
+proc sql;
+    create table work.clientes_con_ventas as
+    select c.id, c.nombre_completo, c.sexo_full
+         , v.id_venta, v.producto, v.cantidad
+         , v.monto_total, v.fecha_venta_d
+    from work.clientes_prep as c
+    inner join work.ventas_prep as v
+        on c.id = v.id_cliente;
+quit;</code></pre>
+                <p><strong>LEFT JOIN - Preservar tabla izquierda:</strong></p>
+                <pre><code class="language-sas">/* Todos los clientes, con/sin ventas */
+proc sql;
+    create table work.clientes_completo as
+    select c.id, c.nombre_completo
+         , v.id_venta, v.monto_total
+    from work.clientes_prep as c
+    left join work.ventas_prep as v
+        on c.id = v.id_cliente;
+quit;</code></pre>
               </div>
               <div>
-                <p><strong>3. PROC IMPORT (Código):</strong></p>
-                <pre><code class="language-sas">/* CSV */
-PROC IMPORT DATAFILE="/home/usuario/datos.csv"
-    OUT=work.datos
-    DATAROW=2;
-RUN;
+                <p><strong>FULL JOIN - Unión completa:</strong></p>
+                <pre><code class="language-sas">/* Detectar registros huérfanos */
+proc sql;
+    create table work.auditoria_completa as
+    select coalesce(c.id, v.id_cliente) as id_master
+         , c.id as id_en_clientes
+         , v.id_cliente as id_en_ventas
+         , c.nombre_completo, v.id_venta
+    from work.clientes_prep c
+    full join work.ventas_prep v
+        on c.id = v.id_cliente;
+quit;
 
-/* Excel */
-PROC IMPORT DATAFILE="/home/usuario/datos.xlsx"
-    OUT=work.datos
-    DBMS=xlsx REPLACE;
-    SHEET="Hoja1";
-    GETNAMES=YES;
-RUN;</code></pre>
+/* Identificar casos problemáticos */
+proc sql;
+    create table work.ventas_huerfanas as
+    select * from work.auditoria_completa
+    where id_en_clientes is null;</code></pre>
+                <p><strong>Consideración:</strong> Indexar variables de unión para datasets grandes</p>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Demostrar ambos métodos. Siempre verificar con PROC CONTENTS después de importar.</aside>
+          <aside class="notes" hidden>INNER JOIN para análisis limpio, LEFT JOIN para cobertura completa, FULL JOIN para auditoría de integridad referencial.</aside>
         </section>
 
-        <!-- ============ SLIDE 6 · Limpieza básica: valores faltantes ============ -->
-        <section class="slide" data-title="Limpieza: valores faltantes" data-template="cleaning-missing">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Limpieza de datos</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 6 · Agregaciones y KPIs ============ -->
+        <section class="slide" data-title="Agregaciones y KPIs" data-template="aggregations">
+          <header class="brand brand--compact"><div class="brand-lines"><span>KPIs con GROUP BY</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Limpieza básica: valores faltantes (missing)</h2>
+            <h2 class="slide-title">Agregaciones y KPIs con GROUP BY y HAVING</h2>
             <div class="cols">
               <div>
-                <p><strong>Detección de missing:</strong></p>
-                <pre><code class="language-sas">/* Contar missing por variable */
-PROC MEANS DATA=work.datos NMISS N;
-    VAR edad salario;
-RUN;
-
-/* Missing en variables carácter */
-PROC FREQ DATA=work.datos;
-    TABLES pais / MISSING;
-RUN;</code></pre>
-                <p><strong>En SAS:</strong></p>
-                <ul class="bullets">
-                  <li>Numérico: <code>.</code> (punto)</li>
-                  <li>Carácter: cadena vacía</li>
-                </ul>
+                <p><strong>KPIs básicos por cliente:</strong></p>
+                <pre><code class="language-sas">proc sql;
+    create table work.kpi_cliente as
+    select c.id, c.nombre_completo
+         , count(v.id_venta) as n_transacciones
+         , sum(coalesce(v.monto_total,0)) as total_monto
+         , mean(v.monto_total) as ticket_promedio
+         , min(v.fecha_venta_d) as primera_compra format=date9.
+         , max(v.fecha_venta_d) as ultima_compra format=date9.
+    from work.clientes_prep c
+    left join work.ventas_prep v
+        on c.id = v.id_cliente
+    group by c.id, c.nombre_completo
+    order by calculated total_monto desc;
+quit;</code></pre>
               </div>
               <div>
-                <p><strong>Estrategias de tratamiento:</strong></p>
-                <pre><code class="language-sas">/* Imputar con valor fijo */
-DATA work.datos_clean;
-    SET work.datos;
-    IF MISSING(edad) THEN edad = 30;
-    IF MISSING(pais) THEN pais = 'Desconocido';
-RUN;
-
-/* Filtrar casos incompletos */
-DATA work.datos_completos;
-    SET work.datos;
-    IF NOT MISSING(edad) AND NOT MISSING(salario);
-RUN;</code></pre>
+                <p><strong>Filtros con HAVING (sobre agregados):</strong></p>
+                <pre><code class="language-sas">/* Clientes VIP: >$3,000 en compras */
+%let umbral_vip = 3000;
+proc sql;
+    create table work.clientes_vip as
+    select * from work.kpi_cliente
+    having total_monto >= &umbral_vip
+       and n_transacciones >= 3;
+quit;</code></pre>
+                <p><strong>KPIs por múltiples dimensiones:</strong></p>
+                <pre><code class="language-sas">/* KPIs por producto */
+proc sql;
+    create table work.kpi_producto as
+    select producto
+         , count(*) as n_ventas
+         , sum(monto_total) as monto_total
+         , mean(monto_total) as ticket_promedio
+         , count(distinct id_cliente) as clientes_unicos
+    from work.ventas_prep
+    group by producto
+    order by monto_total desc;
+quit;</code></pre>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enfatizar que la estrategia depende del contexto del análisis. Missing != 0.</aside>
+          <aside class="notes" hidden>GROUP BY para consolidar por grupos, HAVING para filtrar agregados. Diferencia clave: WHERE filtra antes de agrupar, HAVING después.</aside>
         </section>
 
         <!-- ============ SLIDE 7 · Formatos y filtros ============ -->
@@ -428,200 +452,208 @@ RUN;</code></pre>
           <aside class="notes" hidden>Diferencia entre formato permanente (DATA step) vs temporal (PROC step). WHERE vs IF.</aside>
         </section>
 
-        <!-- ============ SLIDE 8 · Validación de tipos y consistencia ============ -->
-        <section class="slide" data-title="Validación de datos" data-template="validation">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Validación</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 7 · CASE WHEN y Variables Calculadas ============ -->
+        <section class="slide" data-title="CASE WHEN y Variables Calculadas" data-template="case-when">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Lógica condicional</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Validación: tipos de datos y consistencia lógica</h2>
+            <h2 class="slide-title">CASE WHEN y Variables Calculadas con CALCULATED</h2>
             <div class="cols">
               <div>
-                <p><strong>Control de tipos:</strong></p>
-                <pre><code class="language-sas">/* Verificar tipos */
-PROC CONTENTS DATA=work.datos SHORT;
-RUN;
-
-/* Conversión de tipos */
-DATA work.datos_fix;
-    SET work.datos;
-    /* Texto a número */
-    edad_num = INPUT(edad_char, BEST12.);
-    /* Número a texto */
-    id_char = PUT(id_num, 8.);
-RUN;</code></pre>
+                <p><strong>Segmentación con CASE WHEN:</strong></p>
+                <pre><code class="language-sas">/* Segmentación por nivel de gasto */
+proc sql;
+    create table work.segmento_cliente as
+    select k.*
+         , case
+             when total_monto >= 5000 then 'VIP'
+             when total_monto >= 2000 then 'Premium'
+             when total_monto > 0 then 'Regular'
+             else 'Sin Compras'
+           end as segmento length=12
+         , case
+             when n_transacciones >= 10 then 'Muy Activo'
+             when n_transacciones >= 5 then 'Activo'
+             when n_transacciones >= 1 then 'Ocasional'
+             else 'Inactivo'
+           end as actividad length=12
+    from work.kpi_cliente as k;
+quit;</code></pre>
               </div>
               <div>
-                <p><strong>Validaciones lógicas:</strong></p>
-                <pre><code class="language-sas">/* Rangos válidos */
-DATA work.datos_valid;
-    SET work.datos;
-    /* Fechas en rango lógico */
-    IF NOT ('01JAN2019'd <= fecha <= TODAY())
-        THEN flag_fecha = 1;
-    /* Valores no negativos */
-    IF monto < 0 THEN flag_monto = 1;
-    /* Emails válidos (básico) */
-    IF NOT INDEX(email, '@') THEN flag_email = 1;
-RUN;</code></pre>
+                <p><strong>Uso de CALCULATED:</strong></p>
+                <pre><code class="language-sas">/* Filtrar por ticket promedio calculado */
+proc sql;
+    create table work.alto_ticket as
+    select id, nombre_completo
+         , n_transacciones
+         , total_monto
+         , case when n_transacciones > 0 
+                then total_monto/n_transacciones 
+                else . end as ticket_promedio
+    from work.kpi_cliente
+    having calculated ticket_promedio > 300;
+quit;</code></pre>
+                <p><strong>Principio:</strong> CALCULATED permite referenciar columnas creadas en la misma consulta</p>
               </div>
             </div>
-            <p><strong>Principio:</strong> Detectar inconsistencias antes de que afecten el análisis</p>
+            <p><strong>Ventaja:</strong> Lógica condicional compleja directamente en SQL sin DATA steps adicionales</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">CASE WHEN es fundamental para crear categorizaciones dinámicas. CALCULATED evita subconsultas innecesarias.</aside>
         </section>
 
-        <!-- ============ SLIDE 9 · Ejemplos prácticos integrados ============ -->
-        <section class="slide" data-title="Ejemplos prácticos de limpieza" data-template="practical-examples">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica</span></div><div class="module-badge">BLOQUE 2</div></header>
+        <!-- ============ SLIDE 8 · DATA Step: SET, MERGE y Variables FIRST/LAST ============ -->
+        <section class="slide" data-title="DATA Step: SET, MERGE y FIRST/LAST" data-template="data-step-advanced">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Control granular</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Ejemplos prácticos de limpieza</h2>
+            <h2 class="slide-title">DATA Step: SET/MERGE y Variables Automáticas FIRST./LAST.</h2>
             <div class="cols">
               <div>
-                <p><strong>Normalización de texto:</strong></p>
-                <pre><code class="language-sas">/* Limpiar y estandarizar */
-DATA work.datos_clean;
-    SET work.datos;
-    /* Normalizar país */
-    pais = PROPCASE(STRIP(pais));
-    /* Limpiar email */
-    email = LOWCASE(STRIP(email));
-    /* Crear categorías */
-    IF edad < 18 THEN grupo_edad = 'Menor';
-    ELSE IF edad <= 65 THEN grupo_edad = 'Adulto';
-    ELSE grupo_edad = 'Senior';
-RUN;</code></pre>
+                <p><strong>MERGE - Combinación horizontal:</strong></p>
+                <pre><code class="language-sas">/* Agregar métricas por cliente */
+proc sql;
+    create table work.metricas_cliente as
+    select id_cliente as id
+         , count(*) as num_compras
+         , sum(monto_total) as total_gastado
+    from work.ventas_prep
+    group by id_cliente;
+quit;
+
+/* Ordenar para MERGE */
+proc sort data=work.clientes_prep; by id; run;
+proc sort data=work.metricas_cliente; by id; run;
+
+/* MERGE con indicadores IN= */
+data work.cliente_completo;
+    merge work.clientes_prep(in=tiene_datos_cliente) 
+          work.metricas_cliente(in=tiene_ventas);
+    by id;
+    
+    if tiene_datos_cliente and tiene_ventas then 
+        tipo = 'Cliente Activo';
+    else if tiene_datos_cliente and not tiene_ventas then 
+        tipo = 'Cliente Sin Ventas';
+    
+    if tiene_datos_cliente; /* Solo clientes válidos */
+run;</code></pre>
               </div>
               <div>
-                <p><strong>Detección de duplicados:</strong></p>
-                <pre><code class="language-sas">/* Identificar y remover duplicados */
-PROC SORT DATA=work.datos 
-    OUT=work.datos_nodup 
-    NODUPKEY DUPOUT=work.duplicados;
-    BY id_cliente;
-RUN;
+                <p><strong>Variables FIRST./LAST. por grupos:</strong></p>
+                <pre><code class="language-sas">/* Encontrar última compra por cliente */
+proc sort data=work.ventas_prep out=work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+run;
 
-/* Reportar duplicados encontrados */
-PROC PRINT DATA=work.duplicados;
-    TITLE 'Registros duplicados detectados';
-RUN;</code></pre>
+data work.ultima_compra;
+    set work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+    
+    retain fecha_ultima_compra monto_ultima_compra;
+    
+    if first.id_cliente then do;
+        fecha_ultima_compra = .;
+        monto_ultima_compra = .;
+    end;
+    
+    /* Actualizar con cada registro */
+    fecha_ultima_compra = fecha_venta_d;
+    monto_ultima_compra = monto_total;
+    
+    /* Solo salida en último registro del cliente */
+    if last.id_cliente then output;
+    
+    format fecha_ultima_compra date9.;
+    keep id_cliente fecha_ultima_compra monto_ultima_compra;
+run;</code></pre>
+                <p><strong>Gestión de duplicados con NODUPKEY</strong></p>
               </div>
             </div>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Usar el dataset del curso datos_curso_sas.csv para ejemplos en vivo.</aside>
+          <aside class="notes" hidden">FIRST./LAST. son fundamentales para procesamiento por grupos. MERGE requiere ordenamiento previo pero ofrece máximo control.</aside>
         </section>
 
-        <!-- ============ SLIDE 10 · Actividad práctica integrada ============ -->
+        <!-- ============ SLIDE 9 · Actividad práctica integrada ============ -->
         <section class="slide" data-title="Actividad práctica" data-template="activity">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica guiada</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica guiada</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
-            <h2 class="slide-title">Actividad práctica integrada (20 min)</h2>
-            <p><strong>Usando datos_curso_sas.csv:</strong></p>
+            <h2 class="slide-title">Actividad práctica: Construcción de DataMart integrado (20 min)</h2>
+            <p><strong>Usando datasets del curso (clientes, ventas, productos, vendedores):</strong></p>
             <ol class="refs">
-              <li><strong>Importar:</strong> Usar PROC IMPORT para cargar el dataset</li>
-              <li><strong>Explorar:</strong> PROC CONTENTS y PROC MEANS para entender los datos</li>
-              <li><strong>Limpiar:</strong> Tratar valores faltantes en variables clave</li>
-              <li><strong>Validar:</strong> Verificar rangos lógicos (edad, salario, monto)</li>
-              <li><strong>Transformar:</strong> Crear categorías y aplicar formatos</li>
-              <li><strong>Reportar:</strong> Generar resumen de calidad de datos</li>
+              <li><strong>JOINs básicos:</strong> Combinar clientes con ventas usando INNER y LEFT JOIN</li>
+              <li><strong>KPIs agregados:</strong> Calcular métricas por cliente con GROUP BY</li>
+              <li><strong>Segmentación:</strong> Crear categorías VIP/Premium/Regular con CASE WHEN</li>
+              <li><strong>Variables FIRST./LAST.:</strong> Encontrar última compra por cliente usando DATA step</li>
+              <li><strong>DataMart final:</strong> Integrar todas las dimensiones en una vista analítica</li>
+              <li><strong>Validación:</strong> Controles de calidad e identificación de registros huérfanos</li>
             </ol>
-            <p><strong>Entrega:</strong> Script completo con comentarios y 1 captura del resumen final</p>
+            <p><strong>Entrega:</strong> Script completo con DataMart final y 1 captura del resumen por segmento</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Circular por las pantallas para asistir. Enfatizar documentación del proceso de limpieza.</aside>
+          <aside class="notes" hidden>Esta es la actividad más importante del bloque. Los participantes crearán su primer DataMart empresarial completo.</aside>
         </section>
 
-        <!-- ============ SLIDE 11 · Cierre y próximos pasos ============ -->
+        <!-- ============ SLIDE 10 · Cierre y próximos pasos ============ -->
         <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
             <h2 class="slide-title">Cierre y evaluación</h2>
             <div class="cols">
               <div>
                 <p><strong>Preguntas de verificación:</strong></p>
                 <ul class="bullets">
-                  <li>¿Cuál es la diferencia principal entre DATA step y PROC step?</li>
-                  <li>¿Cómo detectamos valores faltantes en SAS?</li>
-                  <li>¿Para qué sirven los formatos personalizados?</li>
-                  <li>¿Qué validaciones aplicarías a un dataset de ventas?</li>
+                  <li>¿Cuándo usar PROC SQL vs DATA step para combinar datos?</li>
+                  <li>¿Cuáles son las diferencias entre INNER, LEFT y FULL JOIN?</li>
+                  <li>¿Para qué sirven las variables FIRST./LAST.?</li>
+                  <li>¿Cómo crear segmentaciones dinámicas con CASE WHEN?</li>
                 </ul>
               </div>
               <div>
                 <p><strong>Próximos bloques:</strong></p>
                 <ul class="bullets">
-                  <li><strong>Bloque 3:</strong> Análisis exploratorio y visualización</li>
-                  <li><strong>Bloque 4:</strong> Automatización y mejores prácticas</li>
-                  <li><strong>Aplicación:</strong> Los datos limpios son la base de todo análisis válido</li>
+                  <li><strong>Bloque 4:</strong> ETL completo y automatización</li>
+                  <li><strong>Bloque 5:</strong> Visualización y reportes avanzados</li>
+                  <li><strong>Aplicación:</strong> DataMarts integrados son la base de Business Intelligence</li>
                 </ul>
               </div>
             </div>
-            <p><strong>Recordatorio:</strong> Guardar scripts de limpieza para reutilización</p>
+            <p><strong>Recordatorio:</strong> Los DataMarts bien construidos transforman datos dispersos en inteligencia de negocio</p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enfatizar que la preparación de datos es 70% del trabajo en proyectos reales de análisis.</aside>
+          <aside class="notes" hidden>Este bloque es el corazón de la integración de datos. Los participantes ahora pueden crear vistas analíticas empresariales.</aside>
         </section>
 
-        <!-- ============ SLIDE 12 · Recursos adicionales ============ -->
+        <!-- ============ SLIDE 11 · Recursos adicionales ============ -->
         <section class="slide" data-title="Recursos adicionales" data-template="resources">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 2</div></header>
+          <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 3</div></header>
           <main class="content">
             <h2 class="slide-title">Recursos y referencias</h2>
             <div class="cols">
               <div>
                 <p><strong>Documentación SAS:</strong></p>
                 <ul class="bullets">
-                  <li><strong>PROC IMPORT:</strong> Importación de datos externos</li>
-                  <li><strong>DATA Step:</strong> Manipulación registro por registro</li>
-                  <li><strong>PROC FORMAT:</strong> Creación de formatos personalizados</li>
-                  <li><strong>Funciones de texto:</strong> STRIP, UPCASE, LOWCASE, PROPCASE</li>
+                  <li><strong>PROC SQL User's Guide:</strong> JOINs, agregaciones y subconsultas</li>
+                  <li><strong>DATA Step Processing:</strong> MERGE, SET y variables FIRST./LAST.</li>
+                  <li><strong>Functions and CALL Routines:</strong> INTCK, INTNX, CASE WHEN</li>
+                  <li><strong>PROC TRANSPOSE:</strong> Reestructuración largo/ancho</li>
                 </ul>
               </div>
               <div>
                 <p><strong>Mejores prácticas:</strong></p>
                 <ul class="check">
-                  <li>Documentar cada paso de limpieza</li>
-                  <li>Validar datos antes y después de transformaciones</li>
-                  <li>Crear flujos reproducibles</li>
-                  <li>Mantener datasets originales intactos</li>
-                  <li>Reportar calidad de datos al equipo</li>
+                  <li>Documentar lógica de combinación y reglas de negocio</li>
+                  <li>Validar integridad referencial después de JOINs</li>
+                  <li>Usar nombres descriptivos para datasets intermedios</li>
+                  <li>Implementar controles de calidad en DataMarts</li>
+                  <li>Optimizar consultas para grandes volúmenes</li>
                 </ul>
               </div>
             </div>
-            <p><em>Los datos de calidad son la base de decisiones de calidad</em></p>
+            <p><em>Los DataMarts bien construidos son la base de la inteligencia de negocio</em></p>
           </main>
           <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Preparar para siguientes bloques donde usaremos datos limpios para análisis avanzados.</aside>
-        </section>
-
-        <!-- ============ SLIDE 13 · Actividad guiada ============ -->
-        <section class="slide" data-title="Actividad guiada" data-template="activity">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Actividad guiada (15–18 min)</h2>
-            <ol class="refs">
-              <li>Importa <code>clientes.csv</code> y <code>ventas.xlsx</code> en <code>WORK</code>.</li>
-              <li>Normaliza <em>email</em> y <em>pais</em>; elimina duplicados por <em>id_cliente</em>.</li>
-              <li>Valida fechas (2019–2025) y montos (≥ 0); registra incidencias en <code>qc_log</code>.</li>
-              <li>Integra con <strong>PROC SQL (LEFT JOIN)</strong>; reporta #clientes sin ventas.</li>
-            </ol>
-            <p><em>Entrega:</em> 1 captura de <code>qc_log</code> y 1 de la tabla final (5 filas).</p>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Si queda tiempo, crear pivot de monto por canal con TRANSPOSE.</aside>
-        </section>
-
-        <!-- ============ SLIDE 14 · Cierre ============ -->
-        <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
-          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 2</div></header>
-          <main class="content">
-            <h2 class="slide-title">Cierre y evaluación</h2>
-            <ul class="bullets">
-              <li>Preguntas flash: ¿Qué exige <code>MERGE</code>? ¿Cómo marcar <em>FIRST./LAST.</em>? ¿Para qué sirve <code>NODUPKEY</code>?</li>
-              <li>Guardar scripts y bitácora; preparar <em>mini-ETL</em> para el bloque 4.</li>
-              <li>Recordatorio: subir datasets a la ruta del proyecto.</li>
-            </ul>
-          </main>
-          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
-          <aside class="notes" hidden>Enlazar con Bloque 3 (combinaciones más profundas y funciones).</aside>
+          <aside class="notes" hidden>Preparar para Bloque 4 donde se construirán ETL completos usando estas técnicas como fundamento.</aside>
         </section>
 
       </div>
@@ -680,7 +712,7 @@ RUN;</code></pre>
     const help = qs('#help'); const blackout = qs('#blackout'); const laser = qs('#laser');
     const clock = qs('#clock'); let tStart = 0, tElapsed = 0, tRunning = false, tHandle = null;
 
-    const KEY = 'peidDeckState_b2s1';
+    const KEY = 'peidDeckState_b3s2';
     const save = () => localStorage.setItem(KEY, JSON.stringify({ idx, tElapsed, tRunning }));
     const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{ return {}; } };
 

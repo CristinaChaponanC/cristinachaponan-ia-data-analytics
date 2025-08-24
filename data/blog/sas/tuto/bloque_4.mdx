@@ -1,0 +1,628 @@
+---
+title: "Bloque 04 — Flujos ETL en SAS (Extract, Transform, Load y Automatización)"
+summary: "Construiremos pipelines ETL completos en SAS: extracción desde múltiples fuentes (CSV/Excel/BD), validación integral de calidad (duplicados, reglas de negocio e integridad referencial), transformaciones con DATA step y PROC SQL, integración progresiva (clientes–productos–vendedores), cálculo de KPIs y Data Mart RFM, y cierre con exportación/reporting, auditoría y trazabilidad. Además, parametrizaremos y orquestaremos el proceso con macros para lograr automatización, escalabilidad y mantenibilidad."
+date: 2025-08-24 10:00:00
+lastmod: 2025-08-24 10:00:00
+tags: ['SAS','ETL','Extract','Transform','Load','Automatización','SAS Macro','DATA Step','PROC SQL','PROC IMPORT','PROC EXPORT','LIBNAME','Validación de datos','Calidad de datos','Integridad referencial','Duplicados','Auditoría','Trazabilidad','KPIs','RFM','Data Mart','SAS Studio','Orquestación']
+draft: false
+images: ['/imagenes/posts/sas-etl-bloque4.jpg']
+authors: ['default']
+---
+
+# ETL en SAS
+
+## Introducción
+
+En este bloque abordaremos la construcción de **flujos ETL (Extract, Transform, Load) completos** en SAS para procesar múltiples fuentes de datos de manera sistemática y automatizada. Combinaremos las técnicas aprendidas en bloques anteriores para crear pipelines de procesamiento robustos que incluyan ingesta, validación, transformación, integración y exportación de datos. Al final de las 1.5 horas, los participantes comprenderán cómo diseñar procesos ETL escalables, implementar validaciones de calidad de datos, automatizar flujos con parámetros y macros, y generar reportes de auditoría. Este conocimiento es esencial para **crear soluciones de datos empresariales confiables y reproducibles**.
+
+## 1. Conceptos Fundamentales de ETL en SAS
+
+ETL (Extract, Transform, Load) es una metodología sistemática para mover datos desde fuentes originales hasta un destino analítico, aplicando transformaciones y validaciones en el proceso.
+
+- **Extract (Extracción):** La fase de extracción se encarga de **obtener datos de fuentes originales** como archivos CSV, Excel, bases de datos, APIs o sistemas transaccionales. En SAS, utilizamos principalmente PROC IMPORT para archivos planos y LIBNAME para conexiones a bases de datos. Esta fase debe manejar diferentes formatos de datos, detectar tipos automáticamente, y establecer la estructura inicial de los datasets de trabajo. Es fundamental documentar las fuentes y mantener trazabilidad del origen de cada dato.
+
+```sas
+/* Configuración global del proceso ETL */
+options mprint mlogic symbolgen nocenter validvarname=v7;
+
+/* Parámetros del proceso */
+%let PATH = /home/&sysuserid/My Folder;
+%let INDIR = &PATH;
+%let OUTDIR = &PATH;
+
+/* Extracción de múltiples fuentes */
+proc import datafile="&INDIR/datos_curso_sas.csv"
+    out=work.clientes_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;
+
+proc import datafile="&INDIR/ventas_simulado.csv"
+    out=work.ventas_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;
+
+proc import datafile="&INDIR/productos_simulado.csv"
+    out=work.productos_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;
+
+proc import datafile="&INDIR/vendedores_simulado.csv"
+    out=work.vendedores_raw dbms=csv replace;
+    guessingrows=max; getnames=yes;
+run;
+```
+
+- **Transform (Transformación):** Esta fase incluye **limpieza, estandarización, validación e integración** de los datos extraídos. Las transformaciones pueden incluir: normalización de formatos (fechas, nombres), aplicación de reglas de negocio, cálculo de variables derivadas, detección y corrección de errores, eliminación de duplicados, y enriquecimiento con datos de referencia. En SAS, combinamos DATA steps y PROC SQL para estas transformaciones.
+
+```sas
+/* Estandarización de clientes */
+data work.clientes_prep;
+    set work.clientes_raw;
+    length sexo_full $12 nombre_completo $120 email_dominio $100;
+    
+    /* ID homogéneo como texto */
+    id_char = cats(id);
+    
+    /* Sexo legible */
+    sexo_trim = strip(upcase(sexo));
+    if sexo_trim='M' then sexo_full='Masculino';
+    else if sexo_trim='F' then sexo_full='Femenino';
+    else sexo_full='(Desconocido)';
+    
+    /* Nombre completo */
+    nombre_completo = catx(' ', strip(nombre), strip(apellido));
+    
+    /* Dominio email */
+    if not missing(email) then do;
+        if index(email,'@')>0 then email_dominio = substr(email, index(email,'@')+1);
+        else email_dominio='(email_invalido)';
+    end;
+    
+    /* Fechas SAS */
+    fecha_nac = fecha_nacimiento;
+    format fecha_nac ddmmyy10.;
+run;
+```
+
+- **Load (Carga):** La fase de carga se encarga de **almacenar los datos procesados** en el destino final, que puede ser un data warehouse, data mart, archivos de salida, o sistemas analíticos. Esta fase incluye la exportación en diferentes formatos, la persistencia en librerías permanentes, y la generación de reportes de proceso. En SAS utilizamos PROC EXPORT, ODS, y LIBNAME para diferentes tipos de destinos.
+
+## 2. Validación Integral de Calidad de Datos
+
+La validación es un componente crítico de cualquier proceso ETL, asegurando que los datos cumplan con estándares de calidad antes de ser procesados.
+
+- **Detección de Duplicados:** El primer paso es identificar y manejar registros duplicados que puedan causar problemas en el procesamiento posterior.
+
+```sas
+/* Eliminar duplicados por clave primaria */
+proc sort data=work.clientes_prep out=work.clientes_nodup 
+          nodupkey dupout=work.clientes_dups; 
+    by id_char; 
+run;
+
+proc sort data=work.ventas_prep out=work.ventas_nodup 
+          nodupkey dupout=work.ventas_dups; 
+    by id_venta; 
+run;
+
+proc sort data=work.productos_prep out=work.productos_nodup 
+          nodupkey dupout=work.productos_dups; 
+    by producto_char; 
+run;
+
+proc sort data=work.vendedores_prep out=work.vendedores_nodup 
+          nodupkey dupout=work.vendedores_dups; 
+    by vendedor_char; 
+run;
+
+/* Resumen de duplicados encontrados */
+proc sql;
+    create table work.dup_resumen as
+    select 'clientes' as tabla length=16, count(*) as n from work.clientes_dups union all
+    select 'ventas', count(*) from work.ventas_dups union all
+    select 'productos', count(*) from work.productos_dups union all
+    select 'vendedores', count(*) from work.vendedores_dups;
+quit;
+
+proc print data=work.dup_resumen; 
+    title 'Duplicados por clave'; 
+run; 
+title;
+```
+
+- **Validaciones de Reglas de Negocio:** Implementar controles específicos para cada entidad según las reglas del negocio.
+
+```sas
+/* Validación de ventas: montos y cantidades válidas */
+data work.ventas_chk;
+    set work.ventas_nodup;
+    length err_tipo $40;
+    err_tipo='';
+    if monto_total < 0 then err_tipo='monto_negativo';
+    else if cantidad <= 0 then err_tipo='cantidad_no_positiva';
+    else if missing(fecha_venta_d) then err_tipo='fecha_invalida';
+    if err_tipo ne '' then output; /* solo errores */
+run;
+
+/* Validación de clientes: edad, email, sexo */
+data work.clientes_chk;
+    set work.clientes_nodup;
+    length err_tipo $40;
+    err_tipo='';
+    if not missing(edad) then if edad<0 or edad>120 then err_tipo='edad_fuera_de_rango';
+    else if missing(email) or index(email,'@')=0 then err_tipo='email_invalido';
+    else if sexo_full='(Desconocido)' then err_tipo='sexo_desconocido';
+    if err_tipo ne '' then output;
+run;
+
+/* Validación de productos: precio>=0, stock>=0 */
+data work.productos_chk;
+    set work.productos_nodup;
+    length err_tipo $40;
+    err_tipo='';
+    if precio_unitario_num < 0 then err_tipo='precio_negativo';
+    else if stock_disponible < 0 then err_tipo='stock_negativo';
+    if err_tipo ne '' then output;
+run;
+
+/* Resumen de reglas violadas */
+proc freq data=work.ventas_chk; 
+    tables err_tipo / nocum nopercent; 
+    title 'Errores en Ventas'; 
+run; 
+title;
+```
+
+- **Validación de Integridad Referencial:** Verificar que las relaciones entre tablas sean consistentes.
+
+```sas
+/* Ventas deben referenciar clientes existentes */
+proc sql;
+    create table work.ventas_ref_cli as
+    select v.*
+    from work.ventas_nodup v
+    left join work.clientes_nodup c
+        on v.id_cliente_char = c.id_char
+    where c.id_char is missing; /* huérfanas */
+quit;
+
+/* Ventas deben referenciar productos existentes */
+proc sql;
+    create table work.ventas_ref_prod as
+    select v.*
+    from work.ventas_nodup v
+    left join work.productos_nodup p
+        on strip(v.producto) = p.producto_char
+    where p.producto_char is missing;
+quit;
+
+/* Clientes deben referenciar vendedores existentes */
+proc sql;
+    create table work.clientes_ref_vend as
+    select c.*
+    from work.clientes_nodup c
+    left join work.vendedores_nodup v
+        on strip(c.vendedor) = v.vendedor_char
+    where not missing(c.vendedor) and v.vendedor_char is missing;
+quit;
+```
+
+## 3. Partición y Clasificación de Datos
+
+Una vez identificados los errores, es fundamental separar los datos válidos de los problemáticos para procesamiento diferenciado.
+
+- **Consolidación de Errores:** Unificar todos los tipos de error en una vista consolidada con motivos específicos.
+
+```sas
+/* Consolidar errores de Ventas con motivo */
+data work.ventas_err_final;
+    set work.ventas_chk(in=a) work.ventas_ref_cli(in=b) work.ventas_ref_prod(in=c);
+    length motivo $60;
+    if a then motivo=err_tipo;
+    else if b then motivo='id_cliente_invalido';
+    else if c then motivo='producto_invalido';
+run;
+
+/* Ventas válidas = todas menos los errores consolidados */
+proc sql;
+    create table work.ventas_validas as
+    select v.*
+    from work.ventas_nodup v
+    left join (select distinct id_venta from work.ventas_err_final) e
+        on v.id_venta = e.id_venta
+    where e.id_venta is null;
+quit;
+
+/* Resumen de calidad de Ventas */
+proc sql;
+    select count(*) as n_total from work.ventas_nodup;
+    select count(*) as n_con_error from work.ventas_err_final;
+    select count(*) as n_validas from work.ventas_validas;
+quit;
+```
+
+## 4. Integración Progresiva de Fuentes
+
+La integración se realiza paso a paso, enriqueciendo progresivamente las ventas con información de cada fuente.
+
+- **Enriquecimiento con Datos de Clientes:** Primer paso de integración, agregando atributos del cliente a cada venta.
+
+```sas
+/* Integración 1: Enriquecer Ventas con Clientes */
+proc sql;
+    create table work.ventas_cli as
+    select v.*
+         , c.id_char as id_cliente
+         , c.nombre_completo, c.sexo_full, c.pais, c.email, c.email_dominio
+         , c.vendedor as vendedor_asignado
+    from work.ventas_validas v
+    inner join work.clientes_nodup c
+        on v.id_cliente_char = c.id_char;
+quit;
+```
+
+- **Enriquecimiento con Datos de Productos:** Segundo paso, agregando información de categoría y precio.
+
+```sas
+/* Integración 2: Añadir Productos (categoría, precio) */
+proc sql;
+    create table work.ventas_cli_prod as
+    select vc.*
+         , p.categoria
+         , p.precio_unitario_num as precio_unitario
+    from work.ventas_cli vc
+    left join work.productos_nodup p
+        on strip(vc.producto) = p.producto_char;
+quit;
+
+/* Validación de consistencia: ¿monto_total ≈ cantidad*precio_unitario? */
+data work.ventas_cli_prod;
+    set work.ventas_cli_prod;
+    monto_teorico = cantidad * precio_unitario;
+    diff_monto = abs(monto_total - monto_teorico);
+    flag_incons = (not missing(precio_unitario)) and (diff_monto > 0.01*monto_total);
+run;
+```
+
+- **Enriquecimiento con Datos de Vendedores:** Paso final, completando con información del vendedor.
+
+```sas
+/* Integración 3: Añadir Vendedores (región, objetivo) */
+proc sql;
+    create table work.ventas_cli_prod_vend as
+    select vcp.*
+         , v.vendedor_char as vendedor
+         , v.region as region_vendedor
+         , v.fecha_ingreso_d
+         , v.objetivo_mensual
+    from work.ventas_cli_prod vcp
+    left join work.vendedores_nodup v
+        on strip(vcp.vendedor_asignado) = v.vendedor_char;
+quit;
+```
+
+## 5. Generación de KPIs y Métricas
+
+Una vez integrados los datos, se calculan indicadores clave de rendimiento por diferentes dimensiones.
+
+- **KPIs por Cliente:** Métricas fundamentales para análisis de comportamiento del cliente.
+
+```sas
+/* KPIs por CLIENTE */
+proc sql;
+    create table work.kpi_cliente as
+    select id_cliente
+         , count(*) as n_transacciones
+         , sum(monto_total) as total_monto
+         , mean(monto_total) as ticket_promedio
+         , max(fecha_venta_d) as ultima_compra format=date9.
+         , sum(flag_incons) as n_inconsistencias
+    from work.ventas_cli_prod_vend
+    group by id_cliente;
+quit;
+```
+
+- **KPIs por Vendedor y Categoría:** Métricas para análisis de desempeño y producto.
+
+```sas
+/* KPIs por VENDEDOR */
+proc sql;
+    create table work.kpi_vendedor as
+    select vendedor
+         , count(*) as n_ventas
+         , sum(monto_total) as monto_total
+         , sum(cantidad) as unidades
+    from work.ventas_cli_prod_vend
+    group by vendedor
+    order by monto_total desc;
+quit;
+
+/* KPIs por CATEGORÍA */
+proc sql;
+    create table work.kpi_categoria as
+    select categoria
+         , count(*) as n_ventas
+         , sum(monto_total) as monto_total
+    from work.ventas_cli_prod_vend
+    group by categoria
+    order by monto_total desc;
+quit;
+```
+
+## 6. Construcción de Data Mart RFM
+
+El análisis RFM (Recency, Frequency, Monetary) es una técnica fundamental para segmentación de clientes.
+
+```sas
+/* Data Mart de Clientes con análisis RFM y segmentación */
+%let UMBRAL_VIP = 5000;
+
+proc sql;
+    create table work.dm_clientes as
+    select c.id_char as id
+         , c.nombre_completo, c.sexo_full, c.pais, c.email, c.email_dominio
+         , k.n_transacciones as F  /* Frequency */
+         , k.total_monto as M      /* Monetary */
+         , intck('day', k.ultima_compra, today()) as R_dias  /* Recency */
+         , case
+             when k.total_monto >= &UMBRAL_VIP then 'VIP'
+             when k.total_monto >= 2000 then 'Premium'
+             when k.total_monto > 0 then 'Regular'
+             else 'Sin Compras' 
+           end as segmento length=12
+    from work.clientes_nodup c
+    left join work.kpi_cliente k
+        on strip(c.id_char) = strip(put(k.id_cliente, best32.))
+    order by M desc;
+quit;
+```
+
+## 7. Parametrización y Automatización
+
+Los procesos ETL deben ser flexibles y configurables mediante parámetros.
+
+- **Parámetros Globales:** Definir variables macro para controlar el comportamiento del proceso.
+
+```sas
+/* Parametrización del proceso */
+%let DEBUG = 0;              /* 1=imprime muestras intermedias */
+%let UMBRAL_VIP = 5000;      /* umbral de segmentación */
+%let PERIODO_INI = 01JAN2023; 
+%let PERIODO_FIN = 31DEC2024;
+
+/* Macro utilitaria para debug condicional */
+%macro quiza_debug(ds, obs);
+    %if &DEBUG %then %do; 
+        proc print data=&ds (obs=&obs); 
+            title "Muestra: &ds"; 
+        run; 
+        title; 
+    %end;
+%mend;
+
+%quiza_debug(work.ventas_raw, 10);
+```
+
+- **Fechas Dinámicas:** Usar funciones de SAS para calcular fechas automáticamente.
+
+```sas
+/* Fechas calculadas automáticamente */
+%let HOY_DNUM = %sysfunc(today());
+%let HOY_TXT = %sysfunc(putn(&HOY_DNUM,date9.));
+%put >>> Hoy es &HOY_TXT (num=&HOY_DNUM);
+
+/* Filtros por periodo en preparación de ventas */
+data work.ventas_prep;
+    set work.ventas_raw;
+    length id_cliente_char $32;
+    id_cliente_char = cats(id_cliente);
+    fecha_venta_d = fecha_venta;
+    format fecha_venta_d ddmmyy10.;
+    
+    /* Derivados temporales */
+    anio_venta = year(fecha_venta_d);
+    mes_venta = intnx('month', fecha_venta_d, 0, 'b');
+    format mes_venta yymmn6.;
+run;
+```
+
+## 8. Exportación y Reporting
+
+La fase final incluye la exportación de resultados y generación de reportes de proceso.
+
+- **Exportación Individual:** Generar archivos específicos para cada resultado.
+
+```sas
+/* Exportación de resultados principales */
+proc export data=work.dm_clientes
+    outfile=_dataout
+    dbms=csv replace;
+run;
+%let _DATAOUT_MIME_TYPE=text/csv;
+%let _DATAOUT_NAME=dm_clientes.csv;
+
+proc export data=work.kpi_vendedor
+    outfile=_dataout
+    dbms=csv replace;
+run;
+%let _DATAOUT_MIME_TYPE=text/csv;
+%let _DATAOUT_NAME=kpi_vendedor;
+
+proc export data=work.ventas_err_final
+    outfile=_dataout
+    dbms=csv replace;
+run;
+%let _DATAOUT_MIME_TYPE=text/csv;
+%let _DATAOUT_NAME=ventas_err_final;
+```
+
+- **Reporte Consolidado:** Generar un reporte multi-sección con todos los resultados importantes.
+
+```sas
+/* Reporte consolidado de proceso */
+proc print data=work.dup_resumen; 
+    title 'Duplicados por Tabla'; 
+run;
+
+proc freq data=work.ventas_err_final; 
+    tables motivo; 
+    title 'Distribución de Errores en Ventas'; 
+run;
+
+proc print data=work.kpi_categoria; 
+    title 'KPIs por Categoría de Producto'; 
+run;
+
+proc print data=work.dm_clientes (obs=20); 
+    title 'Data Mart Clientes (Top 20 por Monto)'; 
+run;
+
+title;
+```
+
+## 9. Auditoria y Trazabilidad
+
+Un sistema ETL robusto debe mantener registro de todas las operaciones para auditoría y debugging.
+
+```sas
+/* Sistema básico de auditoría */
+proc sql; 
+    create table work.etl_audit (
+        etapa char(32), 
+        metrica char(32), 
+        valor num, 
+        timestamp num format=datetime20.
+    ); 
+quit;
+
+/* Macro para registrar métricas */
+%macro audit_push(etapa, metrica, valor);
+    data work.etl_audit; 
+        set work.etl_audit end=_eof_;
+        output; 
+        if _eof_ then do; 
+            etapa="&etapa"; 
+            metrica="&metrica"; 
+            valor=&valor; 
+            timestamp=datetime(); 
+            output; 
+        end;
+    run;
+%mend;
+
+/* Ejemplos de uso de auditoría */
+proc sql noprint; 
+    select count(*) into: n_cli from work.clientes_nodup; 
+quit;
+%audit_push(INGESTA, clientes, &n_cli);
+
+proc sql noprint; 
+    select count(*) into: n_ven from work.ventas_nodup; 
+quit;
+%audit_push(INGESTA, ventas, &n_ven);
+
+proc sql noprint; 
+    select count(*) into: n_err from work.ventas_err_final; 
+quit;
+%audit_push(VALIDACION, ventas_con_error, &n_err);
+
+proc print data=work.etl_audit; 
+    title 'Auditoría del Proceso ETL'; 
+run; 
+title;
+```
+
+## 10. Modularización y Arquitectura
+
+Para procesos complejos, es recomendable dividir el código en módulos especializados.
+
+- **Estructura de Archivos:** Organizar el código en archivos especializados por función.
+
+```
+/etl/
+  00_setup.sas           /* Configuración global y parámetros */
+  10_ingesta.sas         /* Extracción de fuentes */
+  20_validacion.sas      /* Validaciones de calidad */
+  30_integracion.sas     /* Combinación e integración */
+  40_kpis.sas           /* Cálculo de métricas */
+  50_export.sas         /* Exportación y reportes */
+  run_all.sas           /* Orquestador principal */
+```
+
+- **Programa Orquestador:** Un script principal que ejecute todos los módulos en secuencia.
+
+```sas
+/* Programa maestro: run_all.sas */
+%include "&PATH/etl/00_setup.sas";
+%include "&PATH/etl/10_ingesta.sas";
+%include "&PATH/etl/20_validacion.sas";
+%include "&PATH/etl/30_integracion.sas";
+%include "&PATH/etl/40_kpis.sas";
+%include "&PATH/etl/50_export.sas";
+
+/* Log final del proceso */
+%put === PROCESO ETL COMPLETADO ===;
+%put Fecha: %sysfunc(datetime(), datetime20.);
+```
+
+## 11. Controles de Calidad Avanzados
+
+Implementar verificaciones adicionales para asegurar la integridad de los datos procesados.
+
+```sas
+/* Control de balances: verificar que no se pierdan datos */
+proc sql;
+    /* Comparar totales antes y después del procesamiento */
+    select sum(monto_total) as total_original format=comma12.2
+    from work.ventas_raw;
+    
+    select sum(monto_total) as total_procesado format=comma12.2
+    from work.ventas_cli_prod_vend;
+quit;
+
+/* Detección de outliers por categoría */
+proc means data=work.ventas_cli_prod_vend noprint;
+    class categoria;
+    var monto_total;
+    output out=work.outliers_check p5=p5 p95=p95 n=n;
+run;
+
+/* Análisis de completitud por campos clave */
+proc sql;
+    create table work.completitud as
+    select 'clientes' as tabla length=20,
+           'email' as campo length=20,
+           sum(case when missing(email) then 1 else 0 end) as missing_count,
+           count(*) as total_count,
+           calculated missing_count / calculated total_count * 100 as pct_missing format=5.1
+    from work.clientes_nodup;
+quit;
+```
+
+## 12. Mejores Prácticas y Recomendaciones
+
+- **Gestión de Errores:** Siempre capture y documente errores con contexto suficiente para debugging. Mantenga registros de errores separados por tipo y gravedad.
+
+- **Performance:** Use índices cuando sea apropiado, optimice consultas SQL complejas, y considere procesamiento por lotes para volúmenes grandes.
+
+- **Mantenibilidad:** Documente parámetros y dependencias, use nombres descriptivos para datasets intermedios, y mantenga versionado del código.
+
+- **Monitoreo:** Implemente alertas para fallos críticos, registre métricas de tiempo de ejecución, y mantenga histórico de auditoría.
+
+## Recursos Adicionales
+
+> **Referencias recomendadas** — Procesos ETL en SAS
+> 
+> 1. **SAS Data Management Guide** — Guía completa para gestión de datos empresariales con SAS.  
+>    Enlace: https://documentation.sas.com/doc/en/dmdataug/9.4/titlepage.htm
+> 
+> 2. **SAS Macro Programming Guide** — Documentación oficial para programación con macros y automatización.  
+>    Enlace: https://documentation.sas.com/doc/en/macrolang/9.4/p0q5s5s82nlfn9n1lzj2fh0vpk6b.htm
+> 
+> 3. **Data Quality Best Practices in SAS** — Mejores prácticas para validación y control de calidad.  
+>    Enlace: https://blogs.sas.com/content/sgf/2020/03/18/data-quality-best-practices/
+> 
+> 4. **SAS Communities — Data Integration Forum** — Foro especializado en integración y procesos ETL.  
+>    Enlace: https://communities.sas.com/t5/SAS-Data-Management/bd-p/data_management
+> 
+> 5. **Efficient ETL Processing with SAS** — Técnicas avanzadas de optimización para procesos ETL.  
+>    Enlace: https://blogs.sas.com/content/sgf/2021/07/15/efficient-etl-processing/

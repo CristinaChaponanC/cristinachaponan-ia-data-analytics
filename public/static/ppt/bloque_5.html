@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taller SAS · Bloque 5 · Presentador (único archivo)</title>
+  <!--  
+    Presentación PEID en un único archivo (HTML+CSS+JS)
+    Bloque 5 · Sesión 2: Visualización y Exportación de Resultados en SAS (Gráficos, KPIs y Presentación de Datos)
+    Funciones: navegación teclado/click/toque, overview, panel presentador con notas y timer,
+    puntero láser, pantalla en negro, fullscreen, contenteditable y export a PDF.
+  -->
+  <style>
+    :root{
+      --brand-primary:#0b4da2; --brand-secondary:#0a2c59; --accent:#f5b400;
+      --bg:#0f172a; --paper:#ffffff; --ink:#0f172a; --muted:#475569;
+      --shadow:0 14px 40px rgba(0,0,0,.18); --radius:18px; --slide-w:1600; --slide-h:900; 
+      --pad:clamp(24px, 3vw, 48px);
+      --max-content-width:1920px; /* Límite para pantallas 4K */
+    }
+    @media (prefers-color-scheme: dark){ 
+      :root{ --bg:#0b1220; --paper:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --shadow:0 18px 50px rgba(0,0,0,.5) } 
+    }
+    *{box-sizing:border-box} 
+    html,body{height:100%}
+    body{ margin:0; background:var(--bg); color:var(--ink); font:400 clamp(16px, 1.2vw, 22px)/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Arial,sans-serif; overflow:hidden }
+
+    .stage{ position:fixed; inset:0; display:grid; place-items:center; padding:clamp(1rem, 2vmin, 3rem) }
+    .deck{ 
+      position:relative; 
+      width:100%; 
+      height:100%; 
+      max-width:min(var(--max-content-width), calc(100vh*(var(--slide-w)/var(--slide-h)))); 
+      max-height:90vh;
+      aspect-ratio:calc(var(--slide-w)/var(--slide-h));
+      margin:0 auto;
+    }
+    .frame{ position:relative; width:100%; height:100%; border-radius:var(--radius); box-shadow:var(--shadow); background:var(--paper); overflow:hidden }
+
+    .slide{ position:absolute; inset:0; display:grid; grid-template-rows:auto 1fr auto; padding:var(--pad); opacity:0; transform:translateX(40px); transition:opacity .35s ease, transform .35s ease }
+    .slide.active{ opacity:1; transform:translateX(0); z-index:1 }
+
+    .brand{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:clamp(8px, 1vw, 16px); padding-bottom:clamp(8px, 1vw, 16px); border-bottom:3px solid var(--brand-primary) }
+    .brand--compact{ border-bottom-width:2px } 
+    .brand-lines{ display:grid; gap:2px; font-size:clamp(14px,1.8vw,20px); color:var(--muted); line-height:1.3 }
+    .module-badge{ background:linear-gradient(135deg,var(--brand-primary),var(--brand-secondary)); color:#fff; padding:clamp(.4rem, .8vw, .6rem) clamp(.6rem, 1.2vw, 1rem); border-radius:12px; font-weight:700; letter-spacing:.5px; box-shadow:var(--shadow); font-size:clamp(12px, 1.4vw, 16px) }
+
+    .content{ display:grid; align-content:start; gap:clamp(16px,2.5vw,32px); padding-top:clamp(16px,2.5vw,32px) }
+    h1.course-title{ margin:0; font-size:clamp(40px,6.2vw,80px); line-height:1.1; font-weight:700 } 
+    h2.slide-title{ margin:0; font-size:clamp(30px,5vw,60px); line-height:1.15; font-weight:600 }
+    .meta{ display:flex; gap:clamp(6px, 1vw, 12px); font-size:clamp(16px,2.2vw,24px); color:var(--muted); flex-wrap:wrap } 
+    .meta .label{ font-weight:600; color:var(--ink) }
+    .bullets{ margin:0; padding-left:1.1em; font-size:clamp(20px,2.8vw,32px); line-height:1.4 } 
+    .bullets li{ margin:.3em 0 }
+    .cols{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px, 3vw, 32px) }
+    .check{ list-style:'✓  '; padding-left:1ch; color:var(--brand-primary) } 
+    .warn{ list-style:'⚠  '; padding-left:1.2ch; color:var(--accent) }
+    .refs{ margin:0; padding-left:1.2em; font-size:clamp(16px,2.2vw,24px); line-height:1.4 }
+    .refs li{ margin:.2em 0 }
+
+    /* Responsive adjustments */
+    @media (min-width: 2560px) {
+      .stage{ padding:clamp(2rem, 4vmin, 6rem) }
+      .deck{ max-width:1800px; max-height:85vh }
+    }
+
+    @media (max-width: 1366px) {
+      .cols{ grid-template-columns:1fr; gap:clamp(12px, 2vw, 20px) }
+      .brand-lines{ font-size:clamp(12px,1.6vw,18px) }
+    }
+
+    @media (max-width: 768px) {
+      .stage{ padding:1rem }
+      .deck{ max-height:95vh }
+      .brand{ flex-direction:column; text-align:center; gap:8px }
+      .module-badge{ align-self:center }
+    }
+
+    .footer{ display:flex; justify-content:space-between; align-items:center; gap:clamp(8px, 1.5vw, 16px); padding-top:clamp(6px, 1vw, 12px); border-top:1px dashed rgba(0,0,0,.12) }
+    .pager{ font-variant-numeric:tabular-nums; opacity:.7; font-size:clamp(12px, 1.4vw, 16px) }
+    .progress{ position:relative; flex:1; height:clamp(4px, 0.8vw, 8px); border-radius:999px; background:rgba(0,0,0,.08); overflow:hidden }
+    .progress>i{ position:absolute; inset:0; width:0%; background:var(--brand-primary) }
+
+    .ui{ position:fixed; right:clamp(16px,2vmin,32px); bottom:clamp(16px,2vmin,32px); display:grid; grid-auto-flow:column; gap:clamp(6px, 1vw, 12px); z-index:30 }
+    .btn{ width:clamp(38px, 5vw, 50px); height:clamp(38px, 5vw, 50px); border:none; border-radius:clamp(8px, 1.2vw, 16px); display:grid; place-items:center; box-shadow:var(--shadow); background:var(--brand-primary); color:#fff; font-size:clamp(16px, 2vw, 22px); cursor:pointer; transition:all 0.2s ease }
+    .btn:hover{ filter:brightness(1.06); transform:translateY(-1px) }
+    .btn:active{ transform:translateY(1px) }
+
+    .overview{ position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.6); display:none; padding:clamp(2vmin, 3vw, 4vmin); overflow:auto }
+    .overview.on{ display:block }
+    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(clamp(280px, 25vw, 380px),1fr)); gap:clamp(12px, 2vw, 24px); max-width:1400px; margin:0 auto }
+    .thumb{ background:var(--paper); border-radius:clamp(8px, 1.2vw, 16px); box-shadow:var(--shadow); cursor:pointer; overflow:hidden; padding:clamp(10px, 1.5vw, 18px); transition:transform 0.2s ease }
+    .thumb:hover{ transform:translateY(-2px) }
+    .thumb h3{ margin:6px 0 0; font-size:clamp(14px, 1.6vw, 18px); color:var(--muted) }
+
+    .presenter{ position:fixed; right:clamp(16px,2vmin,32px); top:clamp(16px,2vmin,32px); width:clamp(300px, 28vw, 480px); max-height:80vh; z-index:35; background:var(--paper); color:var(--ink); border-radius:clamp(12px, 1.8vw, 20px); box-shadow:var(--shadow); padding:clamp(12px, 2vw, 20px); display:none }
+    .presenter.on{ display:block }
+    .presenter h4{ margin:0 0 6px 0; font-size:clamp(16px, 1.8vw, 20px) }
+    .notes{ font-size:clamp(12px, 1.4vw, 16px); color:var(--muted); margin-top:8px; max-height:36vh; overflow:auto; line-height:1.4 }
+    .timer{ display:flex; align-items:center; gap:clamp(6px, 1.2vw, 14px); margin-top:8px; flex-wrap:wrap }
+    .timer .clock{ font:700 clamp(18px, 2.2vw, 26px)/1 "ui-monospace",SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace }
+    .chip{ background:rgba(0,0,0,.06); padding:clamp(.2rem, .4vw, .3rem) clamp(.4rem, .8vw, .6rem); border-radius:8px; font-size:clamp(11px, 1.3vw, 14px) }
+
+    .help{ position:fixed; inset:0; display:none; place-items:center; z-index:50; background:rgba(0,0,0,.6); padding:clamp(1rem, 3vw, 2rem) }
+    .help.on{ display:grid }
+    .help .card{ width:min(clamp(700px, 80vw, 1000px), 90vw); background:var(--paper); color:var(--ink); border-radius:clamp(12px, 1.8vw, 20px); box-shadow:var(--shadow); padding:clamp(16px, 2.5vw, 28px); max-height:85vh; overflow:auto }
+    .help table{ width:100%; border-collapse:collapse; font-size:clamp(12px, 1.4vw, 16px) }
+    .help th,.help td{ border-bottom:1px solid rgba(0,0,0,.08); padding:clamp(6px, 1vw, 10px); text-align:left }
+    .help h3{ margin-top:0; font-size:clamp(18px, 2.2vw, 24px) }
+
+    .laser{ position:fixed; width:clamp(14px, 2vw, 22px); height:clamp(14px, 2vw, 22px); margin-left:calc(clamp(14px, 2vw, 22px) * -0.5); margin-top:calc(clamp(14px, 2vw, 22px) * -0.5); border-radius:50%; pointer-events:none; z-index:60; background:radial-gradient(circle at 35% 35%, #fff, var(--accent) 40%, rgba(0,0,0,.2) 70%); display:none }
+    .laser.on{ display:block }
+    .blackout{ position:fixed; inset:0; background:#000; z-index:55; display:none }
+    .blackout.on{ display:block }
+
+    pre{ margin:0; background:rgba(2,6,23,.06); padding:clamp(12px, 1.8vw, 20px); border-radius:clamp(8px, 1.2vw, 16px); overflow:auto; line-height:1.45; font-size:clamp(13px, 1.6vw, 16px) }
+    code{ font: 500 clamp(12px, 1.5vw, 16px)/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace }
+
+    /* Mejoras adicionales para UX */
+    .slide { 
+      transition: opacity .4s cubic-bezier(0.25, 1, 0.5, 1), transform .4s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: opacity, transform;
+    }
+    .slide.active {
+      animation: slideIn 0.6s ease-out forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    /* Focus y accesibilidad mejorada */
+    .btn:focus {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    /* Mejor contraste y legibilidad */
+    .bullets, .refs {
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Scroll suave en overview */
+    .overview {
+      scroll-behavior: smooth;
+    }
+    
+    /* Hover mejorado para elementos interactivos */
+    .thumb, .btn, [contenteditable="true"] {
+      transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    [contenteditable="true"]:hover {
+      background: rgba(var(--brand-primary), 0.05);
+      outline: 1px dashed var(--brand-primary);
+      outline-offset: 2px;
+    }
+    
+    /* Indicador visual para elementos editables */
+    [contenteditable="true"]::after {
+      content: "✎";
+      opacity: 0;
+      margin-left: 8px;
+      color: var(--muted);
+      font-size: 0.8em;
+      transition: opacity 0.2s ease;
+    }
+    
+    [contenteditable="true"]:hover::after {
+      opacity: 0.6;
+    }
+
+    @media print{ 
+      body{ overflow:visible; font-size:12pt } 
+      .ui,.overview,.presenter,.help,.laser,.blackout{ display:none !important } 
+      .stage{ position:static; padding:0 } 
+      .deck{ max-width:none; max-height:none } 
+      .frame{ border-radius:0; box-shadow:none } 
+      .slide{ position:relative; page-break-after:always; opacity:1 !important; transform:none !important; padding:1in }
+      h1.course-title{ font-size:28pt }
+      h2.slide-title{ font-size:22pt }
+      .bullets{ font-size:14pt }
+      .refs{ font-size:12pt }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage" aria-live="polite">
+    <div class="deck" id="deck" role="region" aria-label="Presentación">
+      <div class="frame" id="frame">
+
+        <!-- ============ SLIDE 1 · Portada ============ -->
+        <section class="slide active" data-title="Portada" data-template="cover">
+          <header class="brand">
+            <div class="brand-lines">
+              <span>Facultad de Ingeniería Económica, Estadística y Ciencias Sociales</span>
+              <span>Centro de Formación Continua</span>
+              <span>I Programa de Especialización en Ingeniería de Datos</span>
+            </div>
+            <div class="module-badge" id="badge">BLOQUE 5</div>
+          </header>
+          <main class="content">
+            <h1 class="course-title" contenteditable="true">Taller SAS · Bloque 5: Visualización y Exportación de Resultados</h1>
+            <div class="meta">
+              <span class="label">Enfoque:</span><span class="value">Gráficos, KPIs y Presentación de Datos</span>
+            </div>
+            <div class="meta">
+              <span class="label">Docente:</span><span class="value" contenteditable="true">Cristina Chapoñan</span>
+            </div>
+          </main>
+          <footer class="footer">
+            <div class="pager" id="pager">1 / 1</div>
+            <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+          </footer>
+          <aside class="notes" hidden>Este es el bloque final del proceso analítico: transformar análisis técnicos en comunicación empresarial impactante con visualizaciones y reportes.</aside>
+        </section>
+
+        <!-- ============ SLIDE 2 · Agenda ============ -->
+        <section class="slide" data-title="Agenda (90 min)" data-template="agenda">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Taller SAS · Bloque 5</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Agenda (90 min)</h2>
+            <ul class="bullets">
+              <li>15′ – Fundamentos de visualización con PROC SGPLOT y preparación de agregados</li>
+              <li>20′ – Gráficos básicos y avanzados: series, barras, distribuciones y paneles</li>
+              <li>10′ – KPIs rápidos con PROC MEANS, PROC FREQ y PROC REPORT</li>
+              <li>15′ – Exportación profesional: ODS EXCEL, ODS PDF y PROC EXPORT</li>
+              <li>10′ – Automatización de reportes con macros parametrizadas</li>
+              <li>20′ – Actividad práctica: crear dashboard ejecutivo completo</li>
+            </ul>
+            <p><strong>Objetivo:</strong> Transformar análisis técnicos en comunicación empresarial impactante</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">Este bloque es el corazón del procesamiento de datos. Los participantes aprenderán a combinar múltiples fuentes para crear vistas analíticas integradas.</aside>
+        </section>
+
+        <!-- ============ SLIDE 3 · Resultados de aprendizaje ============ -->
+        <section class="slide" data-title="Resultados de aprendizaje" data-template="goals">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Resultados</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Resultados de aprendizaje</h2>
+            <ul class="check">
+              <li>Domina <strong>PROC SGPLOT</strong> para crear visualizaciones básicas y avanzadas profesionales</li>
+              <li>Construye <strong>gráficos especializados</strong>: series temporales, barras, distribuciones y paneles</li>
+              <li>Calcula <strong>KPIs ejecutivos</strong> rápidamente con PROC MEANS, PROC FREQ y PROC REPORT</li>
+              <li>Exporta <strong>resultados profesionales</strong> usando ODS EXCEL, ODS PDF y PROC EXPORT</li>
+              <li>Automatiza <strong>paquetes de reportes</strong> con macros parametrizadas para distribución</li>
+              <li>Integra <strong>resultados SAS con herramientas BI</strong> para dashboards interactivos empresariales</li>
+            </ul>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Este bloque transforma a los participantes en comunicadores de datos, capaces de crear reportes ejecutivos impactantes.</aside>
+        </section>
+
+        <!-- ============ SLIDE 4 · Fundamentos de Visualización ============ -->
+        <section class="slide" data-title="Fundamentos de Visualización" data-template="visualization-basics">
+          <header class="brand brand--compact"><div class="brand-lines"><span>PROC SGPLOT</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Fundamentos de Visualización con PROC SGPLOT</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Configuración inicial:</strong></p>
+                <pre><code class="language-sas">/* Habilitar gráficos SG */
+options nocenter validvarname=v7;
+ods graphics on;
+
+/* Preparación de datos integrados */
+proc sql;
+    create table work.ventas_cli as
+    select v.*, c.id_char as id_cliente, 
+           c.nombre_completo, c.pais, 
+           c.sexo_full, c.email_dominio
+    from work.ventas_prep v 
+    left join work.clientes_prep c 
+        on v.id_cliente_char=c.id_char;
+quit;</code></pre>
+                <p><strong>Agregados para visualización:</strong></p>
+                <pre><code class="language-sas">/* KPIs por categoría */
+proc sql; 
+    create table work.kpi_categoria as
+    select categoria
+         , sum(monto_total) as monto_total
+         , count(*) as n_ventas
+    from work.ventas_cli_prod_vend 
+    group by categoria 
+    order by monto_total desc; 
+quit;</code></pre>
+              </div>
+              <div>
+                <p><strong>Tipos de gráficos y aplicaciones:</strong></p>
+                <ul class="bullets">
+                  <li><strong>VBAR/HBAR:</strong> Comparaciones categóricas</li>
+                  <li><strong>SERIES:</strong> Tendencias temporales</li>
+                  <li><strong>SCATTER:</strong> Relaciones entre variables</li>
+                  <li><strong>VBOX/HBOX:</strong> Distribuciones y outliers</li>
+                  <li><strong>HISTOGRAM:</strong> Frecuencias y distribuciones</li>
+                </ul>
+                <p><strong>Serie temporal básica:</strong></p>
+                <pre><code class="language-sas">/* Ventas mensuales */
+proc sgplot data=work.ventas_mensual;
+    title "Ventas mensuales (total)";
+    series x=mes y=monto_mes / markers;
+    yaxis label="Monto" grid; 
+    xaxis label="Mes";
+run; 
+title;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>PROC SGPLOT es la herramienta moderna de SAS para visualización. Automáticamente genera elementos como ejes, leyendas y escalas.</aside>
+        </section>
+
+        <!-- ============ SLIDE 5 · Gráficos Básicos ============ -->
+        <section class="slide" data-title="Gráficos Básicos" data-template="basic-plots">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Visualización efectiva</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Gráficos Básicos con PROC SGPLOT</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Gráficos de barras (comparaciones):</strong></p>
+                <pre><code class="language-sas">/* Barras por categoría (ordenadas) */
+proc sgplot data=work.kpi_categoria;
+    title "Ventas por categoría";
+    vbar categoria / response=monto_total 
+                    datalabel 
+                    categoryorder=respdesc;
+    yaxis label="Monto" grid;
+run; 
+title;
+
+/* Top 10 vendedores (horizontal) */
+proc sgplot data=work.kpi_vendedor(obs=10);
+    title "Top 10 vendedores";
+    hbar vendedor / response=monto_total 
+                   datalabel 
+                   categoryorder=respdesc;
+    xaxis label="Monto" grid;
+run; 
+title;</code></pre>
+              </div>
+              <div>
+                <p><strong>Distribuciones y dispersión:</strong></p>
+                <pre><code class="language-sas">/* Boxplot por categoría */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Distribución de monto por categoría";
+    vbox monto_total / category=categoria;
+    yaxis label="Monto por transacción" grid;
+run; 
+title;
+
+/* Histograma con densidad */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Histograma de monto_total";
+    histogram monto_total; 
+    density monto_total;
+    xaxis label="Monto"; 
+    yaxis label="Frecuencia";
+run; 
+title;
+
+/* Scatter plot */
+proc sgplot data=work.ventas_cli_prod_vend;
+    title "Cantidad vs Monto";
+    scatter x=cantidad y=monto_total / 
+            transparency=0.1;
+    xaxis grid; yaxis grid;
+run; 
+title;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Cada tipo de gráfico tiene propósitos específicos: barras para comparar, boxplots para distribuciones, scatter para relaciones.</aside>
+        </section>
+
+        <!-- ============ SLIDE 6 · KPIs Rápidos ============ -->
+        <section class="slide" data-title="KPIs Rápidos" data-template="quick-kpis">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Procedimientos estadísticos</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">KPIs Rápidos con Procedimientos Estadísticos</h2>
+            <div class="cols">
+              <div>
+                <p><strong>PROC MEANS para variables numéricas:</strong></p>
+                <pre><code class="language-sas">/* Estadísticas por categoría */
+proc means data=work.ventas_cli_prod_vend 
+           mean sum maxdec=2;
+    class categoria;
+    var monto_total;
+    title 'KPIs de Monto por Categoría';
+run; 
+title;
+
+/* Múltiples variables */
+proc means data=work.ventas_cli_prod_vend 
+           n mean stddev min max maxdec=2;
+    var monto_total cantidad precio_unitario;
+    title 'Estadísticas Descriptivas';
+run; 
+title;</code></pre>
+                <p><strong>PROC FREQ para categóricas:</strong></p>
+                <pre><code class="language-sas">/* Distribución de transacciones */
+proc freq data=work.ventas_cli_prod_vend;
+    tables categoria / nocum;
+    title 'Ventas por Categoría';
+run; 
+title;</code></pre>
+              </div>
+              <div>
+                <p><strong>PROC REPORT ejecutivo:</strong></p>
+                <pre><code class="language-sas">/* Reporte KPI con totales */
+proc report data=work.kpi_vendedor nowd;
+    title "KPI por vendedor";
+    columns vendedor n_ventas unidades 
+            monto_total;
+    define vendedor   / display "Vendedor";
+    define n_ventas   / analysis sum 
+                        "#Ventas";
+    define unidades   / analysis sum 
+                        "Unidades";
+    define monto_total/ analysis sum 
+                        format=dollar12.2 
+                        "Monto total";
+    rbreak after / summarize;
+run; 
+title;</code></pre>
+                <p><strong>PROC TABULATE (tablas cruzadas):</strong></p>
+                <pre><code class="language-sas">/* País vs Categoría */
+proc tabulate data=work.ventas_cli_prod_vend 
+              format=dollar12.2;
+    title "Monto por País y Categoría";
+    class pais categoria;
+    var monto_total;
+    table pais, categoria*monto_total*
+                (sum mean);
+run; 
+title;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Los procedimientos estadísticos generan KPIs automáticamente sin programación manual. PROC MEANS, FREQ y REPORT son fundamentales.</aside>
+        </section>
+        <section class="slide" data-title="Integración Progresiva" data-template="integration">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Construcción de DataMarts</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Integración Progresiva de Fuentes y Construcción de DataMarts</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Paso 1: Enriquecer con Clientes</strong></p>
+                <pre><code class="language-sas">/* Integración 1: Ventas + Clientes */
+proc sql;
+    create table work.ventas_cli as
+    select v.*
+         , c.id_char as id_cliente
+         , c.nombre_completo, c.sexo_full
+         , c.pais, c.email, c.email_dominio
+         , c.vendedor as vendedor_asignado
+    from work.ventas_validas v
+    inner join work.clientes_nodup c
+        on v.id_cliente_char = c.id_char;
+quit;</code></pre>
+                <p><strong>Paso 2: Añadir Productos</strong></p>
+                <pre><code class="language-sas">/* Integración 2: + Productos */
+proc sql;
+    create table work.ventas_cli_prod as
+    select vc.*
+         , p.categoria
+         , p.precio_unitario_num as precio_unitario
+    from work.ventas_cli vc
+    left join work.productos_nodup p
+        on strip(vc.producto) = p.producto_char;
+quit;</code></pre>
+              </div>
+              <div>
+                <p><strong>Paso 3: Completar con Vendedores</strong></p>
+                <pre><code class="language-sas">/* Integración 3: + Vendedores */
+proc sql;
+    create table work.ventas_cli_prod_vend as
+    select vcp.*
+         , v.vendedor_char as vendedor
+         , v.region as region_vendedor
+         , v.fecha_ingreso_d
+         , v.objetivo_mensual
+    from work.ventas_cli_prod vcp
+    left join work.vendedores_nodup v
+        on strip(vcp.vendedor_asignado) = v.vendedor_char;
+quit;</code></pre>
+                <p><strong>DataMart RFM con Segmentación</strong></p>
+                <pre><code class="language-sas">/* DataMart final con análisis RFM */
+proc sql;
+    create table work.dm_clientes as
+    select c.id_char as id, c.nombre_completo
+         , k.n_transacciones as F  /* Frequency */
+         , k.total_monto as M      /* Monetary */
+         , intck('day', k.ultima_compra, today()) as R_dias
+         , case when k.total_monto >= 5000 then 'VIP'
+                when k.total_monto >= 2000 then 'Premium'
+                else 'Regular' end as segmento length=12
+    from work.clientes_nodup c
+    left join work.kpi_cliente k on c.id_char = k.id_cliente;
+quit;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La integración paso a paso permite verificar la calidad en cada etapa. El DataMart RFM es fundamental para segmentación de clientes.</aside>
+        </section>
+
+        <!-- ============ SLIDE 7 · Exportación Profesional ============ -->
+        <section class="slide" data-title="Exportación Profesional" data-template="export-professional">
+          <header class="brand brand--compact"><div class="brand-lines"><span>ODS y PROC EXPORT</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Exportación Profesional con ODS</h2>
+            <div class="cols">
+              <div>
+                <p><strong>ODS EXCEL (paquetes multi-hoja):</strong></p>
+                <pre><code class="language-sas">/* Paquete ejecutivo Excel */
+%let OUTDIR = /home/&sysuserid/Salida;
+
+ods excel file="&OUTDIR/paquete_b5.xlsx" 
+          style=HTMLBlue 
+          options(frozen_headers='on' 
+                  sheet_interval='none');
+
+ods excel options(sheet_name='Mensual');
+proc report data=work.ventas_mensual nowd; 
+    columns mes monto_mes; 
+    define monto_mes/format=dollar12.2; 
+run;
+
+ods excel options(sheet_name='Categorias');
+proc report data=work.kpi_categoria nowd; 
+    columns categoria monto_total n_ventas; 
+    define monto_total/format=dollar12.2; 
+run;
+
+ods excel close;</code></pre>
+              </div>
+              <div>
+                <p><strong>ODS PDF (reportes formales):</strong></p>
+                <pre><code class="language-sas">/* Informe PDF compacto */
+ods pdf file="&OUTDIR/reporte_b5.pdf" 
+        style=Pearl notoc;
+    title "Reporte ejecutivo — Bloque 5";
+    
+    proc sgplot data=work.ventas_mensual; 
+        series x=mes y=monto_mes / markers; 
+        yaxis grid; 
+    run;
+    
+    proc report data=work.kpi_vendedor(obs=10) 
+                nowd; 
+        columns vendedor monto_total n_ventas; 
+        define monto_total/format=dollar12.2; 
+    run;
+    
+ods pdf close;</code></pre>
+                <p><strong>PROC EXPORT (integración BI):</strong></p>
+                <pre><code class="language-sas">/* Para herramientas externas */
+proc export data=work.kpi_categoria 
+    outfile="&OUTDIR/kpi_categoria_b5.csv" 
+    dbms=csv replace; 
+run;
+
+proc export data=work.kpi_vendedor  
+    outfile="&OUTDIR/kpi_vendedor_b5.xlsx" 
+    dbms=xlsx replace; 
+run;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>ODS permite crear reportes profesionales multi-formato. Excel para ejecutivos, PDF para distribución formal, CSV para integración BI.</aside>
+        </section>
+
+        <!-- ============ SLIDE 8 · Automatización de Reportes ============ -->
+        <section class="slide" data-title="Automatización de Reportes" data-template="automation-reports">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Macros para reportes</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Automatización de Reportes con Macros</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Macro empaquetadora completa:</strong></p>
+                <pre><code class="language-sas">/* Paquete automatizado */
+%macro paquete_b5(out=&OUTDIR, topN=10);
+    %put NOTE: Generando paquete Bloque 5 
+              en &out (Top &topN vendedores).;
+    
+    /* Excel multi-hoja */
+    ods excel file="&out/paquete_b5_macro.xlsx" 
+              style=HTMLBlue 
+              options(frozen_headers='on' 
+                      sheet_interval='none');
+        ods excel options(sheet_name='Mensual');  
+        proc report data=work.ventas_mensual nowd; 
+            columns mes monto_mes; 
+            define monto_mes/format=dollar12.2; 
+        run;
+        
+        ods excel options(sheet_name='TopVend');  
+        proc report data=work.kpi_vendedor
+                           (obs=&topN) nowd; 
+            columns vendedor monto_total n_ventas; 
+            define monto_total/format=dollar12.2; 
+        run;
+    ods excel close;</code></pre>
+              </div>
+              <div>
+                <p><strong>PDF + Gráficos automáticos:</strong></p>
+                <pre><code class="language-sas">    /* PDF con visualizaciones */
+    ods pdf file="&out/reporte_b5_macro.pdf" 
+            style=Pearl notoc;
+        title "Reporte ejecutivo — Bloque 5";
+        
+        proc sgplot data=work.ventas_mensual; 
+            series x=mes y=monto_mes / markers; 
+            yaxis grid; 
+        run;
+        
+        proc sgplot data=work.kpi_categoria; 
+            vbar categoria / response=monto_total 
+                            categoryorder=respdesc; 
+        run;
+        
+        proc report data=work.kpi_vendedor
+                           (obs=&topN) nowd; 
+            columns vendedor monto_total n_ventas; 
+            define monto_total/format=dollar12.2; 
+        run; 
+        title;
+    ods pdf close;
+%mend;
+
+/* Ejecutar paquete */
+%paquete_b5(topN=15)</code></pre>
+                <p><strong>Integración con BI:</strong></p>
+                <pre><code class="language-sas">/* Exportar para Power BI/Tableau */
+%macro exportar_bi();
+    proc export data=work.ventas_mensual 
+        outfile="&OUTDIR/bi_mensual.csv" 
+        dbms=csv replace; 
+    run;
+%mend;</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Las macros permiten parametrizar reportes recurrentes. Un solo comando genera paquetes completos multi-formato para diferentes audiencias.</aside>
+        </section>
+        /* Lógica de validación */
+    %end;
+%mend;</code></pre>
+              </div>
+              <div>
+                <p><strong>ETL Automático completo:</strong></p>
+                <pre><code class="language-sas">/* Macro principal del ETL */
+%macro etl_completo(fecha_proceso=);
+    /* 1. Limpieza y preparación */
+    %validar_archivo(tabla=RAW.ventas);
+    %validar_archivo(tabla=RAW.clientes);
+    
+    /* 2. Transformaciones */
+    proc sql;
+        create table &output_lib..ventas_clean as
+        select *, "&fecha_proceso"d as fecha_proceso format=date9.
+        from RAW.ventas
+        where fecha_venta <= "&fecha_proceso"d
+          and monto_total >= &umbral_monto;
+    quit;
+    
+    /* 3. Integración progresiva */
+    %integrar_fuentes(fecha=&fecha_proceso);
+    
+    /* 4. Construcción DataMart */
+    %construir_datamart(fecha=&fecha_proceso);
+    
+    /* 5. Reportes de auditoría */
+    %generar_auditoria(fecha=&fecha_proceso);
+%mend;
+
+/* Ejecución */
+%etl_completo(fecha_proceso=%sysfunc(today()));</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La automatización permite ejecutar todo el ETL con un solo comando. Las macrovariables facilitan la configuración sin modificar código.</aside>
+        </section>
+             when total_monto >= 2000 then 'Premium'
+             when total_monto > 0 then 'Regular'
+             else 'Sin Compras'
+           end as segmento length=12
+         , case
+             when n_transacciones >= 10 then 'Muy Activo'
+             when n_transacciones >= 5 then 'Activo'
+             when n_transacciones >= 1 then 'Ocasional'
+             else 'Inactivo'
+           end as actividad length=12
+    from work.kpi_cliente as k;
+quit;</code></pre>
+              </div>
+              <div>
+                <p><strong>Uso de CALCULATED:</strong></p>
+                <pre><code class="language-sas">/* Filtrar por ticket promedio calculado */
+proc sql;
+    create table work.alto_ticket as
+    select id, nombre_completo
+         , n_transacciones
+         , total_monto
+         , case when n_transacciones > 0 
+                then total_monto/n_transacciones 
+                else . end as ticket_promedio
+    from work.kpi_cliente
+    having calculated ticket_promedio > 300;
+quit;</code></pre>
+                <p><strong>Principio:</strong> CALCULATED permite referenciar columnas creadas en la misma consulta</p>
+              </div>
+            </div>
+            <p><strong>Ventaja:</strong> Lógica condicional compleja directamente en SQL sin DATA steps adicionales</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">CASE WHEN es fundamental para crear categorizaciones dinámicas. CALCULATED evita subconsultas innecesarias.</aside>
+        </section>
+
+        <!-- ============ SLIDE 8 · DATA Step: SET, MERGE y Variables FIRST/LAST ============ -->
+        <section class="slide" data-title="DATA Step: SET, MERGE y FIRST/LAST" data-template="data-step-advanced">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Control granular</span></div><div class="module-badge">BLOQUE 3</div></header>
+          <main class="content">
+            <h2 class="slide-title">DATA Step: SET/MERGE y Variables Automáticas FIRST./LAST.</h2>
+            <div class="cols">
+              <div>
+                <p><strong>MERGE - Combinación horizontal:</strong></p>
+                <pre><code class="language-sas">/* Agregar métricas por cliente */
+proc sql;
+    create table work.metricas_cliente as
+    select id_cliente as id
+         , count(*) as num_compras
+         , sum(monto_total) as total_gastado
+    from work.ventas_prep
+    group by id_cliente;
+quit;
+
+/* Ordenar para MERGE */
+proc sort data=work.clientes_prep; by id; run;
+proc sort data=work.metricas_cliente; by id; run;
+
+/* MERGE con indicadores IN= */
+data work.cliente_completo;
+    merge work.clientes_prep(in=tiene_datos_cliente) 
+          work.metricas_cliente(in=tiene_ventas);
+    by id;
+    
+    if tiene_datos_cliente and tiene_ventas then 
+        tipo = 'Cliente Activo';
+    else if tiene_datos_cliente and not tiene_ventas then 
+        tipo = 'Cliente Sin Ventas';
+    
+    if tiene_datos_cliente; /* Solo clientes válidos */
+run;</code></pre>
+              </div>
+              <div>
+                <p><strong>Variables FIRST./LAST. por grupos:</strong></p>
+                <pre><code class="language-sas">/* Encontrar última compra por cliente */
+proc sort data=work.ventas_prep out=work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+run;
+
+data work.ultima_compra;
+    set work.ventas_ordenadas;
+    by id_cliente fecha_venta_d;
+    
+    retain fecha_ultima_compra monto_ultima_compra;
+    
+    if first.id_cliente then do;
+        fecha_ultima_compra = .;
+        monto_ultima_compra = .;
+    end;
+    
+    /* Actualizar con cada registro */
+    fecha_ultima_compra = fecha_venta_d;
+    monto_ultima_compra = monto_total;
+    
+    /* Solo salida en último registro del cliente */
+    if last.id_cliente then output;
+    
+    format fecha_ultima_compra date9.;
+    keep id_cliente fecha_ultima_compra monto_ultima_compra;
+run;</code></pre>
+                <p><strong>Gestión de duplicados con NODUPKEY</strong></p>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden">FIRST./LAST. son fundamentales para procesamiento por grupos. MERGE requiere ordenamiento previo pero ofrece máximo control.</aside>
+        </section>
+
+        <!-- ============ SLIDE 8 · Auditoría y Monitoreo ============ -->
+        <section class="slide" data-title="Auditoría y Monitoreo" data-template="audit">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Control de Calidad ETL</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Sistema de Auditoría y Monitoreo ETL</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Macro de Auditoría Automatizada:</strong></p>
+                <pre><code class="language-sas">/* Sistema de auditoría completo */
+%macro auditoria_etl(tabla_base=, tabla_resultado=, fecha_proceso=);
+    proc sql;
+        create table AUDIT.log_proceso_&fecha_proceso as
+        select "&tabla_base" as tabla_origen length=50
+             , "&tabla_resultado" as tabla_destino length=50
+             , datetime() as timestamp_proceso format=datetime20.
+             , (select count(*) from &tabla_base) as registros_origen
+             , (select count(*) from &tabla_resultado) as registros_destino
+             , calculated registros_destino - calculated registros_origen as diferencia
+             , case when calculated diferencia = 0 then 'OK'
+                    when calculated diferencia < 0 then 'PÉRDIDA'
+                    else 'INCREMENTO' end as status length=12
+        from (select 1 as dummy);
+    quit;
+    
+    /* Reporte de problemas */
+    %if &syserr ne 0 %then %do;
+        %put ERROR: Fallo en auditoría de &tabla_base;
+    %end;
+%mend;</code></pre>
+              </div>
+              <div>
+                <p><strong>Validaciones específicas ETL:</strong></p>
+                <pre><code class="language-sas">/* Macro para detectar duplicados post-integración */
+%macro check_duplicados(tabla=, key_fields=);
+    proc sql;
+        create table _temp_check as
+        select &key_fields, count(*) as n_duplicados
+        from &tabla
+        group by &key_fields
+        having count(*) > 1;
+    quit;
+    
+    proc sql noprint;
+        select count(*) into :n_problemas
+        from _temp_check;
+    quit;
+    
+    %if &n_problemas > 0 %then %do;
+        %put WARNING: &n_problemas grupos con duplicados en &tabla;
+        proc print data=_temp_check;
+            title "Duplicados encontrados en &tabla";
+        run;
+    %end;
+    %else %do;
+        %put INFO: No se encontraron duplicados en &tabla;
+    %end;
+%mend;
+
+/* Ejecutar auditorías */
+%auditoria_etl(tabla_base=RAW.ventas, tabla_resultado=work.dm_final);
+%check_duplicados(tabla=work.dm_final, key_fields=id_cliente, fecha_venta);</code></pre>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La auditoría automatizada es esencial para detectar problemas en producción. Los logs permiten rastrear cada transformación.</aside>
+        </section>
+
+        <!-- ============ SLIDE 9 · Actividad práctica Dashboard ============ -->
+        <section class="slide" data-title="Actividad práctica Dashboard" data-template="activity">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Práctica visualización</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Actividad práctica: Dashboard ejecutivo completo (20 min)</h2>
+            <p><strong>Usando los datasets integrados del curso:</strong></p>
+            <ol class="refs">
+              <li><strong>Agregados básicos:</strong> Crear KPIs mensuales, por categoría y vendedor</li>
+              <li><strong>Visualizaciones core:</strong> Serie temporal, barras por categoría, top vendedores</li>
+              <li><strong>Gráficos avanzados:</strong> Distribuciones por segmento y scatter plots</li>
+              <li><strong>KPIs ejecutivos:</strong> Usar PROC MEANS y PROC REPORT con totales</li>
+              <li><strong>Exportación Excel:</strong> Paquete multi-hoja con gráficos y tablas</li>
+              <li><strong>Reporte PDF:</strong> Documento ejecutivo con visualizaciones integradas</li>
+              <li><strong>Automatización:</strong> Macro parametrizada para generar dashboard completo</li>
+            </ol>
+            <p><strong>Entrega:</strong> Paquete ejecutivo (Excel + PDF) y archivos CSV para integración BI</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Esta actividad integra todo el flujo de visualización: de datos procesados a reportes ejecutivos listos para presentación.</aside>
+        </section>
+
+        <!-- ============ SLIDE 10 · Cierre y próximos pasos ============ -->
+        <section class="slide" data-title="Cierre y evaluación" data-template="wrap">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Cierre</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Cierre y evaluación</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Preguntas de verificación:</strong></p>
+                <ul class="bullets">
+                  <li>¿Cuándo usar cada tipo de gráfico en PROC SGPLOT?</li>
+                  <li>¿Cómo generar KPIs rápidos con procedimientos estadísticos?</li>
+                  <li>¿Cuáles son las diferencias entre ODS EXCEL, PDF y PROC EXPORT?</li>
+                  <li>¿Cómo automatizar paquetes de reportes con macros?</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Integración empresarial:</strong></p>
+                <ul class="bullets">
+                  <li><strong>Power BI/Tableau:</strong> Dashboards interactivos con datos SAS</li>
+                  <li><strong>Reportes ejecutivos:</strong> Paquetes automatizados multi-formato</li>
+                  <li><strong>Flujo completo:</strong> Desde datos brutos hasta insights accionables</li>
+                </ul>
+              </div>
+            </div>
+            <p><strong>Logro:</strong> Han dominado la comunicación visual de datos y generación de reportes empresariales</p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Este bloque completa el ciclo analítico. Los participantes pueden ahora comunicar efectivamente sus hallazgos a cualquier audiencia.</aside>
+        </section>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Este bloque completa el ciclo analítico. Los participantes pueden ahora comunicar efectivamente sus hallazgos a cualquier audiencia.</aside>
+        </section>
+
+        <!-- ============ SLIDE 11 · Recursos adicionales ============ -->
+        <section class="slide" data-title="Recursos adicionales" data-template="resources">
+          <header class="brand brand--compact"><div class="brand-lines"><span>Recursos</span></div><div class="module-badge">BLOQUE 5</div></header>
+          <main class="content">
+            <h2 class="slide-title">Recursos y referencias</h2>
+            <div class="cols">
+              <div>
+                <p><strong>Documentación SAS:</strong></p>
+                <ul class="bullets">
+                  <li><strong>PROC SGPLOT User Guide:</strong> Visualizaciones modernas</li>
+                  <li><strong>ODS Graphics User's Guide:</strong> Gráficos estadísticos avanzados</li>
+                  <li><strong>ODS User's Guide:</strong> Sistema de exportación completo</li>
+                  <li><strong>Statistical Procedures:</strong> PROC MEANS, FREQ, REPORT</li>
+                </ul>
+                <p><strong>Mejores prácticas visualización:</strong></p>
+                <ul class="bullets">
+                  <li>Selección apropiada de tipo de gráfico</li>
+                  <li>Títulos descriptivos y etiquetas claras</li>
+                  <li>Formatos numéricos consistentes</li>
+                  <li>Jerarquía de información por audiencia</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Integración BI:</strong></p>
+                <ul class="bullets">
+                  <li><strong>Power BI:</strong> Conectores y archivos CSV/Excel</li>
+                  <li><strong>Tableau:</strong> Importación directa de datasets SAS</li>
+                  <li><strong>Qlik Sense:</strong> Integración con archivos exportados</li>
+                  <li><strong>R/Python:</strong> Intercambio vía CSV y conectores ODBC</li>
+                </ul>
+                <p><strong>Recursos avanzados:</strong></p>
+                <ul class="bullets">
+                  <li>SAS Visual Analytics para dashboards interactivos</li>
+                  <li>PROC SGPANEL para visualizaciones múltiples</li>
+                  <li>Estilos ODS personalizados para marca corporativa</li>
+                  <li>Automatización con SAS Stored Processes</li>
+                </ul>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>La visualización es una competencia clave en analytics. Estos principios se aplican en cualquier herramienta de BI moderna.</aside>
+        </section>
+              <div>
+                <p><strong>Herramientas complementarias:</strong></p>
+                <ul class="bullets">
+                  <li><strong>SAS Data Integration Studio:</strong> ETL visual</li>
+                  <li><strong>SAS Enterprise Guide:</strong> Flujos de trabajo</li>
+                  <li><strong>Git:</strong> Control de versiones de scripts</li>
+                  <li><strong>Crontab/Task Scheduler:</strong> Automatización temporal</li>
+                </ul>
+                <p><strong>Extensiones del curso:</strong></p>
+                <ul class="bullets">
+                  <li>ETL en tiempo real con SAS Event Stream Processing</li>
+                  <li>Big Data ETL con SAS Viya</li>
+                  <li>Calidad de datos con SAS Data Quality</li>
+                </ul>
+              </div>
+            </div>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>ETL es una competencia trasversal esencial en el mundo de datos. Estos principios se aplican en cualquier stack tecnológico.</aside>
+        </section>
+                  <li><strong>PROC SQL User's Guide:</strong> JOINs, agregaciones y subconsultas</li>
+                  <li><strong>DATA Step Processing:</strong> MERGE, SET y variables FIRST./LAST.</li>
+                  <li><strong>Functions and CALL Routines:</strong> INTCK, INTNX, CASE WHEN</li>
+                  <li><strong>PROC TRANSPOSE:</strong> Reestructuración largo/ancho</li>
+                </ul>
+              </div>
+              <div>
+                <p><strong>Mejores prácticas:</strong></p>
+                <ul class="check">
+                  <li>Documentar lógica de combinación y reglas de negocio</li>
+                  <li>Validar integridad referencial después de JOINs</li>
+                  <li>Usar nombres descriptivos para datasets intermedios</li>
+                  <li>Implementar controles de calidad en DataMarts</li>
+                  <li>Optimizar consultas para grandes volúmenes</li>
+                </ul>
+              </div>
+            </div>
+            <p><em>Los DataMarts bien construidos son la base de la inteligencia de negocio</em></p>
+          </main>
+          <footer class="footer"><div class="pager"></div><div class="progress"><i></i></div></footer>
+          <aside class="notes" hidden>Preparar para Bloque 4 donde se construirán ETL completos usando estas técnicas como fundamento.</aside>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== UI Fija ====== -->
+  <div class="ui" aria-hidden="false">
+    <button class="btn" id="prevBtn" title="Anterior (←)">◀</button>
+    <button class="btn" id="nextBtn" title="Siguiente (→)">▶</button>
+    <button class="btn" id="ovBtn" title="Overview (O)">▦</button>
+    <button class="btn" id="fsBtn" title="Pantalla completa (F)">⤢</button>
+    <button class="btn" id="helpBtn" title="Ayuda (?)">?</button>
+  </div>
+
+  <!-- ====== Overlays ====== -->
+  <div class="overview" id="overview" aria-hidden="true"><div class="grid" id="grid"></div></div>
+  <div class="presenter" id="presenter" aria-live="polite">
+    <h4 id="pTitle">—</h4>
+    <div class="timer">
+      <span class="clock" id="clock">00:00</span>
+      <button class="btn" id="tStart" title="Iniciar/Pausar (T)">▶</button>
+      <button class="btn" id="tReset" title="Reiniciar (R)">⟲</button>
+      <span class="chip" id="pInfo">Slide 1/1</span>
+    </div>
+    <div class="notes" id="pNotes">Notas del presentador…</div>
+  </div>
+  <div class="help" id="help">
+    <div class="card">
+      <h3>Atajos del presentador</h3>
+      <table>
+        <tr><th>Navegar</th><td>← → · Space · PgUp/PgDn · Home/End</td></tr>
+        <tr><th>Overview</th><td>O</td></tr>
+        <tr><th>Ir a diapositiva</th><td>G</td></tr>
+        <tr><th>Fullscreen</th><td>F</td></tr>
+        <tr><th>Pantalla en negro</th><td>B</td></tr>
+        <tr><th>Puntero láser</th><td>L</td></tr>
+        <tr><th>Panel presentador</th><td>P</td></tr>
+        <tr><th>Timer</th><td>T iniciar/pausar · R reiniciar</td></tr>
+        <tr><th>Notas (mostrar/ocultar)</th><td>N</td></tr>
+        <tr><th>Ayuda</th><td>?</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="laser" id="laser"></div>
+  <div class="blackout" id="blackout"></div>
+
+  <script>
+  (function(){
+    const qs = s => document.querySelector(s); const qsa = s => [...document.querySelectorAll(s)];
+    const deck = qs('#deck'); const frame = qs('#frame'); let slides = qsa('.slide'); let idx = 0;
+
+    const pagerEls = qsa('.pager'); const progressEls = qsa('.progress > i'); const bar = qs('#bar');
+    const overview = qs('#overview'); const grid = qs('#grid'); const presenter = qs('#presenter');
+    const pTitle = qs('#pTitle'); const pNotes = qs('#pNotes'); const pInfo = qs('#pInfo');
+    const help = qs('#help'); const blackout = qs('#blackout'); const laser = qs('#laser');
+    const clock = qs('#clock'); let tStart = 0, tElapsed = 0, tRunning = false, tHandle = null;
+
+    const KEY = 'peidDeckState_b3s2';
+    const save = () => localStorage.setItem(KEY, JSON.stringify({ idx, tElapsed, tRunning }));
+    const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{ return {}; } };
+
+    function init(){
+      const m = location.hash.match(/#\/(\d+)/); if(m){ idx = clamp(parseInt(m[1]) - 1, 0, slides.length-1); }
+      else { const st = load(); if(Number.isInteger(st.idx)) idx = clamp(st.idx,0,slides.length-1); if(st.tElapsed) tElapsed = st.tElapsed; if(st.tRunning) startTimer(); }
+      bindUI(); buildOverview(); show(idx, false); updateTimer();
+    }
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function show(i, pushHash = true){
+      // Suavizar transición entre slides
+      slides.forEach(s => {
+        s.classList.remove('active');
+        s.style.zIndex = '0';
+      });
+      
+      idx = clamp(i, 0, slides.length-1);
+      const s = slides[idx];
+      s.style.zIndex = '1';
+      
+      // Pequeño delay para mejor animación
+      requestAnimationFrame(() => {
+        s.classList.add('active');
+      });
+      
+      if(pushHash) location.hash = `#/${idx+1}`;
+      save();
+      
+      const total = slides.length; 
+      const label = `${idx+1} / ${total}`;
+      const progress = (idx)/(total-1)*100 || 0;
+      
+      pagerEls.forEach(el => el.textContent = label);
+      progressEls.forEach(el => {
+        el.style.transition = 'width 0.3s ease';
+        el.style.width = `${progress}%`;
+      });
+      if(bar) {
+        bar.style.transition = 'width 0.3s ease';
+        bar.style.width = `${progress}%`;
+      }
+      
+      pTitle.textContent = s.dataset.title || (s.querySelector('h1,h2')?.textContent || `Slide ${idx+1}`);
+      const notes = s.querySelector('.notes'); 
+      pNotes.textContent = notes ? notes.textContent.trim() : '—';
+      pInfo.textContent = label; 
+      
+      qsa('.thumb').forEach((t, n)=> {
+        t.classList.toggle('active', n===idx);
+        if(n === idx) t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      
+      // Anunciar cambio para lectores de pantalla
+      const announcement = `Diapositiva ${idx+1} de ${total}: ${s.dataset.title || 'Sin título'}`;
+      updateAriaLive(announcement);
+    }
+
+    function next(){ show(idx+1); } 
+    function prev(){ show(idx-1); }
+
+    function bindUI(){
+      qs('#nextBtn').addEventListener('click', next); qs('#prevBtn').addEventListener('click', prev);
+      qs('#ovBtn').addEventListener('click', toggleOverview); qs('#fsBtn').addEventListener('click', toggleFull); qs('#helpBtn').addEventListener('click', ()=> help.classList.toggle('on'));
+      window.addEventListener('keydown', e => {
+        const InEdit = e.target.closest('[contenteditable="true"]'); 
+        if(InEdit) return;
+        
+        // Prevenir repetición de teclas muy rápida
+        if(e.repeat) return;
+        
+        switch(e.key){
+          case 'ArrowRight': case 'PageDown': case ' ': case 'n': case 'N': 
+            next(); e.preventDefault(); break;
+          case 'ArrowLeft': case 'PageUp': case 'Backspace': case 'p': case 'P': 
+            prev(); e.preventDefault(); break;
+          case 'Home': show(0); e.preventDefault(); break; 
+          case 'End': show(slides.length-1); e.preventDefault(); break;
+          case 'o': case 'O': toggleOverview(); e.preventDefault(); break; 
+          case 'g': case 'G': goto(); e.preventDefault(); break; 
+          case 'f': case 'F': toggleFull(); e.preventDefault(); break;
+          case 'b': case 'B': blackout.classList.toggle('on'); e.preventDefault(); break; 
+          case '?': help.classList.toggle('on'); e.preventDefault(); break; 
+          case 'l': case 'L': laser.classList.toggle('on'); e.preventDefault(); break;
+          case 'Escape': 
+            // Cerrar cualquier modal abierto
+            overview.classList.remove('on');
+            help.classList.remove('on');
+            presenter.classList.remove('on');
+            blackout.classList.remove('on');
+            laser.classList.remove('on');
+            e.preventDefault(); 
+            break;
+          case 't': case 'T': tRunning ? stopTimer() : startTimer(); e.preventDefault(); break; 
+          case 'r': case 'R': resetTimer(); e.preventDefault(); break;
+        }
+      });
+      frame.addEventListener('click', e => { const InEdit = e.target.closest('[contenteditable="true"]'); if(InEdit) return; if(e.altKey || e.metaKey) prev(); else next(); });
+      let sx=0, sy=0; frame.addEventListener('touchstart', e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; }, {passive:true});
+      frame.addEventListener('touchend', e=>{ const t=e.changedTouches[0]; const dx=t.clientX - sx; const dy=t.clientY - sy; if(Math.abs(dx)>40 && Math.abs(dx) > Math.abs(dy)) { dx<0 ? next() : prev(); } }, {passive:true});
+      window.addEventListener('mousemove', e=>{ if(laser.classList.contains('on')){ laser.style.left=e.clientX+'px'; laser.style.top=e.clientY+'px'; }});
+      qs('#tStart').addEventListener('click', ()=> tRunning? stopTimer() : startTimer()); qs('#tReset').addEventListener('click', resetTimer);
+      overview.addEventListener('click', e=>{ if(e.target===overview) toggleOverview(false) }); help.addEventListener('click', e=>{ if(e.target===help) help.classList.remove('on') });
+    }
+
+    function buildOverview(){ grid.innerHTML = ''; slides.forEach((s,i)=>{ const t = document.createElement('div'); t.className='thumb'; const title = s.dataset.title || (s.querySelector('h1,h2')?.textContent || `Slide ${i+1}`); t.innerHTML = `<div class=\"mini\" style=\"aspect-ratio: calc(var(--slide-w)/var(--slide-h)); background:var(--paper); border:1px solid rgba(0,0,0,.08); border-radius:10px; display:grid; place-items:center; color:var(--muted)\"> ${i+1} </div><h3>${i+1}. ${escapeHtml(title)}</h3>`; t.addEventListener('click', ()=>{ show(i); toggleOverview(false); }); grid.appendChild(t); }); }
+    function toggleOverview(force){ overview.classList.toggle('on', force===undefined? !overview.classList.contains('on') : !!force); }
+    function toggleFull(){ const el = document.fullscreenElement; if(el){ document.exitFullscreen(); } else { deck.requestFullscreen?.(); } }
+    function goto(){ const n = prompt(`Ir a diapositiva (1–${slides.length}):`, idx+1); const v = parseInt(n,10); if(Number.isInteger(v)) show(v-1); }
+
+    function startTimer(){ if(tRunning) return; tRunning = true; tStart = performance.now() - tElapsed; tick(); save(); }
+    function stopTimer(){ tRunning = false; cancelAnimationFrame(tHandle); save(); }
+    function resetTimer(){ tElapsed = 0; updateTimer(); save(); }
+    function tick(){ if(!tRunning) return; tElapsed = performance.now() - tStart; updateTimer(); tHandle = requestAnimationFrame(tick); }
+    function updateTimer(){ const s = Math.floor(tElapsed/1000); const mm = String(Math.floor(s/60)).padStart(2,'0'); const ss = String(s%60).padStart(2,'0'); clock.textContent = `${mm}:${ss}`; }
+
+    function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[s])); }
+
+    // Función para anuncios de accesibilidad
+    function updateAriaLive(message) {
+      const liveRegion = document.querySelector('.stage');
+      if (liveRegion) {
+        liveRegion.setAttribute('aria-live', 'polite');
+        // Temporal para no saturar
+        setTimeout(() => {
+          liveRegion.setAttribute('aria-live', 'off');
+        }, 1000);
+      }
+    }
+
+    // Mejora del fullscreen con detección de cambios
+    function toggleFull(){ 
+      const el = document.fullscreenElement; 
+      if(el){ 
+        document.exitFullscreen(); 
+      } else { 
+        deck.requestFullscreen?.().catch(err => {
+          console.log('Fullscreen no disponible:', err);
+        }); 
+      } 
+    }
+
+    // Detectar cambios de fullscreen
+    document.addEventListener('fullscreenchange', () => {
+      const btn = qs('#fsBtn');
+      if (document.fullscreenElement) {
+        btn.textContent = '⤡';
+        btn.title = 'Salir de pantalla completa (F)';
+      } else {
+        btn.textContent = '⤢';
+        btn.title = 'Pantalla completa (F)';
+      }
+    });
+
+    // API pública
+    window.PEID = {
+      go: n => show(n-1), setModule: txt => qsa('.module-badge').forEach(el=> el.textContent = txt),
+      addSlide: html => { const s = document.createElement('section'); s.className='slide'; s.innerHTML = html; frame.appendChild(s); slides = qsa('.slide'); buildOverview(); show(slides.length-1); },
+      count: () => slides.length
+    };
+
+    init();
+  })();
+  </script>
+</body>
+</html>
