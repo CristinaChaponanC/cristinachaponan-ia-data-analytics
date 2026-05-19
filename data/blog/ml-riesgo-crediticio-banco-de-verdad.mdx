@@ -1,0 +1,40 @@
+---
+title: 'Machine learning para riesgo crediticio en un banco de verdad (no en Kaggle)'
+summary: 'El dataset limpio de Kaggle te miente. Cómo se hace ML de riesgo crediticio donde las decisiones cuestan dinero: definir el target es una decisión de negocio, las tres ventanas (observación, desempeño, exclusión), y por qué el desbalance no se arregla con SMOTE sino con el costo del error.'
+date: 2026-06-09 19:00:00
+tags: ['Machine Learning', 'Riesgo Crediticio', 'Banca', 'Scoring', 'Python', '2026']
+draft: false
+authors: ['default']
+---
+
+# Machine learning para riesgo crediticio en un banco de verdad
+
+Todos los tutoriales de scoring usan el mismo dataset limpio de Kaggle. En un banco de verdad nada de eso aplica. Trabajé riesgo crediticio en banca peruana y regional, y esto es lo que no está en los cursos —porque no es glamoroso, pero es lo que de verdad importa.
+
+## El target no es obvio
+
+¿Qué es "default"? ¿90 días de atraso? ¿60? ¿Un crédito reestructurado cuenta como malo? Eso no es una decisión técnica: es de negocio y de norma regulatoria. Si eliges mal la definición del target, el mejor modelo del mundo está optimizando la pregunta equivocada con una precisión impecable. Antes de tocar Python, defines —y documentas— qué es malo.
+
+## Las tres ventanas
+
+Esto es lo que separa un scoring profesional de un notebook:
+
+- **Ventana de observación:** el período de donde sacas las variables predictoras.
+- **Ventana de desempeño:** el período futuro donde mides si el cliente cayó en mora.
+- **Ventana de exclusión:** el colchón que evita usar información que el banco no tendría al momento de decidir.
+
+Si las mezclas, tu modelo se ve brillante en validación y se derrumba en producción. Es la fuga de información temporal, pero en su versión profesional: sutil, costosa y difícil de detectar si no diseñaste las ventanas a propósito.
+
+## El desbalance no se arregla con SMOTE
+
+5% de mora. El reflejo es aplicar SMOTE e inflar la clase minoritaria con datos sintéticos. En crédito real eso casi nunca ayuda, y a veces empeora la calibración de las probabilidades —que es justo lo que riesgo necesita bien. El desbalance se gestiona con **el punto de corte y el costo del error**: un falso negativo (dar un crédito que no se paga) cuesta muchísimo más que un falso positivo (rechazar uno bueno). Ese costo asimétrico define el corte, no la librería ni la métrica por defecto.
+
+## La idea que se queda
+
+Un modelo de riesgo no compite por accuracy. Compite por decisiones que el banco pueda defender ante riesgo y ante el regulador, con probabilidades bien calibradas y un target que tenga sentido de negocio.
+
+## Ver en video
+
+El recorrido completo —target, las tres ventanas y el manejo real del desbalance— está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Machine learning para riesgo crediticio en un banco de verdad"*.
+
+¿Te ha tocado definir qué es "default" en un proyecto real? ¿Cómo lo resolviste? Cuéntame.
