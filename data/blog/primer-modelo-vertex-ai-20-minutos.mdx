@@ -1,0 +1,37 @@
+---
+title: 'Tu primer modelo en Vertex AI en 20 minutos (sin Kubernetes)'
+summary: 'Del notebook a un endpoint real en cuatro pasos: empaquetar con dependencias fijadas, subir al Model Registry, desplegar y validar el contrato de entrada. Lo mínimo que de verdad funciona en producción, en 2026, sin montar el serving a mano.'
+date: 2026-06-04 19:00:00
+tags: ['IA', 'Vertex AI', 'MLOps', 'GCP', 'Machine Learning', 'Producción', '2026']
+draft: false
+authors: ['default']
+---
+
+# Tu primer modelo en Vertex AI en 20 minutos
+
+Tu modelo vive en un notebook. Para que sirva, tiene que vivir en un endpoint que alguien pueda llamar. Hoy lidero una plataforma de IA sobre GCP, y esto es lo mínimo que de verdad funciona —sin Kubernetes, sin un Flask con los dedos cruzados.
+
+## Por qué Vertex AI y no montarlo a mano
+
+Porque el serving ya está resuelto: endpoint gestionado, escalado automático, versionado. En 2026, montar la infraestructura de serving a mano no es valentía técnica: es deuda que vas a pagar un domingo a las 3 a.m. Usa lo que ya funciona y pon tu energía en el modelo y los datos.
+
+## Los 4 pasos
+
+1. **Empaqueta con dependencias fijadas.** Un lockfile. Lo que entrenaste es exactamente lo que corre. La causa #1 de "funcionaba en mi notebook" es una versión de librería distinta en el servidor.
+2. **Sube al Model Registry.** Versionado y rastreable. Cuando dentro de tres meses te pregunten "¿qué modelo decidió esto?", tienes respuesta.
+3. **Despliega a un endpoint.** Vertex lo gestiona; tú defines la máquina y el escalado.
+4. **Haz una request de prueba y mide la latencia real** —la del endpoint, no la del notebook. Un modelo correcto pero lento también está roto para el negocio.
+
+## El paso que separa una demo de algo serio
+
+Valida el contrato de entrada. Define el esquema explícito: qué campos, qué tipos, qué rangos. Si llega algo que no cumple, **rechaza ruidoso antes de predecir**. Un modelo que predice sobre basura no falla con un error: devuelve un número plausible y equivocado, con total confianza. Eso es mucho peor que un crash, porque nadie se entera hasta que el daño ya está hecho.
+
+## La idea que se queda
+
+Desplegar no es la meta. Es el día uno de la parte que importa: que siga funcionando, medido y validado, cuando ya nadie está mirando.
+
+## Ver en video
+
+El recorrido completo, paso a paso con el notebook, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Tu primer modelo en Vertex AI en 20 minutos"*.
+
+¿Ya pusiste un modelo en producción? ¿Lo serviste gestionado o lo montaste a mano? Cuéntame cómo te fue.
