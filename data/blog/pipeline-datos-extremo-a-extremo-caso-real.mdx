@@ -1,0 +1,40 @@
+---
+title: 'Un pipeline de datos de extremo a extremo: dónde se rompe de verdad'
+summary: 'Los tutoriales enseñan piezas sueltas; nadie te muestra el sistema completo conectado, que es donde de verdad se rompe. Las 5 etapas, por qué casi siempre falla en los bordes (no en la transformación) y la pieza que casi todos saltan: la observabilidad.'
+date: 2026-07-14 19:00:00
+tags: ['Data Engineering', 'Pipelines', 'Observabilidad', 'Arquitectura', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# Un pipeline de datos de extremo a extremo: dónde se rompe de verdad
+
+Todos los tutoriales enseñan piezas sueltas: lee un CSV, entrena un modelo. Nadie te muestra el sistema completo conectado, que es justo donde se rompe. Construí pipelines completos en banca regulada —no demos de 15 minutos, sino cosas que tenían que correr todos los días sin que yo estuviera mirando.
+
+## Las 5 etapas
+
+1. **Ingesta** — traes el dato de la fuente.
+2. **Validación** — antes de tocar nada, verificas que el dato sea lo que esperabas.
+3. **Transformación** — la lógica de negocio.
+4. **Carga** — lo dejas donde se consume.
+5. **Observabilidad** — sabes que todo lo anterior pasó bien.
+
+El sistema vale lo que su etapa más débil, no lo que su mejor query.
+
+## Casi nunca se rompe donde crees
+
+No se rompe en la transformación: esa parte la probaste. Se rompe en **los bordes**. La fuente que un día cambió una columna sin avisar. La entrega que se generó pero nadie confirmó que llegó. El 80% de los incidentes reales vive en la ingesta y en la entrega, no en el SQL del medio. Por eso ahí es donde van las validaciones más estrictas, no en el centro.
+
+## La pieza que casi todos saltan
+
+Observabilidad. No es un dashboard bonito: es poder responder, sin abrir nada a mano, ¿corrió hoy? ¿con cuántas filas? ¿pasó los controles? ¿en cuánto tiempo? Si no puedes responder eso en diez segundos, no tienes un pipeline: tienes un script y un poco de suerte. Y la suerte no es una arquitectura.
+
+## La idea que se queda
+
+El valor de un ingeniero de datos no es escribir la transformación. Es que el sistema completo sea confiable cuando nadie mira. Eso no se logra con mejor SQL: se logra con validación en los bordes y observabilidad de serie.
+
+## Ver en video
+
+El recorrido por las 5 etapas, con el repo de ejemplo, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Un pipeline de datos de extremo a extremo"*.
+
+¿Tu último incidente fue en la transformación o en un borde? Apuesto a que en un borde. Cuéntame.
