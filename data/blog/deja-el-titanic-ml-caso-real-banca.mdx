@@ -1,0 +1,38 @@
+---
+title: 'Deja el Titanic: machine learning con un caso real de banca'
+summary: 'Si solo hiciste el Titanic y el dataset de casas, eso no te prepara para el trabajo real. Por qué el dataset limpio te miente, un caso real de predecir mora con datos crudos (nulos con significado, fechas en tres formatos, fuga temporal) y la verdad incómoda: el 80% del trabajo no es el modelo.'
+date: 2026-06-23 19:00:00
+tags: ['Machine Learning', 'Aprender Data', 'Carrera', 'Python', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# Deja el Titanic: machine learning con un caso real de banca
+
+Si estás aprendiendo ML y solo hiciste el Titanic y el dataset de casas, mala noticia: eso no te prepara para el trabajo real. Enseño ingeniería de datos en el postgrado de la UNI, y lo que más le cuesta a quien entra a un trabajo de datos no es el algoritmo —es que la realidad no se parece al tutorial.
+
+## El dataset limpio te miente
+
+En un curso te dan un CSV perfecto. En el trabajo te dan tres fuentes que no cuadran entre sí, un campo que significa cosas distintas según el año, y a nadie le consta de dónde salió el dato. Empezar por el modelo es empezar por el final.
+
+## El caso real: predecir mora con datos crudos
+
+Tres trampas que el Titanic nunca te enseña:
+
+- **Los nulos tienen significado.** Un cliente sin historial crediticio no es un cero: es "desconocido". Imputarlo como cero le enseña al modelo algo falso, y en crédito eso se traduce en plata mal prestada.
+- **Fechas en tres formatos** en la misma columna. Real, frecuente, y rompe todo silenciosamente si no lo detectas.
+- **La fuga temporal.** Una variable que solo existe *después* de que el crédito se aprobó. Si la usas para predecir si se aprueba, tu modelo es perfecto en validación y completamente inútil en producción.
+
+## La verdad incómoda
+
+El 80% del trabajo es entender el problema y limpiar el dato. El modelo es la parte fácil, y la última. Los tutoriales invierten esa proporción porque pelearse con dato sucio no se ve bien en un video corto —pero es exactamente lo que te van a pagar por hacer.
+
+## La idea que se queda
+
+Deja el Titanic. Busca un dato feo, real, con varias fuentes que no cuadran, y peléate con él. Ahí se aprende lo que ningún curso limpio te puede enseñar.
+
+## Ver en video
+
+El caso completo, con las tres trampas y cómo se resuelven, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Deja el Titanic: machine learning con un caso real de banca"*.
+
+¿Cuál fue el primer dataset real (y feo) con el que te peleaste? Cuéntame.
