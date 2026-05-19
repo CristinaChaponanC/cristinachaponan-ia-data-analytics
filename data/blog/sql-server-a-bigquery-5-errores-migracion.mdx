@@ -1,0 +1,42 @@
+---
+title: 'De SQL Server a BigQuery: los 5 errores que casi me cuestan el proyecto'
+summary: 'Migrar reportería a BigQuery no es copiar tablas. Los 5 errores que casi hacen fracasar una migración en banca regulada: lift-and-shift, el costo escondido del modelo columnar, tipos que pierden precisión, zonas horarias que descuadran cortes regulatorios, y migrar sin prueba de paridad.'
+date: 2026-06-02 19:00:00
+tags: ['Data Engineering', 'BigQuery', 'SQL Server', 'Migración', 'GCP', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# De SQL Server a BigQuery: los 5 errores que casi me cuestan el proyecto
+
+Migrar una reportería de SQL Server a BigQuery suena a copiar tablas. No lo es. Migré reportería crítica a la nube en banca regulada —donde un número que no cuadra no es un bug, es un hallazgo de auditoría— y estos son los cinco errores que casi lo tumban.
+
+## Error 1: lift-and-shift
+
+Copiar el modelo relacional tal cual. BigQuery no es SQL Server: es columnar y distribuido. Lo que en SQL Server era un join eficiente, en BigQuery puede ser caro y lento. Hay que repensar el modelo —desnormalizar donde tenga sentido, particionar, clusterizar— no traducir esquema a esquema.
+
+## Error 2: el costo escondido
+
+BigQuery cobra por **dato leído**, no por consulta. Un `SELECT *` o un filtro sin partición escanea la tabla entera, y la factura te enseña la lección al fin de mes. Particiona por fecha, clusteriza por las columnas de filtro frecuentes, y selecciona solo las columnas que usas. El costo es una decisión de diseño, no un accidente.
+
+## Error 3: los tipos
+
+Un `DATETIME` de SQL Server no mapea limpio a BigQuery. Si no defines los tipos explícitamente en la carga, pierdes precisión sin enterarte —y en reportería financiera, un decimal truncado es un descuadre. Define el esquema; no dejes que la inferencia automática decida por ti.
+
+## Error 4: zonas horarias
+
+El más traicionero en reportería regulatoria. Una fecha sin zona horaria descuadra un corte regulatorio por un día entero —y un reporte SBS con la fecha movida es un reproceso, no un detalle. Regla simple: **todo en UTC internamente, conviertes solo al presentar**.
+
+## Error 5: migrar sin prueba de paridad
+
+El que nadie te cuenta. Asumir que migró bien. No migró bien hasta que **reconcilias**: fila a fila, suma a suma, origen contra destino, en un período de solape donde ambos sistemas conviven. En banca, sin prueba de paridad no migraste: esperas que haya salido bien. Y esperar no es un control.
+
+## La idea que se queda
+
+Una migración no termina cuando los datos llegan a BigQuery. Termina cuando demuestras, con números, que son los mismos que en el origen.
+
+## Ver en video
+
+El checklist completo de los cinco errores está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"De SQL Server a BigQuery: los 5 errores"*.
+
+¿Ya hiciste una migración a la nube? ¿Cuál de estos cinco te mordió? Cuéntame.
