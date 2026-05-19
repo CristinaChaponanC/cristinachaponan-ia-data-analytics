@@ -1,0 +1,40 @@
+---
+title: 'Monitoreo de modelos: detecta el drift antes que el negocio'
+summary: 'Un modelo no avisa cuando se rompe: sigue prediciendo con confianza, números cada vez peores. Los tres tipos de drift, por qué esperar la etiqueta real llega tarde, y qué hacer cuando salta la alarma sin reentrenar en pánico.'
+date: 2026-06-18 19:00:00
+tags: ['IA', 'MLOps', 'Monitoreo', 'Drift', 'Machine Learning', 'Producción', '2026']
+draft: false
+authors: ['default']
+---
+
+# Monitoreo de modelos: detecta el drift antes que el negocio
+
+Un modelo no te avisa cuando se rompe. No tira un error. Sigue prediciendo, con la misma confianza, números cada vez peores. Para cuando el negocio lo nota, ya perdiste dinero. Opero modelos en producción sobre GCP, y el síntoma más peligroso no es un crash: es el silencio.
+
+## Los tres tipos de drift
+
+- **Data drift:** la distribución de las entradas cambió. Llegan clientes distintos a los del entrenamiento. El modelo sigue, pero ya no es el terreno para el que lo entrenaste.
+- **Concept drift:** la relación cambió. Lo que predecía la mora hace dos años ya no la predice igual —cambió la economía, el producto o el comportamiento.
+- **Prediction drift:** lo que el modelo emite se corrió, aunque todavía no sepas si acierta. Suele ser la primera señal observable.
+
+## Por qué esperar la etiqueta real llega tarde
+
+El error clásico es evaluar solo cuando llega el resultado real. En crédito, saber si un cliente cayó en mora tarda meses. Para entonces el daño está hecho. La señal temprana no es el accuracy: es el **drift de los inputs**, que ves hoy. Métricas como PSI o el test KS, con una herramienta como Evidently, te avisan semanas antes que la pérdida.
+
+## Qué hacer cuando salta la alarma
+
+No reentrenar en pánico. Reentrenar a ciegas con datos que también pueden estar contaminados empeora el modelo. El protocolo:
+
+1. **Umbral claro**, definido antes —no improvisado cuando ya hay fuego.
+2. **Investiga la causa.** ¿Cambió el mundo o se rompió un pipeline aguas arriba? No es lo mismo: uno pide reentrenar, el otro pide arreglar el pipeline.
+3. **Reentrena con criterio**, validando los datos nuevos, no de forma automática y a ciegas.
+
+## La idea que se queda
+
+Monitorear no es un lujo de equipos grandes. Es la diferencia entre enterarte tú —y reaccionar— o que te lo diga el negocio cuando ya perdió plata, o peor, el regulador.
+
+## Ver en video
+
+Los tres drifts, las métricas y el protocolo de respuesta están en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Monitoreo de modelos: detecta el drift antes que el negocio"*.
+
+¿Tienes monitoreo de drift en tus modelos, o esperas la etiqueta real? Cuéntame.
