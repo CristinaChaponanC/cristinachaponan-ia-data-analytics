@@ -1,0 +1,36 @@
+---
+title: 'Automaticé la reportería SBS de un banco: lo que nadie te cuenta'
+summary: 'Automatizar reportería regulatoria no es un proyecto de código: es un proyecto de control con código adentro. El patrón de tres capas —definición como código, control que para la corrida, evidencia auditable— y el error más caro: automatizar el dato equivocado más rápido.'
+date: 2026-06-11 19:00:00
+tags: ['Data Engineering', 'Reporting', 'SBS', 'Banca', 'Compliance', 'Automatización', '2026']
+draft: false
+authors: ['default']
+---
+
+# Automaticé la reportería SBS de un banco: lo que nadie te cuenta
+
+Automaticé la reportería regulatoria de un banco —para la SBS, el BCRP, el MEF. En BBVA fueron 32 reportes regulatorios: de 1–2 semanas por reporte a 10 minutos–2 horas de corrida, −98% de tiempo. Pero ese no es el punto. Lo que casi nadie explica es que **la parte técnica es la fácil**.
+
+## Lo difícil no es el código
+
+El regulador no te pide tu script. Te pide demostrar que el número es correcto y de dónde salió. Eso cambia cómo diseñas todo. No estás construyendo un pipeline: estás construyendo un pipeline que un auditor puede cuestionar línea por línea, meses después, cuando ya no recuerdas los detalles.
+
+## El patrón de tres capas
+
+- **Definición.** La regla regulatoria escrita como código, versionada. No en la cabeza de un analista que se puede ir, ni en un Excel que nadie sabe quién tocó. Si la norma cambia, cambias una definición versionada y queda registro de cuándo y por qué.
+- **Control.** Validaciones que **paran la corrida** si un saldo no cuadra. Es preferible un proceso que se detiene y avisa, a un reporte equivocado entregado puntualmente. La puntualidad no sirve de nada si el número está mal.
+- **Evidencia.** Cada corrida deja un log auditable: qué validó, cuándo, con qué versión de la norma. Esa es la respuesta cuando preguntan "¿cómo llegaron a esta cifra?".
+
+## El error más caro
+
+Automatizar sin entender la norma. Si no dominas la regulación, la automatización no te salva: ahora produces el dato equivocado en minutos en lugar de en semanas. La velocidad sin control solo acelera el problema. Por eso en reportería regulatoria el que automatiza tiene que entender la norma, no solo el Python. Es el error que más caro he visto pagar.
+
+## La idea que se queda
+
+Automatizar reportería regulatoria no es un proyecto de código. Es un proyecto de control, con código adentro. El día que internalizas eso, dejas de escribir scripts y empiezas a construir procesos defendibles.
+
+## Ver en video
+
+El esqueleto de las tres capas, con el detalle del proceso regulatorio, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Automaticé la reportería SBS de un banco"*.
+
+¿Trabajas con reportería regulatoria? ¿Cuál es el control que más te ha salvado? Cuéntame.
