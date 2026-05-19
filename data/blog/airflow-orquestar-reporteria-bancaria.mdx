@@ -1,0 +1,39 @@
+---
+title: 'Airflow para orquestar reportería bancaria: el setup que uso en producción'
+summary: 'Un cron funciona hasta que tienes 10 reportes con dependencias. Por qué Airflow (dependencias, reintentos, trazabilidad), el setup mínimo que un auditor entiende (tareas idempotentes, backoff, cero estado oculto) y el error más común: meter la lógica de negocio dentro del DAG.'
+date: 2026-06-25 19:00:00
+tags: ['Data Engineering', 'Airflow', 'Orquestación', 'Reporting', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# Airflow para orquestar reportería bancaria
+
+Un cron funciona hasta que tienes diez reportes y el séptimo depende de que el tercero haya corrido bien. Ahí el cron se queda corto. Este post cierra la serie de automatización: ya tienes el pipeline; ahora hay que hacerlo correr solo, confiable y auditable.
+
+## Por qué Airflow y no más cron
+
+- **Dependencias.** Un DAG sabe que el reporte 7 corre solo si el 3 terminó bien. El cron no sabe de dependencias: solo de horas.
+- **Reintentos.** Si una fuente no responde, reintenta con backoff. No se cae todo el proceso por un timeout transitorio.
+- **Trazabilidad.** Cada corrida queda registrada: cuándo, qué tarea, con qué resultado. En reportería regulada, eso no es opcional.
+
+## El setup mínimo que funciona
+
+- **Tareas idempotentes.** Si la corres dos veces, el resultado es el mismo —no datos duplicados. Es la propiedad que te salva cuando hay que re-ejecutar.
+- **Reintentos con backoff**, no reintento inmediato que martilla la fuente caída.
+- **Alertas a un canal que alguien realmente mira.** Una alerta que nadie ve no es una alerta.
+- **Cero estado oculto.** Nada de un archivo temporal que solo existe en el servidor de una persona.
+
+## El error más común
+
+Meter la lógica de negocio dentro del DAG. **El DAG orquesta, no procesa.** La transformación del reporte vive en código testeable, aparte; el operador solo la invoca. Si mezclas las dos cosas, no puedes testear nada y el DAG se convierte en la caja negra que justamente querías evitar.
+
+## La idea que se queda
+
+Un buen DAG es uno que un auditor entiende sin que se lo expliques: claro, idempotente, trazable. Con esto cierra el camino completo —del reporte hecho a mano al proceso que corre solo y se defiende ante quien pregunte.
+
+## Ver en video
+
+El setup completo, con el DAG de ejemplo, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Airflow para orquestar reportería bancaria"*.
+
+¿Sigues con cron o ya diste el salto a un orquestador? ¿Qué te hizo cambiar? Cuéntame.
