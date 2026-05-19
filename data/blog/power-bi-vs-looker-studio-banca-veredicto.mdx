@@ -1,0 +1,44 @@
+---
+title: 'Power BI o Looker Studio para banca: mi veredicto tras 2 años con los dos'
+summary: 'La pregunta que me hacen siempre, respondida sin patrocinio. Cuándo Power BI (modelo complejo, gobierno, seguridad por fila), cuándo Looker Studio (ecosistema Google, costo cero) — y por qué lo que de verdad decide no es la herramienta, es el modelo de datos.'
+date: 2026-06-16 19:00:00
+tags: ['Visual Analytics', 'Power BI', 'Looker Studio', 'BI', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# Power BI o Looker Studio para banca: mi veredicto
+
+La pregunta que me hacen siempre. Construí reportería de riesgo en las dos, dos años, en producción y con usuarios reales —no en una demo. No tengo patrocinio de ninguna. Este es el veredicto sin filtro.
+
+## Cuándo Power BI
+
+Cuando el modelo de datos es complejo y el banco ya vive en el ecosistema Microsoft. Su modelo semántico es más potente, y la **seguridad por fila** —que un gerente de una región solo vea su región— está mejor resuelta y es más fácil de auditar. Si gobierno, control y on-prem pesan en tu contexto, Power BI.
+
+## Cuándo Looker Studio
+
+Cuando los datos ya están en BigQuery: la integración es nativa, sin conectores frágiles que se rompen el viernes. Cuando necesitas algo vivo hoy y el presupuesto es cero. Es gratis, y para tableros operativos sobre el stack de Google, vuela. No compite en gobierno fino con Power BI, pero en velocidad de puesta en marcha sobre datos de Google, gana.
+
+## Tabla rápida
+
+| Criterio | Power BI | Looker Studio |
+|---|---|---|
+| Modelo semántico | Más potente | Suficiente |
+| Seguridad por fila | Robusta, auditable | Básica |
+| Costo | Licencia por usuario | Gratis |
+| Integración BigQuery | Buena | Nativa |
+| Puesta en marcha | Más lenta | Inmediata |
+
+## Lo que de verdad decide
+
+No es la herramienta. Es el modelo de datos. Un modelo bien hecho —una sola fuente de verdad, métricas definidas una vez— se ve bien en las dos. Un modelo malo se ve igual de mal en las dos. La gente discute la herramienta para no discutir su modelo: ahí está el verdadero problema, y ninguna licencia lo arregla.
+
+## La idea que se queda
+
+La mejor herramienta de visualización es un buen modelo de datos. Elige la que encaje con tu ecosistema y tu presupuesto, pero invierte el esfuerzo donde de verdad rinde: en el modelo.
+
+## Ver en video
+
+La comparación criterio por criterio, con ejemplos de banca, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Power BI o Looker Studio para banca"*.
+
+¿Cuál usas hoy y por qué? ¿Fue decisión de modelo o de ecosistema? Cuéntame.
