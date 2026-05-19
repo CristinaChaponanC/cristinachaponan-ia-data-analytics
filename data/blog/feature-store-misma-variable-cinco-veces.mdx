@@ -1,0 +1,34 @@
+---
+title: 'Tu equipo calcula la misma variable 5 veces: para eso existe el Feature Store'
+summary: 'Cinco modelos, cinco definiciones de "ingreso promedio", ninguna mal a propósito —y un bug en producción. El training-serving skew, qué resuelve realmente un feature store (una definición, dos consumos) y, sobre todo, cuándo NO usarlo.'
+date: 2026-07-02 19:00:00
+tags: ['IA', 'MLOps', 'Feature Store', 'Machine Learning', 'GCP', '2026']
+draft: false
+authors: ['default']
+---
+
+# Tu equipo calcula la misma variable 5 veces
+
+Cinco modelos en tu equipo. Los cinco usan "ingreso promedio". Y los cinco lo calculan distinto —ninguno mal a propósito. Pero el desorden ya es un bug en producción. Para eso existe el feature store, y esto parece tema de equipos enormes hasta que te explota con tres modelos.
+
+## El problema real: training-serving skew
+
+La variable se calcula de una forma cuando entrenas —con todo el histórico, con tiempo— y de otra cuando predices en vivo —con prisa, con otra persona escribiendo el código. El modelo aprendió una definición y en producción recibe otra. No falla con un error: se degrada en silencio. Es el patrón más caro de MLOps porque nadie lo ve hasta que el daño está hecho.
+
+## Qué resuelve (y qué no)
+
+Un feature store hace una sola cosa, pero clave: **la feature se define una vez; entrenamiento e inferencia leen exactamente la misma** —misma lógica, misma ventana de tiempo, misma fuente. Además guarda valores históricos sin fuga temporal, que es justo donde casi todos se cortan solos al armarlo a mano.
+
+## Cuándo NO usarlo
+
+Seamos honestos: para tu primer modelo es sobreingeniería. Añade infraestructura que no necesitas todavía. El feature store se justifica cuando hay **varios modelos, varios equipos y features compartidas**. Si lo metes antes de tiempo, el problema deja de ser el skew y pasa a ser la complejidad que tú mismo creaste. Madurez técnica es saber cuándo todavía no.
+
+## La idea que se queda
+
+Un feature store no es moda: es ponerle una sola definición a algo que el equipo estaba calculando de cinco formas distintas. Pero como toda herramienta de plataforma, su valor depende de que el problema ya exista —no de adelantarte a él.
+
+## Ver en video
+
+El ejemplo mínimo y el criterio de cuándo sí y cuándo no están en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Para eso existe el Feature Store"*.
+
+¿Tu equipo comparte features o cada modelo recalcula las suyas? Cuéntame cómo lo manejan.
