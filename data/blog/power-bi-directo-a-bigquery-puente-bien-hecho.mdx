@@ -1,0 +1,37 @@
+---
+title: 'Power BI directo a BigQuery: el puente que casi nadie configura bien'
+summary: 'Conectar toma dos minutos; hacerlo bien es otra historia. Import vs DirectQuery, el error caro de apuntar DirectQuery a la tabla cruda (cada clic factura), y el patrón que funciona: una capa agregada entre medio para que el reporte nunca toque el dato crudo.'
+date: 2026-07-23 19:00:00
+tags: ['Visual Analytics', 'Power BI', 'BigQuery', 'Arquitectura', 'Costos', '2026']
+draft: false
+authors: ['default']
+---
+
+# Power BI directo a BigQuery: el puente que casi nadie configura bien
+
+Conectar Power BI a BigQuery toma dos minutos. Hacerlo bien es otra historia. La decisión que tomes acá define si tu reporte vuela o si quema cuota —y dinero— sin que te enteres. Conecté reportería de banca entre la nube y Power BI en producción, con usuarios haciendo clic todo el día: ahí los errores cuestan plata real.
+
+## La decisión clave: Import o DirectQuery
+
+- **Import:** Power BI se trae los datos y los guarda. Rápido para el usuario, pero es una foto: se actualiza cuando programas el refresco.
+- **DirectQuery:** Power BI no guarda nada, consulta BigQuery en cada interacción. Datos siempre vivos, pero **cada filtro y cada clic es una consulta facturada**.
+
+No hay opción universalmente buena: depende de cuán fresco necesitas el dato y cuánto puedes gastar.
+
+## El error caro
+
+DirectQuery apuntando a la tabla cruda de millones de filas. El usuario mueve un filtro y, sin saberlo, dispara un escaneo de toda la tabla. Multiplica eso por 50 usuarios en un día de cierre: la factura de BigQuery a fin de mes es la que enseña esa lección, no el tutorial.
+
+## El patrón que funciona: capa agregada
+
+BigQuery no expone la tabla cruda al reporte. Expone una vista o tabla **ya agregada al grano que el dashboard necesita**. Power BI lee eso —pequeño, barato, rápido—. Datos frescos sin escanear millones de filas por clic. La regla: el reporte nunca toca el dato crudo directamente. Ni por rendimiento, ni por costo, ni por gobierno.
+
+## La idea que se queda
+
+Conectar es un botón. Conectar bien es una decisión de arquitectura que se paga —o se ahorra— todos los meses. La capa agregada no es opcional cuando hay volumen y usuarios reales.
+
+## Ver en video
+
+La guía de conexión con el patrón de capa agregada, paso a paso, está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Power BI directo a BigQuery"*.
+
+¿Usas Import o DirectQuery hoy? ¿Tomaste la decisión por costo o por costumbre? Cuéntame.
