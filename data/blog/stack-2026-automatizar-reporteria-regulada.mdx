@@ -1,0 +1,46 @@
+---
+title: 'El stack 2026 para automatizar reportería regulada: dlt, DuckDB y validación que no te deja mentir'
+summary: 'El patrón exacto que uso para llevar un reporte regulatorio de una semana a ocho minutos: ingesta con dlt, transformación con DuckDB y Polars, y controles automáticos con Great Expectations. Con foco en lo que casi nadie enseña: la trazabilidad.'
+date: 2026-05-19 19:00:00
+tags: ['Data Engineering', 'Automatización', 'Python', 'DuckDB', 'Reporting', 'Banca', '2026']
+draft: false
+authors: ['default']
+---
+
+# El stack 2026 para automatizar reportería regulada
+
+Este reporte regulatorio tomaba una semana armarlo a mano. Hoy corre solo en ocho minutos. No es magia, es Python — y un stack que en 2026 ya es estándar. Acá te dejo el patrón exacto, sin teoría de relleno.
+
+## El problema real, sin adornos
+
+Un reporte regulatorio hecho a mano es extracción manual, copiar y pegar entre hojas de Excel, y revisión visual a la una de la mañana antes del plazo de la SBS. En BBVA automaticé 32 reportes regulatorios (SBS, BCRP, MEF) con Python, SAS y SQL: pasaron de 1–2 semanas por reporte a 10 minutos–2 horas de corrida. Eso es −98% de tiempo y +300 horas de analista liberadas por trimestre. Pero la cifra no es el punto. El punto es que cada hora a mano es una hora donde se cuela un error que el regulador sí va a ver.
+
+## Las tres capas
+
+No necesitas una plataforma cara. Necesitas tres capas claras:
+
+**1. Ingesta — `dlt`.** La librería `dlt` extrae de la fuente y detecta el esquema sola. Mapea JSON o DataFrames a tablas y mantiene estado: solo carga lo nuevo, no reprocesa la historia entera cada corrida. Eso elimina la clase de bug más cara en reportería: el doble conteo silencioso.
+
+**2. Transformación — DuckDB + Polars.** La lógica del reporte vive en SQL sobre DuckDB y en Polars para los pasos intermedios pesados. Rápido, reproducible, y sin un Excel intermedio que nadie sabe quién tocó. Si mañana cambia una definición regulatoria, cambias una consulta versionada, no doce celdas.
+
+**3. Validación — Great Expectations.** Acá defines los controles regulatorios como código: este saldo cuadra con este otro, esta suma da cero, esta columna nunca es nula. Si un control falla, la corrida falla **ruidoso**, antes de entregar. Nunca después.
+
+## Lo que casi nadie enseña: la trazabilidad
+
+En un entorno regulado, la trazabilidad importa tanto como el número. Cada corrida tiene que dejar evidencia: qué validó, cuándo, con qué resultado, con qué versión de la lógica. Cuando el regulador pregunta "¿cómo llegaron a esta cifra?", la respuesta no puede ser "lo armó Juan en un Excel". Tiene que ser un log que puedas mostrar. Esa es la diferencia entre un script y un proceso auditable.
+
+## El patrón mínimo
+
+1. `dlt` carga incremental desde la fuente a DuckDB.
+2. Modelos SQL versionados (idealmente con dbt) hacen la transformación.
+3. Great Expectations corre el set de controles antes de exportar.
+4. Si todo pasa: se genera el entregable + un log de corrida con timestamp, versión y resultado de cada control.
+5. Orquestas con cron o, si ya hay varios reportes, con Dagster.
+
+Ese es el esqueleto. Lo demás es negocio.
+
+## Ver en video
+
+Lo expliqué paso a paso, con el flujo completo, en mi canal de YouTube: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Automatiza tu reporte regulatorio con Python"*.
+
+¿Cuál es el reporte que hoy te come la semana? Cuéntamelo y lo desarmamos juntos.

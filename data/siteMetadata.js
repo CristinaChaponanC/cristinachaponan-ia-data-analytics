@@ -16,7 +16,7 @@ const siteMetadata = {
   github: 'https://github.com/CristinaChaponanC',
   x: 'https://twitter.com/Cristina_CCC',
   facebook: '',
-  youtube: '',
+  youtube: 'https://www.youtube.com/@cristinachaponan',
   linkedin: 'https://www.linkedin.com/in/cristina-chapo%C3%B1an/',
   threads: '',
   instagram: '',

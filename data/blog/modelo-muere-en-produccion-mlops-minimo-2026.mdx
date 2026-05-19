@@ -1,0 +1,48 @@
+---
+title: 'Tu modelo muere en producción: el MLOps mínimo que sí necesitas en 2026'
+summary: 'El 95% de exactitud en el notebook no significa nada si el modelo se cae en producción. Los tres asesinos reales (data drift, dependencias, supuestos de input) y el MLOps mínimo viable con Vertex AI y Evidently — sin Kubernetes.'
+date: 2026-05-21 19:00:00
+tags: ['IA', 'MLOps', 'Machine Learning', 'GCP', 'Vertex AI', 'Producción', '2026']
+draft: false
+authors: ['default']
+---
+
+# Tu modelo muere en producción
+
+Tu modelo tiene 95% de exactitud en el notebook. Lo subes a producción y se cae. Le pasa a todo el mundo la primera vez. Hoy lidero una plataforma de IA sobre GCP, y aprendí algo que casi nadie enseña en español: el 80% del trabajo de machine learning no es el modelo, es que siga funcionando.
+
+## Por qué el notebook miente
+
+El notebook es un entorno congelado: datos estáticos, librerías fijas, sin concurrencia. Por eso engaña. Hay tres asesinos:
+
+- **Data drift.** El mundo cambió y tu modelo no se enteró. La distribución de entrada de hoy no es la del entrenamiento.
+- **Dependencias no replicadas.** Funcionaba con tu `pandas` local; en el servidor hay otra versión y un comportamiento sutilmente distinto.
+- **Supuestos de input que la realidad rompe.** En banca lo vi con un scoring que asumía que un campo siempre venía lleno. Un día no vino. El modelo no falló ruidoso: falló en silencio, dando puntajes plausibles pero equivocados. Ese es el peor caso.
+
+## El MLOps mínimo viable (sin Kubernetes)
+
+No necesitas una plataforma enorme para empezar. Necesitas tres cosas:
+
+1. **Entorno reproducible.** Dependencias fijadas (lockfile). Lo que corre en producción es exactamente lo que probaste.
+2. **Un endpoint real.** En 2026, desplegar un modelo en Vertex AI es cuestión de minutos. No es el notebook expuesto con Flask y los dedos cruzados.
+3. **Validación del esquema de entrada.** Si llega algo que no respeta el contrato (tipo, rango, nulos), se rechaza ruidoso *antes* de predecir. Basura entra, error explícito sale — no una predicción silenciosa y falsa.
+
+## Lo que sí importa monitorear
+
+El accuracy de hace seis meses no te dice nada hoy. Monitorea:
+
+- **Distribución de inputs vs. entrenamiento**, con una herramienta como Evidently. Es la señal temprana de drift.
+- **Latencia.** Un modelo correcto pero lento también está roto para el negocio.
+- **Tasa de fallo y de rechazo de schema.** Sube de golpe → algo cambió aguas arriba.
+
+Regla simple: si no lo monitoreas, no está en producción. Está en deuda técnica esperando a explotar en el peor momento.
+
+## La idea que se queda
+
+Un modelo en producción es uno que vigilas, no uno que entrenaste y olvidaste. El despliegue no es la meta; es el día uno de la parte difícil.
+
+## Ver en video
+
+Lo desarrollé con los tres asesinos y el setup mínimo en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Por qué tu modelo muere en producción"*.
+
+¿Ya te pasó que un modelo se cayó al pasar a prod? Cuéntame qué lo mató.

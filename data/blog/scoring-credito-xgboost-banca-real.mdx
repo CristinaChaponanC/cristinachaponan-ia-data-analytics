@@ -1,0 +1,42 @@
+---
+title: 'Scoring de crédito que un banco usaría: XGBoost, split temporal y por qué accuracy no sirve'
+summary: 'El camino real de un scoring de crédito: del dato sucio al modelo evaluado como lo evaluaría un área de riesgo. Por qué el split temporal lo es todo, por qué accuracy miente en crédito, y por qué sin SHAP no lo puedes desplegar en banca regulada.'
+date: 2026-05-26 19:00:00
+tags: ['Machine Learning', 'XGBoost', 'Riesgo Crediticio', 'Banca', 'SHAP', 'Python', '2026']
+draft: false
+authors: ['default']
+---
+
+# Scoring de crédito que un banco usaría
+
+Un scoring de crédito real, evaluado como lo evaluaría un área de riesgo —no como un tutorial de Kaggle. Trabajé riesgo crediticio en banca peruana y regional; este es el camino que importa, no el que sale bonito en un notebook.
+
+## El dato real es feo
+
+Olvídate del dataset limpio. El dato de crédito llega con nulos, categorías escritas de tres formas distintas, y lo más peligroso: **fuga de información temporal** — usar, sin darte cuenta, información del futuro para predecir el presente. El feature engineering aquí no es automático: es con sentido de negocio. Una variable que el área de riesgo pueda explicar vale más que una que solo sube una métrica.
+
+## XGBoost sin misticismo
+
+XGBoost domina el scoring tabular por una razón concreta: captura interacciones entre variables que una regresión logística no ve, sin que tengas que diseñarlas a mano. No es moda; es que en datos tabulares de crédito, sigue ganando en 2026. Pero el modelo no es el truco.
+
+## El truco está en el split
+
+En crédito **no partes los datos al azar. Partes por tiempo.** Entrenas con el pasado, validas con el futuro. Si haces un split aleatorio, tu modelo se ve espectacular en validación y luego miente en producción, porque en la vida real nunca tendrás datos del futuro al momento de decidir. El split temporal es la diferencia entre un número real y un número que te va a costar caro.
+
+## Accuracy no sirve en crédito
+
+Un modelo que dice "no default" a todos puede tener 95% de accuracy si solo 5% cae en mora. Inútil. En crédito mira:
+
+- **KS y Gini/AUC** — poder de discriminación real.
+- **Matriz de confusión en el punto de corte de negocio**, no en 0.5. El corte lo define el costo de un falso negativo vs. un falso positivo, no la librería.
+- **Estabilidad** en el tiempo (PSI). Un modelo que se degrada en tres meses no sirve.
+
+## Sin interpretabilidad no hay despliegue
+
+En banca regulada, un modelo que no puedes explicar es un modelo que no puedes desplegar. Con SHAP puedes decir, crédito por crédito, por qué se rechazó. Eso no es un lujo académico: es el requisito para que riesgo y el regulador te dejen ponerlo en producción. Un buen scoring no es el de mayor accuracy: es el que riesgo puede defender.
+
+## Ver en video
+
+El recorrido completo —dato sucio, split temporal, evaluación y SHAP— está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Scoring de crédito con XGBoost en banca real"*.
+
+¿Te ha tocado defender un modelo de riesgo ante un regulador? Cuéntame cómo te fue.
