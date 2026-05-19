@@ -1,0 +1,39 @@
+---
+title: 'Un dashboard de riesgo que un gerente sí entiende: diseño que decide, no que decora'
+summary: 'El problema de un dashboard de riesgo casi nunca es la herramienta: es el diseño. Una pregunta por pantalla, KRI antes que KPI, color con significado y un modelo semántico que sea la única fuente de verdad. El patrón que funcionó para más de 100 usuarios en banca.'
+date: 2026-05-28 19:00:00
+tags: ['Visual Analytics', 'Power BI', 'Looker Studio', 'Riesgo', 'Banca', 'Dashboards', '2026']
+draft: false
+authors: ['default']
+---
+
+# Un dashboard de riesgo que un gerente sí entiende
+
+Le muestras un dashboard de riesgo a un gerente y en tres segundos pregunta: *"¿qué tengo que mirar acá?"*. Si tiene que preguntar, el dashboard falló. Construí dashboards de riesgo para más de 100 usuarios en banca, y aprendí que el problema casi nunca es la herramienta. Es el diseño.
+
+## 30 gráficos no son un dashboard
+
+Son un volcado de datos. El error más común es meter todo lo que se puede medir en una pantalla, por miedo a que falte algo. El resultado: el que decide no sabe dónde mirar ni qué hacer. Un buen dashboard de riesgo responde **una pregunta por pantalla**: ¿está la cartera dentro del apetito de riesgo, sí o no? Recién después viene el detalle.
+
+## El patrón que funciona
+
+- **Arriba: KRI, no KPI sueltos.** Indicadores clave de riesgo (mora temprana, cosechas que se deterioran, concentración) — no veinte tarjetas decorativas. El gerente mira tres números y sabe si hay que actuar.
+- **En el medio: segmentos.** Qué perfil de cliente concentra la mora, por producto, por canal, por cosecha. Aquí es donde se decide la acción.
+- **Abajo: alertas tempranas.** Ratio de endeudamiento, deterioro de cosechas recientes, señales que anticipan el problema antes de que sea pérdida.
+- **Color con significado.** Rojo es acción, no estética. Si todo tiene color, nada lo tiene.
+
+## Lo técnico que sostiene todo: el modelo semántico
+
+La discusión de "¿de qué Excel salió este número?" en plena reunión de comité no es un problema de visualización: es de modelo de datos. La solución, en 2026, sigue siendo la misma idea: **una sola fuente de verdad**. En Power BI o en Looker Studio —da igual la marca— las métricas se definen una vez, en el modelo semántico, con refresco automático. Nadie recalcula la mora a mano. El dashboard solo *muestra* lo que el modelo ya garantiza.
+
+Power BI sigue siendo el líder de self-service BI en banca por su modelado y su integración; Looker Studio gana cuando el ecosistema es Google y el costo importa. La herramienta es secundaria: el modelo bien hecho es lo que separa un dashboard confiable de uno bonito.
+
+## La idea que se queda
+
+Un dashboard no es bueno porque sea bonito. Es bueno si el que decide sabe qué mirar en diez segundos y puede actuar. Es claro, o no sirve.
+
+## Ver en video
+
+El recorrido completo —del error común al patrón que decide y el modelo semántico— está en mi canal: **[Cristina Chapoñán | Data & IA](https://www.youtube.com/@cristinachaponan)** — busca *"Un dashboard de riesgo que un gerente sí entiende"*.
+
+¿Tu último dashboard lo entendió el negocio a la primera, o tuviste que explicarlo? Cuéntame.
